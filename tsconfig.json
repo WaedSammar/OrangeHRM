@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "types": [
+      "cypress",
+      "node"
+    ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "preserveValueImports": false
+  },
+  "include": [
+    "**/*/*.ts",
+    "../node_modules/cypress"
+  ]
+}
