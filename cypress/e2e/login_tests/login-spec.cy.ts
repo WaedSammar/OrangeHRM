@@ -48,7 +48,15 @@ describe('Login Page Test Cases', () => {
     cy.get('.oxd-input-field-error-message').should('contain.text', 'Required')
   });
 
-  it('Test empty Username', () => {
+  it('Test empty Username with correct Password', () => {
+    cy.get("[name='password']").type("admin123")
+    cy.get("[type='submit']").click()
+
+    cy.get('.oxd-input-field-error-message').should('have.length', 1)
+    cy.get(".oxd-input-field-error-message").first().should('contain.text', 'Required')
+  });
+
+  it('Test empty Username with wrong Password', () => {
     cy.get("[name='password']").type("admin12345")
     cy.get("[type='submit']").click()
 
@@ -56,10 +64,18 @@ describe('Login Page Test Cases', () => {
     cy.get(".oxd-input-field-error-message").first().should('contain.text', 'Required')
   });
 
-  it('Test empty Password', () => {
+  it('Test empty Password with correct Username', () => {
     cy.get("[name='username']").type("Admin")
     cy.get("[type='submit']").click()
-    
+
+    cy.get('.oxd-input-field-error-message').should('have.length', 1)
+    cy.get(".oxd-input-field-error-message").first().should('contain.text', 'Required')
+  });
+
+  it('Test empty Password with wrong Username', () => {
+    cy.get("[name='username']").type("AdminAdmin")
+    cy.get("[type='submit']").click()
+
     cy.get('.oxd-input-field-error-message').should('have.length', 1)
     cy.get(".oxd-input-field-error-message").first().should('contain.text', 'Required')
   });
