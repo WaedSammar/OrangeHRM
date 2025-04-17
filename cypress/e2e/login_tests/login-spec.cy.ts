@@ -11,7 +11,7 @@ describe('Login Page Test Cases', () => {
     cy.visit('/')
   });
 
-  it('Login Test Successfully', () => {
+  it('Should log in Successfully with correct credentials', () => {
 
     cy.get("[name='username']").clear().type(correctUsername)
     cy.get("[name='password']").clear().type(correctPassword)
@@ -24,7 +24,7 @@ describe('Login Page Test Cases', () => {
     // cy.url().should('include', '/dashboard')
   });
 
-  it('Sensitive Username', () => {
+  it('Should allow login with case-insensitive Username', () => {
 
     cy.get("[name='username']").clear().type(correctUsername.toLocaleUpperCase())
     cy.get("[name='password']").clear().type(correctPassword)
@@ -33,7 +33,7 @@ describe('Login Page Test Cases', () => {
     cy.url().should('include', '/dashboard')
   });
 
-  it('Test wrong Password', () => {
+  it('Should show error for incorrect Password', () => {
     cy.get("[name='username']").clear().type(correctUsername)
     cy.get("[name='password']").clear().type(wrongPassword)
     cy.get("[type='submit']").click()
@@ -41,7 +41,7 @@ describe('Login Page Test Cases', () => {
     cy.get('.oxd-alert-content-text').should('contain.text', 'Invalid credentials')
   });
 
-  it('Test wrong Username', () => {
+  it('Should show error for incorrect Username', () => {
     cy.get("[name='username']").clear().type(wrongUsername)
     cy.get("[name='password']").clear().type(correctPassword)
     cy.get("[type='submit']").click()
@@ -49,7 +49,7 @@ describe('Login Page Test Cases', () => {
     cy.get('.oxd-alert-content-text').should('contain.text', 'Invalid credentials')
   });
 
-  it('Test wrong Password and Username', () => {
+  it('Should show error for incorrect Username and Password', () => {
     cy.get("[name='username']").clear().type(wrongUsername)
     cy.get("[name='password']").clear().type(wrongPassword)
     cy.get("[type='submit']").click()
@@ -57,7 +57,7 @@ describe('Login Page Test Cases', () => {
     cy.get('.oxd-alert-content-text').should('contain.text', 'Invalid credentials')
   });
 
-  it('Test empty Username and Password', () => {
+  it('Should show validation messages for empty Username and Password', () => {
     cy.get("[type='submit']").click()
 
     cy.get('.oxd-input-field-error-message').should('have.length', 2)
@@ -66,7 +66,7 @@ describe('Login Page Test Cases', () => {
 
   });
 
-  it('Test empty Username with correct Password', () => {
+  it('Should show validation message for empty Username and correct Password', () => {
     cy.get("[name='password']").clear().type(correctUsername)
     cy.get("[type='submit']").click()
 
@@ -74,7 +74,7 @@ describe('Login Page Test Cases', () => {
     cy.get(".oxd-input-field-error-message").first().should('contain.text', 'Required')
   });
 
-  it('Test empty Username with wrong Password', () => {
+  it('Should show validation message for empty Username and wrong Password', () => {
     cy.get("[name='password']").clear().type(wrongPassword)
     cy.get("[type='submit']").click()
 
@@ -82,7 +82,7 @@ describe('Login Page Test Cases', () => {
     cy.get(".oxd-input-field-error-message").first().should('contain.text', 'Required')
   });
 
-  it('Test empty Password with correct Username', () => {
+  it('Should show validation message for empty Password and correct Username', () => {
     cy.get("[name='username']").clear().type(correctUsername)
     cy.get("[type='submit']").click()
 
@@ -90,7 +90,7 @@ describe('Login Page Test Cases', () => {
     cy.get(".oxd-input-field-error-message").first().should('contain.text', 'Required')
   });
 
-  it('Test empty Password with wrong Username', () => {
+  it('Should show validation message for empty Password and wrong Username', () => {
     cy.get("[name='username']").clear().type(wrongUsername)
     cy.get("[type='submit']").click()
 
@@ -98,7 +98,7 @@ describe('Login Page Test Cases', () => {
     cy.get(".oxd-input-field-error-message").first().should('contain.text', 'Required')
   });
 
-  it('Hidden Password', () => {
+  it('Should hide the password field content', () => {
     cy.get("[name='password']").should('have.attr', 'type', 'password')
   });
 
