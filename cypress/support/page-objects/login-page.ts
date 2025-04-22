@@ -1,3 +1,5 @@
+import LoginPageMsg from "../constants/login-page-messages";
+
 class LoginPage {
 
   private static LOCATORS = {
@@ -6,17 +8,15 @@ class LoginPage {
     loginBtn: "[type='submit']",
     errorMsg: '.oxd-alert-content-text',
     requiredMsg: ".oxd-input-field-error-message",
-    logo: "img[alt='client brand banner']"
   };
 
   //Actions
-
   static fill_username_field(username: string) {
-    cy.get(this.LOCATORS.username).type(username);
+    cy.get(this.LOCATORS.username).clear().type(username);
   }
 
   static fill_password_field(password: string) {
-    cy.get(this.LOCATORS.password).type(password);
+    cy.get(this.LOCATORS.password).clear().type(password);
   }
 
   static click_submit() {
@@ -41,7 +41,7 @@ class LoginPage {
 
   static check_required_color() {
     cy.get(this.LOCATORS.requiredMsg).each(($el) => {
-      cy.wrap($el).should('contain.text', 'Required');
+      cy.wrap($el).should('contain.text', LoginPageMsg.REQUIRED_FIELD);
       cy.wrap($el).should('have.css', 'color', 'rgb(235, 9, 16)');
     });
   }
