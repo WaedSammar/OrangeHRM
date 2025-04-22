@@ -1,5 +1,4 @@
-import LoginPageMsg from "../../support/constants/login-page-messages";
-import LoginPage from "../../support/page-objects/login-page";
+import { LoginPage, LoginPageMsg } from "../../support/page-objects/login-page";
 
 describe('Login Page Test Cases', () => {
 

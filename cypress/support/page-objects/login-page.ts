@@ -1,5 +1,3 @@
-import LoginPageMsg from "../constants/login-page-messages";
-
 class LoginPage {
 
   private static LOCATORS = {
@@ -45,6 +43,9 @@ class LoginPage {
       cy.wrap($el).should('have.css', 'color', 'rgb(235, 9, 16)');
     });
   }
-
 }
-export default LoginPage;
+enum LoginPageMsg {
+  INVALID_CREDENTIALS = "Invalid credentials",
+  REQUIRED_FIELD = "Required",
+}
+export { LoginPage, LoginPageMsg };
