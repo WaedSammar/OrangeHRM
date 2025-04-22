@@ -39,13 +39,13 @@ class LoginPage {
 
   static check_required_color() {
     cy.get(this.LOCATORS.requiredMsg).each(($el) => {
-      cy.wrap($el).should('contain.text', LoginPageMsg.REQUIRED_FIELD);
+      cy.wrap($el).should('contain.text', LOGIN_PAGE_MSGS.REQUIRED_FIELD);
       cy.wrap($el).should('have.css', 'color', 'rgb(235, 9, 16)');
     });
   }
 }
-enum LoginPageMsg {
+enum LOGIN_PAGE_MSGS {
   INVALID_CREDENTIALS = "Invalid credentials",
   REQUIRED_FIELD = "Required",
 }
-export { LoginPage, LoginPageMsg };
+export { LoginPage, LOGIN_PAGE_MSGS };

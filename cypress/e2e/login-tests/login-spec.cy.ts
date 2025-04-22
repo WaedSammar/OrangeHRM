@@ -1,4 +1,4 @@
-import { LoginPage, LoginPageMsg } from "../../support/page-objects/login-page";
+import { LoginPage, LOGIN_PAGE_MSGS } from "../../support/page-objects/login-page";
 
 describe('Login Page Test Cases', () => {
 
@@ -33,21 +33,21 @@ describe('Login Page Test Cases', () => {
     LoginPage.fill_username_field(correctUsername);
     LoginPage.fill_password_field(wrongPassword);
     LoginPage.click_submit();
-    LoginPage.check_error_message(LoginPageMsg.INVALID_CREDENTIALS);
+    LoginPage.check_error_message(LOGIN_PAGE_MSGS.INVALID_CREDENTIALS);
   });
 
   it('Should show error for incorrect Username', () => {
     LoginPage.fill_username_field(wrongUsername);
     LoginPage.fill_password_field(correctPassword);
     LoginPage.click_submit();
-    LoginPage.check_error_message(LoginPageMsg.INVALID_CREDENTIALS);
+    LoginPage.check_error_message(LOGIN_PAGE_MSGS.INVALID_CREDENTIALS);
   });
 
   it('Should show error for incorrect Username and Password', () => {
     LoginPage.fill_username_field(wrongUsername);
     LoginPage.fill_password_field(wrongPassword);
     LoginPage.click_submit();
-    LoginPage.check_error_message(LoginPageMsg.INVALID_CREDENTIALS);
+    LoginPage.check_error_message(LOGIN_PAGE_MSGS.INVALID_CREDENTIALS);
   });
 
   it('Should show validation messages for empty Username and Password', () => {
