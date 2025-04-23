@@ -1,3 +1,7 @@
+enum LOGIN_PAGE_MSGS {
+  INVALID_CREDENTIALS = "Invalid credentials",
+  REQUIRED_FIELD = "Required",
+}
 class LoginPage {
 
   private static LOCATORS = {
@@ -43,9 +47,5 @@ class LoginPage {
       cy.wrap($el).should('have.css', 'color', 'rgb(235, 9, 16)');
     });
   }
-}
-enum LOGIN_PAGE_MSGS {
-  INVALID_CREDENTIALS = "Invalid credentials",
-  REQUIRED_FIELD = "Required",
 }
 export { LoginPage, LOGIN_PAGE_MSGS };
