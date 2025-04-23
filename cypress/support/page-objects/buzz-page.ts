@@ -25,5 +25,25 @@ class BuzzPage {
   static verifyPost(text: string) {
     cy.get('.orangehrm-buzz-post-body').first().should('contain.text', text);
   }
+
+  static verifyPoster(name: string) {
+    cy.get('.orangehrm-buzz-post-emp-name')
+      .first()
+      .should('contain.text', name);
+  }
+
+  static verifyPosterMatchesLoggedInUser() {
+    cy.get(".oxd-userdropdown-name").invoke('text')
+      .then((currentUser) => {
+        const firstName = currentUser.split(' ')[0].toLocaleUpperCase();
+        cy.get(".orangehrm-buzz-post-emp-name").first()
+          .invoke('text')
+          .then((posterName) => {
+            expect(posterName.trim().toLocaleUpperCase())
+              .to.include(firstName);
+          });
+      });
+
+  }
 }
 export { BuzzPage };

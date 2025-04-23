@@ -14,4 +14,10 @@ describe("Buzz News Feed Test Cases", () => {
     BuzzPage.writePost(postData.postText);
     BuzzPage.verifyPost(postData.postText);
   });
+
+  it.only("Should verify Poster Name", () => {
+    BuzzPage.writePost(postData.postText);
+    BuzzPage.verifyPost(postData.postText);
+    BuzzPage.verifyPosterMatchesLoggedInUser()
+  })
 })
