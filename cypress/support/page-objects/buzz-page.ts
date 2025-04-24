@@ -1,49 +1,45 @@
 class BuzzPage {
 
   private static LOCATORS = {
-    username: "[name='username']",
-    password: "[name='password']",
-    loginBtn: "[type='submit']",
     buzzBtn: "span.oxd-main-menu-item--name",
+    postBtn: 'button',
+    postPlaceHolder: `textarea[placeholder="What's on your mind?"]`,
+    postBody: '.orangehrm-buzz-post-body',
+    toastAlert: ".oxd-toast",
+    userdropDownName: '.oxd-userdropdown-name',
+    postEmpName: '.orangehrm-buzz-post-emp-name',
   };
-
-  static login(username: string, password: string) {
-    cy.get(this.LOCATORS.username).clear().type(username);
-    cy.get(this.LOCATORS.password).clear().type(password);
-    cy.get(this.LOCATORS.loginBtn).click();
-  }
 
   static goToBuzzPage() {
     cy.get(this.LOCATORS.buzzBtn).contains("Buzz").click();
   }
 
   static writePost(text: string) {
-    cy.get(`textarea[placeholder="What's on your mind?"]`).type(text)
-    cy.get('button[type="submit"]').contains('Post').click()
+    cy.get(this.LOCATORS.postPlaceHolder).type(text)
+  }
+
+  static submitPost() {
+    cy.get(this.LOCATORS.postBtn).contains("Post").click()
   }
 
   static verifyPost(text: string) {
-    cy.get('.orangehrm-buzz-post-body').first().should('contain.text', text);
-  }
-
-  static verifyPoster(name: string) {
-    cy.get('.orangehrm-buzz-post-emp-name')
-      .first()
-      .should('contain.text', name);
+    cy.get(this.LOCATORS.postBody).first().should('contain.text', text);
+    cy.get(this.LOCATORS.toastAlert)
+      .should('be.visible')
+      .and('contain.text', 'Successfully Saved');
   }
 
   static verifyPosterMatchesLoggedInUser() {
-    cy.get(".oxd-userdropdown-name").invoke('text')
+    cy.get(this.LOCATORS.userdropDownName).invoke('text')
       .then((currentUser) => {
         const firstName = currentUser.split(' ')[0].toLocaleUpperCase();
-        cy.get(".orangehrm-buzz-post-emp-name").first()
+        cy.get(this.LOCATORS.postEmpName).first()
           .invoke('text')
           .then((posterName) => {
             expect(posterName.trim().toLocaleUpperCase())
               .to.include(firstName);
           });
       });
-
   }
 }
 export { BuzzPage };

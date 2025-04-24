@@ -13,6 +13,12 @@ class LoginPage {
   };
 
   //Actions
+  static login(username: string, password: string) {
+    this.fill_username_field(username);
+    this.fill_password_field(password);
+    this.click_submit();
+  }
+
   static fill_username_field(username: string) {
     cy.get(this.LOCATORS.username).clear().type(username);
   }
