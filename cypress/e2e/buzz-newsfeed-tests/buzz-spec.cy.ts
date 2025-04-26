@@ -27,4 +27,15 @@ describe("Buzz News Feed Test Cases", () => {
     BuzzPage.verifyPost(postText);
     BuzzPage.verifyPosterMatchesLoggedInUser()
   })
+
+  it("Should verify from current date", () => {
+    BuzzPage.writePost(postText);
+    BuzzPage.submitPost();
+    BuzzPage.verifyDateAndTime();
+  })
+
+  it("Should verify most liked post", () => {
+    BuzzPage.getMostLikedPost();
+    BuzzPage.verifyMostLikedPost();
+  })
 })

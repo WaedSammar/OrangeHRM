@@ -1,3 +1,5 @@
+const dayjs = require('dayjs')
+
 class BuzzPage {
 
   private static LOCATORS = {
@@ -8,6 +10,9 @@ class BuzzPage {
     toastAlert: ".oxd-toast",
     userdropDownName: '.oxd-userdropdown-name',
     postEmpName: '.orangehrm-buzz-post-emp-name',
+    postTime: '.orangehrm-buzz-post-time',
+    mostLiked: '.orangehrm-post-filters-button',
+    likesState: '.orangehrm-buzz-stats-row',
   };
 
   static goToBuzzPage() {
@@ -40,6 +45,35 @@ class BuzzPage {
               .to.include(firstName);
           });
       });
+  }
+
+  static verifyDateAndTime() {
+    const postCurrentTime = dayjs().format('YYYY-DD-MM hh:mm A');
+    const postOneMinuteAgo = dayjs().subtract(1, 'minute').format('YYYY-DD-MM hh:mm A');
+    cy.get(this.LOCATORS.postTime).first().invoke('text').then((text) => {
+      expect([postCurrentTime, postOneMinuteAgo]).to.include(text.trim());
+    })
+  }
+
+  static getMostLikedPost() {
+    cy.get(this.LOCATORS.mostLiked).contains('Most Liked Posts').click();
+  }
+
+  static verifyMostLikedPost() {
+    cy.get(this.LOCATORS.likesState).then((posts) => {
+      let likesArr = [];
+      cy.wrap(posts).each(($post) => {
+        cy.wrap($post).invoke('text').then((text) => {
+          const words = text.split(' ');
+          const likesNum = parseInt(words[0]);
+          likesArr.push(likesNum);
+        })
+      }).then(() => {
+        const mostLikedPost = likesArr[0];
+        const maxLiked = Math.max(...likesArr);
+        expect(mostLikedPost).to.equal(maxLiked);
+      });
+    });
   }
 }
 export { BuzzPage };
