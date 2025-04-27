@@ -1,4 +1,5 @@
 import { BuzzPage } from "../../support/page-objects/buzz-page";
+import { LoginPage } from "../../support/page-objects/login-page";
 
 describe("Buzz News Feed Test Cases", () => {
 
@@ -7,13 +8,16 @@ describe("Buzz News Feed Test Cases", () => {
   beforeEach(() => {
     cy.visit('/')
     cy.fixture("buzz-post-mock").then((postData) => {
-      cy.fixture("login-page-mock").then((loginData) => {
-        postText = postData.postText;
-        correctUsername = loginData.correctUsername;
-        correctPassword = loginData.correctPassword;
-        BuzzPage.goToBuzzPage();
-      })
-    })
+      postText = postData.postText;
+    });
+    cy.fixture("login-page-mock").then((loginData) => {
+      correctUsername = loginData.correctUsername;
+      correctPassword = loginData.correctPassword;
+    });
+    cy.then(() => {
+      LoginPage.login(correctUsername, correctPassword);
+      BuzzPage.goToBuzzPage();
+    });
   });
 
   it("Should write a Successful Post", () => {
