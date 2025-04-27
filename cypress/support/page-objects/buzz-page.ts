@@ -1,4 +1,10 @@
-const dayjs = require('dayjs')
+import dayjs from 'dayjs';
+
+enum POST_FILTER_OPTION {
+  MOST_RECENT = 'Most Recent Posts',
+  MOST_LIKED = 'Most Liked Posts',
+  MOST_COMMENTED = 'Most Commented Posts'
+}
 
 class BuzzPage {
 
@@ -11,8 +17,8 @@ class BuzzPage {
     userdropDownName: '.oxd-userdropdown-name',
     postEmpName: '.orangehrm-buzz-post-emp-name',
     postTime: '.orangehrm-buzz-post-time',
-    mostLiked: '.orangehrm-post-filters-button',
-    likesState: '.orangehrm-buzz-stats-row',
+    postFilter: '.orangehrm-post-filters-button',
+    likesState: '.orangehrm-buzz-stats-row'
   };
 
   static goToBuzzPage() {
@@ -27,18 +33,18 @@ class BuzzPage {
     cy.get(this.LOCATORS.postBtn).contains("Post").click()
   }
 
-  static verifyPost(text: string) {
-    cy.get(this.LOCATORS.postBody).first().should('contain.text', text);
+  static verifyPost(text: string, postIndex = 0) {
+    cy.get(this.LOCATORS.postBody).eq(postIndex).should('contain.text', text);
     cy.get(this.LOCATORS.toastAlert)
       .should('be.visible')
       .and('contain.text', 'Successfully Saved');
   }
 
-  static verifyPosterMatchesLoggedInUser() {
+  static verifyPosterMatchesLoggedInUser(postIndex = 0) {
     cy.get(this.LOCATORS.userdropDownName).invoke('text')
       .then((currentUser) => {
         const firstName = currentUser.split(' ')[0].toLocaleUpperCase();
-        cy.get(this.LOCATORS.postEmpName).first()
+        cy.get(this.LOCATORS.postEmpName).eq(postIndex)
           .invoke('text')
           .then((posterName) => {
             expect(posterName.trim().toLocaleUpperCase())
@@ -47,16 +53,16 @@ class BuzzPage {
       });
   }
 
-  static verifyDateAndTime() {
+  static verifyDateAndTime(postIndex = 0) {
     const postCurrentTime = dayjs().format('YYYY-DD-MM hh:mm A');
     const postOneMinuteAgo = dayjs().subtract(1, 'minute').format('YYYY-DD-MM hh:mm A');
-    cy.get(this.LOCATORS.postTime).first().invoke('text').then((text) => {
+    cy.get(this.LOCATORS.postTime).eq(postIndex).invoke('text').then((text) => {
       expect([postCurrentTime, postOneMinuteAgo]).to.include(text.trim());
     })
   }
 
   static getMostLikedPost() {
-    cy.get(this.LOCATORS.mostLiked).contains('Most Liked Posts').click();
+    cy.get(this.LOCATORS.postFilter).contains(POST_FILTER_OPTION.MOST_LIKED).click();
   }
 
   static verifyMostLikedPost() {

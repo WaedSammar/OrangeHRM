@@ -1,18 +1,19 @@
-import loginData from "../../fixtures/login-page-mock.json";
 import { BuzzPage } from "../../support/page-objects/buzz-page";
-import { LoginPage } from "../../support/page-objects/login-page";
 
 describe("Buzz News Feed Test Cases", () => {
 
-  let postText;
+  let postText, correctUsername, correctPassword;
 
   beforeEach(() => {
     cy.visit('/')
     cy.fixture("buzz-post-mock").then((postData) => {
-      postText = postData.postText;
+      cy.fixture("login-page-mock").then((loginData) => {
+        postText = postData.postText;
+        correctUsername = loginData.correctUsername;
+        correctPassword = loginData.correctPassword;
+        BuzzPage.goToBuzzPage();
+      })
     })
-    LoginPage.login(loginData.correctUsername, loginData.correctPassword);
-    BuzzPage.goToBuzzPage();
   });
 
   it("Should write a Successful Post", () => {
