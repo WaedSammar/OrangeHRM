@@ -1,3 +1,7 @@
+enum LOGIN_PAGE_MSGS {
+  INVALID_CREDENTIALS = "Invalid credentials",
+  REQUIRED_FIELD = "Required",
+}
 class LoginPage {
 
   private static LOCATORS = {
@@ -9,6 +13,12 @@ class LoginPage {
   };
 
   //Actions
+  static login(username: string, password: string) {
+    this.fill_username_field(username);
+    this.fill_password_field(password);
+    this.click_submit();
+  }
+
   static fill_username_field(username: string) {
     cy.get(this.LOCATORS.username).clear().type(username);
   }
@@ -43,9 +53,5 @@ class LoginPage {
       cy.wrap($el).should('have.css', 'color', 'rgb(235, 9, 16)');
     });
   }
-}
-enum LOGIN_PAGE_MSGS {
-  INVALID_CREDENTIALS = "Invalid credentials",
-  REQUIRED_FIELD = "Required",
 }
 export { LoginPage, LOGIN_PAGE_MSGS };
