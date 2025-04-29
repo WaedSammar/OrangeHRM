@@ -20,17 +20,25 @@ describe("Buzz News Feed Test Cases", () => {
     });
   });
 
+  it("Should Create Post Successfully", () => {
+    BuzzPage.createPostViaAPI(postText);
+    BuzzPage.verifyPost(postText);
+  })
+
   it("Should write a Successful Post", () => {
     BuzzPage.writePost(postText);
+    BuzzPage.interceptPostRequest();
     BuzzPage.submitPost();
+    BuzzPage.waitForSucceedPost();
     BuzzPage.verifyPost(postText);
   });
 
   it("Should verify Poster Name", () => {
     BuzzPage.writePost(postText);
+    BuzzPage.interceptPostRequest();
     BuzzPage.submitPost();
+    BuzzPage.verifyPosterName();
     BuzzPage.verifyPost(postText);
-    BuzzPage.verifyPosterMatchesLoggedInUser()
   })
 
   it("Should verify from current date", () => {
@@ -39,7 +47,7 @@ describe("Buzz News Feed Test Cases", () => {
     BuzzPage.verifyDateAndTime();
   })
 
-  it.only("Should verify most liked post", () => {
+  it("Should verify most liked post", () => {
     BuzzPage.getMostLikedPost();
     BuzzPage.verifyMostLikedPost();
   })

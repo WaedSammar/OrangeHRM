@@ -1,9 +1,15 @@
 import dayjs from 'dayjs';
+import { HTML_METHODS } from '../helpers/constants';
 
 enum POST_FILTER_OPTION {
   MOST_RECENT = 'Most Recent Posts',
   MOST_LIKED = 'Most Liked Posts',
   MOST_COMMENTED = 'Most Commented Posts'
+}
+
+const baseURL = Cypress.config().baseUrl;
+const URLs = {
+  posts: `${baseURL}/web/index.php/api/v2/buzz/posts`
 }
 
 class BuzzPage {
@@ -29,28 +35,52 @@ class BuzzPage {
     cy.get(this.LOCATORS.postPlaceHolder).type(text)
   }
 
+  static createPostViaAPI(text: string) {
+    cy.request(
+      HTML_METHODS.POST,
+      URLs.posts,
+      {
+        type: "text",
+        text,
+      }
+    )
+    cy.reload();
+  }
+
+  static interceptPostRequest() {
+    cy.intercept({
+      method: HTML_METHODS.POST,
+      url: URLs.posts,
+    }).as("post");
+  }
+
   static submitPost() {
     cy.get(this.LOCATORS.postBtn).contains("Post").click()
   }
 
+  static waitForSucceedPost() {
+    cy.wait("@post").its("response.statusCode").should("eq", 200);
+  }
+
+  static verifyPosterName() {
+    cy.wait("@post").then((response) => {
+      const { firstName, middleName, lastName } = response.response.body.data.employee;
+      const fullName = `${firstName} ${middleName} ${lastName}`.trim();
+      cy.get(this.LOCATORS.postEmpName)
+        .eq(0)
+        .invoke("text")
+        .should("eq", fullName);
+    })
+  }
+
   static verifyPost(text: string, postIndex: number = 0) {
     cy.get(this.LOCATORS.postBody).eq(postIndex).should('contain.text', text);
+  }
+
+  static verifyPostByAlert() {
     cy.get(this.LOCATORS.toastAlert)
       .should('be.visible')
       .and('contain.text', 'Successfully Saved');
-  }
-
-  static verifyPosterMatchesLoggedInUser(postIndex: number = 0) {
-    cy.get(this.LOCATORS.userdropDownName).invoke('text')
-      .then((currentUser) => {
-        const firstName = currentUser.split(' ')[0].toLocaleUpperCase();
-        cy.get(this.LOCATORS.postEmpName).eq(postIndex)
-          .invoke('text')
-          .then((posterName) => {
-            expect(posterName.trim().toLocaleUpperCase())
-              .to.include(firstName);
-          });
-      });
   }
 
   static verifyDateAndTime(postIndex: number = 0) {
