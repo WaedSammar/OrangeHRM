@@ -33,14 +33,14 @@ class BuzzPage {
     cy.get(this.LOCATORS.postBtn).contains("Post").click()
   }
 
-  static verifyPost(text: string, postIndex = 0) {
+  static verifyPost(text: string, postIndex: number = 0) {
     cy.get(this.LOCATORS.postBody).eq(postIndex).should('contain.text', text);
     cy.get(this.LOCATORS.toastAlert)
       .should('be.visible')
       .and('contain.text', 'Successfully Saved');
   }
 
-  static verifyPosterMatchesLoggedInUser(postIndex = 0) {
+  static verifyPosterMatchesLoggedInUser(postIndex: number = 0) {
     cy.get(this.LOCATORS.userdropDownName).invoke('text')
       .then((currentUser) => {
         const firstName = currentUser.split(' ')[0].toLocaleUpperCase();
@@ -53,7 +53,7 @@ class BuzzPage {
       });
   }
 
-  static verifyDateAndTime(postIndex = 0) {
+  static verifyDateAndTime(postIndex: number = 0) {
     const postCurrentTime = dayjs().format('YYYY-DD-MM hh:mm A');
     const postOneMinuteAgo = dayjs().subtract(1, 'minute').format('YYYY-DD-MM hh:mm A');
     cy.get(this.LOCATORS.postTime).eq(postIndex).invoke('text').then((text) => {
@@ -67,19 +67,21 @@ class BuzzPage {
 
   static verifyMostLikedPost() {
     cy.get(this.LOCATORS.likesState).then((posts) => {
-      let likesArr = [];
-      cy.wrap(posts).each(($post) => {
+      let max = Number.NEGATIVE_INFINITY;
+      cy.wrap(posts).each(($post, index) => {
         cy.wrap($post).invoke('text').then((text) => {
           const words = text.split(' ');
           const likesNum = parseInt(words[0]);
-          likesArr.push(likesNum);
+          if (likesNum > max) {
+            max = likesNum;
+          }
+          if (index === posts.length - 1) {
+            const mostLikedPost = parseInt(posts[0].innerText.split(' ')[0]);
+            expect(mostLikedPost).to.equal(max);
+          }
         })
-      }).then(() => {
-        const mostLikedPost = likesArr[0];
-        const maxLiked = Math.max(...likesArr);
-        expect(mostLikedPost).to.equal(maxLiked);
-      });
-    });
+      })
+    })
   }
 }
 export { BuzzPage };

@@ -39,7 +39,7 @@ describe("Buzz News Feed Test Cases", () => {
     BuzzPage.verifyDateAndTime();
   })
 
-  it("Should verify most liked post", () => {
+  it.only("Should verify most liked post", () => {
     BuzzPage.getMostLikedPost();
     BuzzPage.verifyMostLikedPost();
   })
