@@ -1,136 +1,158 @@
-import dayjs from 'dayjs';
-import { HTTP_METHODS } from '../helpers/constants';
-
-enum POST_FILTER_OPTION {
-  MOST_RECENT = 'Most Recent Posts',
-  MOST_LIKED = 'Most Liked Posts',
-  MOST_COMMENTED = 'Most Commented Posts'
-}
+import dayjs from "dayjs";
+import {
+  HTML_TAGS,
+  HTTP_METHOD,
+  HTTP_STATUS_CODE,
+  SEPARATORS,
+} from "../helpers/constants";
+import CommonHelper from "../helpers/common-helper";
+import ElementsHandler from "../elements-handler";
 
 const baseURL = Cypress.config().baseUrl;
-const URLs = {
+
+export const URLs = {
   posts: `${baseURL}/web/index.php/api/v2/buzz/posts`,
-  mostLiked: `${baseURL}/web/index.php/api/v2/buzz/feed?limit=10&offset=0&sortOrder=DESC&sortField=share.numOfLikes`
+  feed: `${baseURL}/web/index.php/api/v2/buzz/feed**`,
+};
+
+export enum POST_FILTER_OPTION {
+  MOST_RECENT = "Most Recent Posts",
+  MOST_LIKED = "Most Liked Posts",
+  MOST_COMMENTED = "Most Commented Posts",
 }
 
-class BuzzPage {
+enum TIME_FORMATS {
+  POST_TIME = "YYYY-DD-MM hh:mm A",
+}
 
-  private static postAlias: string;
-
+export default class BuzzPage {
   private static LOCATORS = {
     buzzBtn: "span.oxd-main-menu-item--name",
-    postBtn: 'button',
+    postBtn: "button",
     postPlaceHolder: `textarea[placeholder="What's on your mind?"]`,
-    postBody: '.orangehrm-buzz-post-body',
+    postBody: ".orangehrm-buzz-post-body",
     toastAlert: ".oxd-toast",
-    userdropDownName: '.oxd-userdropdown-name',
-    postEmpName: '.orangehrm-buzz-post-emp-name',
-    postTime: '.orangehrm-buzz-post-time',
-    postFilter: '.orangehrm-post-filters-button',
-    likesState: '.orangehrm-buzz-stats-row'
+    userdropDownName: ".oxd-userdropdown-name",
+    postEmpName: ".orangehrm-buzz-post-emp-name",
+    postTime: ".orangehrm-buzz-post-time",
+    postFilter: ".orangehrm-post-filters-button",
+    likesState: ".orangehrm-buzz-stats-row",
   };
 
+  /**
+   * Go to Buzz page
+   */
   static goToBuzzPage() {
     cy.get(this.LOCATORS.buzzBtn).contains("Buzz").click();
+    ElementsHandler.waitLoaderToBeHidden();
   }
 
+  /**
+   * Write post
+   * @param {string} text
+   */
   static writePost(text: string) {
-    cy.get(this.LOCATORS.postPlaceHolder).type(text)
+    cy.get(this.LOCATORS.postPlaceHolder).type(text);
   }
 
+  /**
+   * Create post via API
+   * @param {string} text
+   */
   static createPostViaAPI(text: string) {
-    cy.request(
-      HTTP_METHODS.POST,
-      URLs.posts,
-      {
+    return cy
+      .request(HTTP_METHOD.POST, URLs.posts, {
         type: "text",
         text,
-      }
-    )
+      })
+      .its(HTML_TAGS.body);
   }
 
-  static interceptPostRequest(aliasName: string) {
-    this.postAlias = aliasName;
-    cy.intercept({
-      method: HTTP_METHODS.POST,
-      url: URLs.posts,
-    }).as(aliasName);
-  }
-
+  /**
+   * Click on post button
+   */
   static submitPost() {
-    cy.get(this.LOCATORS.postBtn).contains("Post").click()
+    cy.get(this.LOCATORS.postBtn).contains("Post").click();
   }
 
-  static waitForSucceedPost() {
-    cy.wait(`@${this.postAlias}`).its("response.statusCode").should("eq", 200);
+  /**
+   * Verify the name of the employee who created the post
+   * @param {object} employeeInfo
+   * @param {number} postIndex
+   */
+  static verifyPosterName(employeeInfo: any, postIndex: number = 0) {
+    const { firstName, middleName, lastName } = employeeInfo;
+    const fullName = `${firstName} ${middleName} ${lastName}`.trim();
+    cy.get(this.LOCATORS.postEmpName)
+      .eq(postIndex)
+      .invoke(HTML_TAGS.text)
+      .should("eq", fullName);
   }
 
-  static verifyPosterName(postIndex: number = 0) {
-    cy.wait(`@${this.postAlias}`).then((response) => {
-      const { firstName, middleName, lastName } = response.response.body.data.employee;
-      const fullName = `${firstName} ${middleName} ${lastName}`.trim();
-      cy.get(this.LOCATORS.postEmpName)
-        .eq(postIndex)
-        .invoke("text")
-        .should("eq", fullName);
-    })
-  }
-
+  /**
+   * Verify the post content
+   * @param {string} text
+   * @param {number} postIndex
+   */
   static verifyPost(text: string, postIndex: number = 0) {
-    cy.get(this.LOCATORS.postBody).eq(postIndex).should('contain.text', text);
+    cy.get(this.LOCATORS.postBody).eq(postIndex).should("contain.text", text);
   }
 
+  /**
+   * Verify the post creation alert
+   */
   static verifyPostByAlert() {
     cy.get(this.LOCATORS.toastAlert)
-      .should('be.visible')
-      .and('contain.text', 'Successfully Saved');
+      .should("be.visible")
+      .and("contain.text", "Successfully Saved");
   }
 
-  static verifyDateAndTime(postIndex: number = 0) {
-    const postCurrentTime = dayjs().format('YYYY-DD-MM hh:mm A');
-    const postOneMinuteAgo = dayjs().subtract(1, 'minute').format('YYYY-DD-MM hh:mm A');
-    cy.get(this.LOCATORS.postTime).eq(postIndex).invoke('text').then((text) => {
-      expect([postCurrentTime, postOneMinuteAgo]).to.include(text.trim());
-    })
+  /**
+   * Verify the date and time of the post
+   * @param {string} createdAt
+   * @param {number} postIndex
+   */
+  static verifyDateAndTime(createdAt?: string, postIndex: number = 0) {
+    const postCurrentTime = dayjs(createdAt).format(TIME_FORMATS.POST_TIME);
+    const postOneMinuteAgo = dayjs(createdAt)
+      .subtract(1, "minute")
+      .format(TIME_FORMATS.POST_TIME);
+
+    cy.get(this.LOCATORS.postTime)
+      .eq(postIndex)
+      .invoke(HTML_TAGS.text)
+      .then((text) => {
+        expect([postCurrentTime, postOneMinuteAgo]).to.include(text.trim());
+      });
   }
 
-  static verifyDateAndTimeViaAPI(postIndex: number = 0) {
-    cy.wait(`@${this.postAlias}`).then((response) => {
-      const post = response.response.body.data;
-      const createdAt = dayjs(post.createdAt).format('YYYY-DD-MM hh:mm A');
-      const postOneMinuteAgo = dayjs(post.createdAt).subtract(1, 'minute').format('YYYY-DD-MM hh:mm A')
-
-      cy.get(this.LOCATORS.postTime)
-        .eq(postIndex)
-        .invoke("text")
-        .should((text) => {
-          expect([createdAt, postOneMinuteAgo]).to.include(text);
-        });
-    })
-  }
-
+  /**
+   * Filters the posts based on the selected option
+   * @param {POST_FILTER_OPTION} filterOption
+   */
   static applyPostFilter(filterOption: POST_FILTER_OPTION) {
     cy.get(this.LOCATORS.postFilter).contains(filterOption).click();
   }
 
-  static verifyMostLikedPost() {
-    cy.get(this.LOCATORS.likesState).then((posts) => {
-      let max = Number.NEGATIVE_INFINITY;
-      cy.wrap(posts).each(($post, index) => {
-        cy.wrap($post).invoke('text').then((text) => {
-          const words = text.split(' ');
-          const likesNum = parseInt(words[0]);
-          if (likesNum > max) {
-            max = likesNum;
-          }
-          if (index === posts.length - 1) {
-            const mostLikedPost = parseInt(posts[0].innerText.split(' ')[0]);
-            expect(mostLikedPost).to.equal(max);
-          }
-        })
-      })
-    })
-  }
+  /**
+   * Verify the most liked posts
+   */
+  static verifyMostLikedPosts() {
+    const likeCounts = [];
 
+    cy.get(this.LOCATORS.likesState)
+      .each(($post, index) => {
+        if (index & 1) return;
+        cy.wrap($post)
+          .find(HTML_TAGS.p)
+          .invoke(HTML_TAGS.text)
+          .then((text) => {
+            likeCounts.push(Number(text.split(SEPARATORS.SPACE)[0]));
+          });
+      })
+      .then(() => {
+        const sortedLikeCounts = [...likeCounts].sort((a, b) => b - a);
+        expect(likeCounts).to.deep.equal(sortedLikeCounts);
+      });
+  }
 }
-export { BuzzPage, POST_FILTER_OPTION };
