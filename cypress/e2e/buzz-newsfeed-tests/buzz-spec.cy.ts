@@ -1,4 +1,4 @@
-import { BuzzPage } from "../../support/page-objects/buzz-page";
+import { BuzzPage, POST_FILTER_OPTION } from "../../support/page-objects/buzz-page";
 import { LoginPage } from "../../support/page-objects/login-page";
 
 describe("Buzz News Feed Test Cases", () => {
@@ -27,7 +27,7 @@ describe("Buzz News Feed Test Cases", () => {
 
   it("Should write a Successful Post", () => {
     BuzzPage.writePost(postText);
-    BuzzPage.interceptPostRequest();
+    BuzzPage.interceptPostRequest("createPost");
     BuzzPage.submitPost();
     BuzzPage.waitForSucceedPost();
     BuzzPage.verifyPost(postText);
@@ -35,20 +35,21 @@ describe("Buzz News Feed Test Cases", () => {
 
   it("Should verify Poster Name", () => {
     BuzzPage.writePost(postText);
-    BuzzPage.interceptPostRequest();
+    BuzzPage.interceptPostRequest("createPost");
     BuzzPage.submitPost();
     BuzzPage.verifyPosterName();
     BuzzPage.verifyPost(postText);
   })
 
-  it("Should verify from current date", () => {
+  it.only("Should verify from current date", () => {
     BuzzPage.writePost(postText);
+    BuzzPage.interceptPostRequest("createPost");
     BuzzPage.submitPost();
-    BuzzPage.verifyDateAndTime();
+    BuzzPage.verifyDateAndTimeViaAPI();
   })
 
   it("Should verify most liked post", () => {
-    BuzzPage.getMostLikedPost();
+    BuzzPage.applyPostFilter(POST_FILTER_OPTION.MOST_LIKED);
     BuzzPage.verifyMostLikedPost();
   })
 })

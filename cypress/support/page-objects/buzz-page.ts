@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { HTML_METHODS } from '../helpers/constants';
+import { HTTP_METHODS } from '../helpers/constants';
 
 enum POST_FILTER_OPTION {
   MOST_RECENT = 'Most Recent Posts',
@@ -9,10 +9,13 @@ enum POST_FILTER_OPTION {
 
 const baseURL = Cypress.config().baseUrl;
 const URLs = {
-  posts: `${baseURL}/web/index.php/api/v2/buzz/posts`
+  posts: `${baseURL}/web/index.php/api/v2/buzz/posts`,
+  mostLiked: `${baseURL}/web/index.php/api/v2/buzz/feed?limit=10&offset=0&sortOrder=DESC&sortField=share.numOfLikes`
 }
 
 class BuzzPage {
+
+  private static postAlias: string;
 
   private static LOCATORS = {
     buzzBtn: "span.oxd-main-menu-item--name",
@@ -37,21 +40,21 @@ class BuzzPage {
 
   static createPostViaAPI(text: string) {
     cy.request(
-      HTML_METHODS.POST,
+      HTTP_METHODS.POST,
       URLs.posts,
       {
         type: "text",
         text,
       }
     )
-    cy.reload();
   }
 
-  static interceptPostRequest() {
+  static interceptPostRequest(aliasName: string) {
+    this.postAlias = aliasName;
     cy.intercept({
-      method: HTML_METHODS.POST,
+      method: HTTP_METHODS.POST,
       url: URLs.posts,
-    }).as("post");
+    }).as(aliasName);
   }
 
   static submitPost() {
@@ -59,15 +62,15 @@ class BuzzPage {
   }
 
   static waitForSucceedPost() {
-    cy.wait("@post").its("response.statusCode").should("eq", 200);
+    cy.wait(`@${this.postAlias}`).its("response.statusCode").should("eq", 200);
   }
 
-  static verifyPosterName() {
-    cy.wait("@post").then((response) => {
+  static verifyPosterName(postIndex: number = 0) {
+    cy.wait(`@${this.postAlias}`).then((response) => {
       const { firstName, middleName, lastName } = response.response.body.data.employee;
       const fullName = `${firstName} ${middleName} ${lastName}`.trim();
       cy.get(this.LOCATORS.postEmpName)
-        .eq(0)
+        .eq(postIndex)
         .invoke("text")
         .should("eq", fullName);
     })
@@ -91,8 +94,23 @@ class BuzzPage {
     })
   }
 
-  static getMostLikedPost() {
-    cy.get(this.LOCATORS.postFilter).contains(POST_FILTER_OPTION.MOST_LIKED).click();
+  static verifyDateAndTimeViaAPI(postIndex: number = 0) {
+    cy.wait(`@${this.postAlias}`).then((response) => {
+      const post = response.response.body.data;
+      const createdAt = dayjs(post.createdAt).format('YYYY-DD-MM hh:mm A');
+      const postOneMinuteAgo = dayjs(post.createdAt).subtract(1, 'minute').format('YYYY-DD-MM hh:mm A')
+
+      cy.get(this.LOCATORS.postTime)
+        .eq(postIndex)
+        .invoke("text")
+        .should((text) => {
+          expect([createdAt, postOneMinuteAgo]).to.include(text);
+        });
+    })
+  }
+
+  static applyPostFilter(filterOption: POST_FILTER_OPTION) {
+    cy.get(this.LOCATORS.postFilter).contains(filterOption).click();
   }
 
   static verifyMostLikedPost() {
@@ -113,5 +131,6 @@ class BuzzPage {
       })
     })
   }
+
 }
-export { BuzzPage };
+export { BuzzPage, POST_FILTER_OPTION };
