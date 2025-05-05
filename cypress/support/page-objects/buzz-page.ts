@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { HTTP_METHODS } from '../helpers/constants';
+import { HTML_TAGS, HTTP_METHODS } from '../helpers/constants';
 
 enum POST_FILTER_OPTION {
   MOST_RECENT = 'Most Recent Posts',
@@ -9,20 +9,17 @@ enum POST_FILTER_OPTION {
 
 const baseURL = Cypress.config().baseUrl;
 const URLs = {
-  posts: `${baseURL}/web/index.php/api/v2/buzz/posts`,
-  mostLiked: `${baseURL}/web/index.php/api/v2/buzz/feed?limit=10&offset=0&sortOrder=DESC&sortField=share.numOfLikes`
+  posts: `${baseURL}/web/index.php/api/v2/buzz/posts`
 }
 
 class BuzzPage {
 
-  private static postAlias: string;
-
   private static LOCATORS = {
-    buzzBtn: "span.oxd-main-menu-item--name",
+    buzzBtn: 'span.oxd-main-menu-item--name',
     postBtn: 'button',
     postPlaceHolder: `textarea[placeholder="What's on your mind?"]`,
     postBody: '.orangehrm-buzz-post-body',
-    toastAlert: ".oxd-toast",
+    toastAlert: '.oxd-toast',
     userdropDownName: '.oxd-userdropdown-name',
     postEmpName: '.orangehrm-buzz-post-emp-name',
     postTime: '.orangehrm-buzz-post-time',
@@ -30,103 +27,143 @@ class BuzzPage {
     likesState: '.orangehrm-buzz-stats-row'
   };
 
+  /**
+   * Navigates to the Buzz page by clicking the Buzz button.
+   * @param
+   */
   static goToBuzzPage() {
     cy.get(this.LOCATORS.buzzBtn).contains("Buzz").click();
   }
 
+  /**
+   * Writes a post by typing the provided text into the post input field.
+   * @param {string} text - The text content to post
+   */
   static writePost(text: string) {
     cy.get(this.LOCATORS.postPlaceHolder).type(text)
   }
 
+  /**
+   * Creates a post by sending a POST request to the API with the given text content
+   * @param {string} text - The text content of the post
+   */
   static createPostViaAPI(text: string) {
-    cy.request(
-      HTTP_METHODS.POST,
-      URLs.posts,
-      {
-        type: "text",
-        text,
-      }
-    )
+    return cy
+      .request(
+        HTTP_METHODS.POST,
+        URLs.posts,
+        {
+          type: "text",
+          text,
+        }
+      ).as(HTML_TAGS.body)
   }
 
+  /**
+   * Intercepts the POST request to create a post and assigns an alias
+   * @param {string} aliasName - The alias to assign to the intercepted request
+   */
   static interceptPostRequest(aliasName: string) {
-    this.postAlias = aliasName;
     cy.intercept({
       method: HTTP_METHODS.POST,
       url: URLs.posts,
     }).as(aliasName);
   }
 
+  /**
+   * Clicks the "Post" button to submit a post
+   */
   static submitPost() {
     cy.get(this.LOCATORS.postBtn).contains("Post").click()
   }
 
-  static waitForSucceedPost() {
-    cy.wait(`@${this.postAlias}`).its("response.statusCode").should("eq", 200);
+  /**
+   * Waits for the post request to complete and asserts a successful (200) status code
+   */
+  static waitForSucceedPost(aliasName: string) {
+    return new Cypress.Promise((resolve) => {
+      cy.wait(`@${aliasName}`).then((response) => {
+        expect(response.response.statusCode).to.eq(200);
+        resolve(response);
+      });
+    });
   }
 
-  static verifyPosterName(postIndex: number = 0) {
-    cy.wait(`@${this.postAlias}`).then((response) => {
+  /**
+   * Verifies that the name of the post's author matches the name in the response body
+   * @param {string} aliasName - The alias of the intercepted POST request
+   * @param {number} [postIndex] - The index of the post to verify 
+   */
+  static verifyPosterName(aliasName: string, postIndex: number = 0) {
+    cy.wait(`@${aliasName}`).then((response) => {
       const { firstName, middleName, lastName } = response.response.body.data.employee;
       const fullName = `${firstName} ${middleName} ${lastName}`.trim();
+
       cy.get(this.LOCATORS.postEmpName)
         .eq(postIndex)
-        .invoke("text")
+        .invoke(HTML_TAGS.text)
         .should("eq", fullName);
     })
   }
 
+  /**
+   * Verifies that the post content matches the expected text
+   * @param {string} text - The expected post content
+   * @param {number} [postIndex] - The index of the post to verify
+   */
   static verifyPost(text: string, postIndex: number = 0) {
     cy.get(this.LOCATORS.postBody).eq(postIndex).should('contain.text', text);
   }
 
-  static verifyPostByAlert() {
+  /**
+   * Verifies that a visible toast alert contains the expected message
+   * @param {string} message - The expected text content of the alert
+   */
+  static verifyToastAlert(message: string) {
     cy.get(this.LOCATORS.toastAlert)
       .should('be.visible')
-      .and('contain.text', 'Successfully Saved');
+      .and('contain.text', message);
   }
 
-  static verifyDateAndTime(postIndex: number = 0) {
-    const postCurrentTime = dayjs().format('YYYY-DD-MM hh:mm A');
-    const postOneMinuteAgo = dayjs().subtract(1, 'minute').format('YYYY-DD-MM hh:mm A');
-    cy.get(this.LOCATORS.postTime).eq(postIndex).invoke('text').then((text) => {
-      expect([postCurrentTime, postOneMinuteAgo]).to.include(text.trim());
-    })
+  /**
+   * Verifies that the post timestamp is either the current time or one minute ago
+   * @param {number} [postIndex] - The index of the post to verify
+   */
+  static verifyDateAndTime(createdAt?: string, postIndex: number = 0) {
+    const postCurrentTime = dayjs(createdAt).format('YYYY-DD-MM hh:mm A');
+    const postOneMinuteAgo = dayjs(createdAt).subtract(1, 'minute').format('YYYY-DD-MM hh:mm A');
+
+    cy.get(this.LOCATORS.postTime)
+      .eq(postIndex)
+      .invoke(HTML_TAGS.text)
+      .then((text) => {
+        expect([postCurrentTime, postOneMinuteAgo]).to.include(text.trim());
+      })
   }
 
-  static verifyDateAndTimeViaAPI(postIndex: number = 0) {
-    cy.wait(`@${this.postAlias}`).then((response) => {
-      const post = response.response.body.data;
-      const createdAt = dayjs(post.createdAt).format('YYYY-DD-MM hh:mm A');
-      const postOneMinuteAgo = dayjs(post.createdAt).subtract(1, 'minute').format('YYYY-DD-MM hh:mm A')
-
-      cy.get(this.LOCATORS.postTime)
-        .eq(postIndex)
-        .invoke("text")
-        .should((text) => {
-          expect([createdAt, postOneMinuteAgo]).to.include(text);
-        });
-    })
-  }
-
+  /**
+   * Applies a filter to the posts based on the given option
+   * @param {POST_FILTER_OPTION} filterOption - The filter to apply
+   */
   static applyPostFilter(filterOption: POST_FILTER_OPTION) {
     cy.get(this.LOCATORS.postFilter).contains(filterOption).click();
   }
 
+  /**
+   * Verifies that the top post displayed has the highest number of likes
+   */
   static verifyMostLikedPost() {
     cy.get(this.LOCATORS.likesState).then((posts) => {
       let max = Number.NEGATIVE_INFINITY;
-      cy.wrap(posts).each(($post, index) => {
-        cy.wrap($post).invoke('text').then((text) => {
-          const words = text.split(' ');
+      cy.wrap(posts).each(($post) => {
+        cy.wrap($post).invoke(HTML_TAGS.text).then((text) => {
+          const words = text.split(" ");
           const likesNum = parseInt(words[0]);
           if (likesNum > max) {
             max = likesNum;
           }
-          if (index === posts.length - 1) {
-            const mostLikedPost = parseInt(posts[0].innerText.split(' ')[0]);
-            expect(mostLikedPost).to.equal(max);
-          }
+          const mostLikedPost = parseInt(posts[0].innerText.split(" ")[0]);
+          expect(mostLikedPost).to.equal(max);
         })
       })
     })

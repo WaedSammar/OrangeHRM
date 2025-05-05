@@ -1,3 +1,4 @@
+import CommonHelper from "../../support/helpers/common-helper";
 import { BuzzPage, POST_FILTER_OPTION } from "../../support/page-objects/buzz-page";
 import { LoginPage } from "../../support/page-objects/login-page";
 
@@ -20,36 +21,57 @@ describe("Buzz News Feed Test Cases", () => {
     });
   });
 
-  it("Should Create Post Successfully", () => {
-    BuzzPage.createPostViaAPI(postText);
-    BuzzPage.verifyPost(postText);
+  it("Should create a new post via API", () => {
+    BuzzPage.createPostViaAPI(postText).then(() => {
+      BuzzPage.goToBuzzPage();
+      BuzzPage.verifyPost(postText);
+    })
   })
 
-  it("Should write a Successful Post", () => {
+  it("Should write a successful post", () => {
     BuzzPage.writePost(postText);
-    BuzzPage.interceptPostRequest("createPost");
+    const createPostAliasName = CommonHelper.generate_random_string(
+      7,
+      "CreatePost_"
+    );
+    BuzzPage.interceptPostRequest(createPostAliasName);
     BuzzPage.submitPost();
-    BuzzPage.waitForSucceedPost();
-    BuzzPage.verifyPost(postText);
+    BuzzPage.waitForSucceedPost(createPostAliasName).then(() => {
+      BuzzPage.verifyPost(postText);
+    })
   });
 
-  it("Should verify Poster Name", () => {
+  it("Should verify poster name", () => {
     BuzzPage.writePost(postText);
-    BuzzPage.interceptPostRequest("createPost");
+    const createPostAliasName = CommonHelper.generate_random_string(
+      4,
+      "CreatePost_"
+    );
+    BuzzPage.interceptPostRequest(createPostAliasName);
     BuzzPage.submitPost();
-    BuzzPage.verifyPosterName();
-    BuzzPage.verifyPost(postText);
-  })
+    BuzzPage.waitForSucceedPost(createPostAliasName).then((response) => {
+      // @ts-ignore
+      BuzzPage.verifyPosterName(response.data.employee);
+      BuzzPage.verifyPost(postText);
+    })
+  });
 
-  it.only("Should verify from current date", () => {
+  it("Should verify post date is current", () => {
     BuzzPage.writePost(postText);
-    BuzzPage.interceptPostRequest("createPost");
+    const createPostAliasName = CommonHelper.generate_random_string(
+      2,
+      "CreatePost_"
+    );
+    BuzzPage.interceptPostRequest(createPostAliasName);
     BuzzPage.submitPost();
-    BuzzPage.verifyDateAndTimeViaAPI();
-  })
+    BuzzPage.waitForSucceedPost(createPostAliasName).then((response) => {
+      // @ts-ignore
+      BuzzPage.verifyDateAndTime(response.data.createdAt);
+    })
+  });
 
   it("Should verify most liked post", () => {
     BuzzPage.applyPostFilter(POST_FILTER_OPTION.MOST_LIKED);
     BuzzPage.verifyMostLikedPost();
-  })
+  });
 })
