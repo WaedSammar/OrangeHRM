@@ -73,7 +73,7 @@ describe("Employee management - Add and Save Test Cases", () => {
 
     PIMPage.fillOtherId(otherId);
     PIMPage.fillLicenseNum(licenseNum);
-    PIMPage.selectDate(expDate, 0);
+    PIMPage.selectDate(expDate);
     PIMPage.removeFocusFromDatePicker();
     PIMPage.selectNationality(nationality);
     PIMPage.selectMaritalStatus(maritalState);
