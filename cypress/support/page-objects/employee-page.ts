@@ -1,11 +1,3 @@
-import { use } from "chai";
-import { HTTP_METHODS } from "../helpers/constants";
-
-const URLs = {
-  employees: `/api/v2/pim/employees`,
-  personalDetails: `/pim/employees/**/personal-details`
-}
-
 class PIMPage {
 
   private static LOCATORS = {
@@ -17,35 +9,11 @@ class PIMPage {
     createLoginCheckbox: "input[type='checkbox']",
     inputGroup: ".oxd-input-group",
     submitBtn: "button[type='submit']",
-    dateInput: "input[placeholder='yyyy-dd-mm']",
+    dateInput: "input[placeholder='D, dd M yyyy']",
     validationMsg: ".oxd-input-group__message",
     dropDownList: ".oxd-userdropdown-name",
     selectField: ".oxd-select-text",
     dropdownOption: ".oxd-select-dropdown"
-  }
-
-  static interceptPIMRequest(url: string, aliasName: string) {
-    cy.intercept({
-      method: HTTP_METHODS.GET,
-      url: `**${url}*`
-    }).as(aliasName)
-  }
-
-  static interceptPIMEmployee(aliasName: string) {
-    this.interceptPIMRequest(URLs.employees, aliasName)
-  }
-
-  static interceptPIMPersonal(aliasName: string) {
-    this.interceptPIMRequest(URLs.personalDetails, aliasName)
-  }
-
-  static waitForSuccess(aliasName: string) {
-    return new Cypress.Promise((resolve) => {
-      cy.wait(`@${aliasName}`).then((res) => {
-        expect(res.response.statusCode).to.eq(200);
-        resolve(res);
-      })
-    })
   }
 
   static goToPIMPage() {
@@ -168,4 +136,5 @@ class PIMPage {
     cy.contains("Logout").click();
   }
 }
-export default PIMPage;
+
+export { PIMPage };

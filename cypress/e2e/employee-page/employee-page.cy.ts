@@ -1,5 +1,6 @@
+import APIsHelper from "../../support/helpers/apis-helpers";
 import CommonHelper from "../../support/helpers/common-helper";
-import PIMPage from "../../support/page-objects/employee-page";
+import { PIMPage } from "../../support/page-objects/employee-page";
 import { LoginPage } from "../../support/page-objects/login-page";
 
 describe("Employee management - Add and Save Test Cases", () => {
@@ -33,27 +34,25 @@ describe("Employee management - Add and Save Test Cases", () => {
       adminName = loginData.correctUsername;
       adminPass = loginData.correctPassword;
     })
-    cy.then(() => {
-      LoginPage.login(adminName, adminPass);
-      const createLoadPIM = CommonHelper.generate_random_string(
-        7,
-        "loadPIM_"
-      );
-      PIMPage.interceptPIMEmployee(createLoadPIM);
-      PIMPage.goToPIMPage();
-      PIMPage.waitForSuccess(createLoadPIM).then(() => {
-        PIMPage.goToAdd();
-      })
-    });
   });
 
   it("Verify adding new employee", () => {
+    LoginPage.login(adminName, adminPass);
+    const createLoadPIM = CommonHelper.generate_random_string(
+      7,
+      "loadPIM_"
+    );
+    APIsHelper.interceptPIMEmployee(createLoadPIM);
+    PIMPage.goToPIMPage();
+    APIsHelper.waitForApiResponse(createLoadPIM)
+    PIMPage.goToAdd();
+
     const createLoadPersonalDetails = CommonHelper.generate_random_string(
       7,
       "loadPersonalDetails"
     );
 
-    PIMPage.interceptPIMPersonal(createLoadPersonalDetails);
+    APIsHelper.interceptPIMPersonal(createLoadPersonalDetails);
 
     PIMPage.fillFirstName(firstName);
     PIMPage.fillMiddleName(middleName);
@@ -69,9 +68,9 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.handleErrors()
     PIMPage.clickSave();
 
-    PIMPage.waitForSuccess(createLoadPersonalDetails).then(() => {
-      PIMPage.verifyPersonalDetailsHeaderVisible();
-    })
+    APIsHelper.waitForApiResponse(createLoadPersonalDetails)
+    PIMPage.verifyPersonalDetailsHeaderVisible();
+
 
     PIMPage.fillOtherId(otherId);
     PIMPage.fillLicenseNum(licenseNum);
@@ -87,6 +86,17 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.fillTestField(testField);
     PIMPage.clickSave(1);
 
+    Cypress.env("employeeUsername", userName);
+    Cypress.env("employeePassword", password);
+
     PIMPage.logout();
+  })
+
+  it("Logout and re-login using prev information", () => {
+    const employeeUsername = Cypress.env("employeeUsername");
+    const employeePassword = Cypress.env("employeePassword");
+
+    LoginPage.login(employeeUsername, employeePassword);
+
   })
 })

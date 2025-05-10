@@ -1,6 +1,9 @@
 export enum HTTP_METHODS {
   GET = 'GET',
   POST = 'POST',
+  PUT = "PUT",
+  PATCH = "PATCH",
+  DELETE = "DELETE",
 }
 
 export enum HTML_TAGS {
@@ -19,4 +22,10 @@ export enum SEPARATORS {
   SPACE = " ",
   NEW_LINE = "\n",
   EMPTY = "",
+}
+
+export enum HTTP_STATUS_CODE {
+  success = 200,
+  created = 201,
+  error = 500,
 }
