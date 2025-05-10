@@ -1,7 +1,7 @@
 class PIMPage {
 
   private static LOCATORS = {
-    PIMBtn: "span.oxd-main-menu-item--name",
+    menuBtn: "span.oxd-main-menu-item--name",
     AddBtn: "button",
     firstName: ".orangehrm-firstname",
     middleName: ".orangehrm-middlename",
@@ -9,7 +9,7 @@ class PIMPage {
     createLoginCheckbox: "input[type='checkbox']",
     inputGroup: ".oxd-input-group",
     submitBtn: "button[type='submit']",
-    dateInput: "input[placeholder='D, dd M yyyy']",
+    dateInput: "input[placeholder='yyyy-dd-mm']",
     validationMsg: ".oxd-input-group__message",
     dropDownList: ".oxd-userdropdown-name",
     selectField: ".oxd-select-text",
@@ -17,7 +17,7 @@ class PIMPage {
   }
 
   static goToPIMPage() {
-    cy.get(this.LOCATORS.PIMBtn).contains("PIM").click();
+    cy.get(this.LOCATORS.menuBtn).contains("PIM").click();
   }
 
   static goToAdd() {
@@ -134,6 +134,10 @@ class PIMPage {
   static logout() {
     cy.get(this.LOCATORS.dropDownList).click();
     cy.contains("Logout").click();
+  }
+
+  static goToInfoPage(){
+    cy.get(this.LOCATORS.menuBtn).contains("My Info").click();
   }
 }
 

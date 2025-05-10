@@ -44,7 +44,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     );
     APIsHelper.interceptPIMEmployee(createLoadPIM);
     PIMPage.goToPIMPage();
-    APIsHelper.waitForApiResponse(createLoadPIM)
+    APIsHelper.waitForApiResponse(createLoadPIM);
     PIMPage.goToAdd();
 
     const createLoadPersonalDetails = CommonHelper.generate_random_string(
@@ -65,22 +65,21 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.fillConfirmPassword(password);
 
     PIMPage.verifyStatusIsEnabled();
-    PIMPage.handleErrors()
+    PIMPage.handleErrors();
     PIMPage.clickSave();
 
-    APIsHelper.waitForApiResponse(createLoadPersonalDetails)
+    APIsHelper.waitForApiResponse(createLoadPersonalDetails);
     PIMPage.verifyPersonalDetailsHeaderVisible();
-
 
     PIMPage.fillOtherId(otherId);
     PIMPage.fillLicenseNum(licenseNum);
     PIMPage.selectDate(expDate, 0);
     PIMPage.removeFocusFromDatePicker();
     PIMPage.selectNationality(nationality);
-    PIMPage.selectMaritalStatus(maritalState)
+    PIMPage.selectMaritalStatus(maritalState);
     PIMPage.selectDate(dateOfBirth, 1);
     PIMPage.selectGender(gender);
-    PIMPage.clickSave(0);
+    PIMPage.clickSave();
 
     PIMPage.selectBloodType(bloodType);
     PIMPage.fillTestField(testField);
@@ -90,7 +89,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     Cypress.env("employeePassword", password);
 
     PIMPage.logout();
-  })
+  });
 
   it("Logout and re-login using prev information", () => {
     const employeeUsername = Cypress.env("employeeUsername");
@@ -98,5 +97,31 @@ describe("Employee management - Add and Save Test Cases", () => {
 
     LoginPage.login(employeeUsername, employeePassword);
 
-  })
+    const verifyEmployeeInfo = CommonHelper.generate_random_string(
+      7,
+      "employeeInfo"
+    );
+    APIsHelper.interceptEmployeePersonalDetails(verifyEmployeeInfo);
+    PIMPage.goToInfoPage();
+
+    APIsHelper.getInterceptionApiResponse(verifyEmployeeInfo)
+      .then(
+        (data: any) => {
+          expect(data.firstName).to.equal(firstName);
+          expect(data.middleName).to.equal(middleName);
+          expect(data.lastName).to.equal(lastName);
+          expect(data.employeeId).to.equal(employeeId);
+          expect(data.otherId).to.equal(otherId);
+          expect(data.drivingLicenseNo).to.equal(licenseNum);
+          expect(data.drivingLicenseExpiredDate).to.include(expDate);
+          expect(data.nationality).to.equal(nationality);
+          expect(data.maritalStatus).to.equal(maritalState.toUpperCase());
+          expect(data.birthday).to.include(dateOfBirth);
+          expect(data.gender).to.equal(gender.toUpperCase());
+          expect(data.bloodType).to.equal(bloodType);
+          expect(data.custom1).to.equal(testField);
+        }
+      )
+  });
+
 })
