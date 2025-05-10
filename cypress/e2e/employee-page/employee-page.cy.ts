@@ -1,0 +1,92 @@
+import CommonHelper from "../../support/helpers/common-helper";
+import PIMPage from "../../support/page-objects/employee-page";
+import { LoginPage } from "../../support/page-objects/login-page";
+
+describe("Employee management - Add and Save Test Cases", () => {
+
+  let adminName, adminPass, firstName, middleName, lastName, employeeId, userName, password,
+    otherId, licenseNum, expDate, nationality, maritalState, dateOfBirth, gender, bloodType,
+    testField;
+
+  beforeEach(() => {
+
+    cy.fixture("employee-page-mock").then((addEmployeeData) => {
+      const randomId = Math.floor(Math.random() * 10000);
+
+      firstName = addEmployeeData.firstName;
+      middleName = addEmployeeData.middleName;
+      lastName = addEmployeeData.lastName;
+      employeeId = `${addEmployeeData.employeeId}${randomId}`;
+      userName = `${addEmployeeData.userName}${randomId}`;
+      password = addEmployeeData.password;
+      otherId = addEmployeeData.otherId;
+      licenseNum = addEmployeeData.licenseNum;
+      expDate = addEmployeeData.expDate;
+      nationality = addEmployeeData.nationality;
+      maritalState = addEmployeeData.maritalState;
+      dateOfBirth = addEmployeeData.dateOfBirth;
+      gender = addEmployeeData.gender;
+      bloodType = addEmployeeData.bloodType;
+      testField = addEmployeeData.testField;
+    })
+    cy.fixture("login-page-mock").then((loginData) => {
+      adminName = loginData.correctUsername;
+      adminPass = loginData.correctPassword;
+    })
+    cy.then(() => {
+      LoginPage.login(adminName, adminPass);
+      const createLoadPIM = CommonHelper.generate_random_string(
+        7,
+        "loadPIM_"
+      );
+      PIMPage.interceptPIMEmployee(createLoadPIM);
+      PIMPage.goToPIMPage();
+      PIMPage.waitForSuccess(createLoadPIM).then(() => {
+        PIMPage.goToAdd();
+      })
+    });
+  });
+
+  it("Verify adding new employee", () => {
+    const createLoadPersonalDetails = CommonHelper.generate_random_string(
+      7,
+      "loadPersonalDetails"
+    );
+
+    PIMPage.interceptPIMPersonal(createLoadPersonalDetails);
+
+    PIMPage.fillFirstName(firstName);
+    PIMPage.fillMiddleName(middleName);
+    PIMPage.fillLastName(lastName);
+    PIMPage.fillEmployeeId(employeeId);
+
+    PIMPage.ensureLoginButtonActive();
+    PIMPage.fillUsername(userName);
+    PIMPage.fillPassword(password);
+    PIMPage.fillConfirmPassword(password);
+
+    PIMPage.verifyStatusIsEnabled();
+    PIMPage.handleErrors()
+    PIMPage.clickSave();
+
+    PIMPage.waitForSuccess(createLoadPersonalDetails).then(() => {
+      PIMPage.verifyPersonalDetailsHeaderVisible();
+    })
+
+    PIMPage.fillOtherId(otherId);
+    PIMPage.fillLicenseNum(licenseNum);
+    PIMPage.selectDate(expDate, 0);
+    PIMPage.removeFocusFromDatePicker();
+    PIMPage.selectNationality(nationality);
+    PIMPage.selectMaritalStatus(maritalState)
+    PIMPage.selectDate(dateOfBirth, 1);
+    PIMPage.selectGender(gender);
+    PIMPage.clickSave(0);
+
+    PIMPage.selectBloodType(bloodType);
+    PIMPage.fillTestField(testField);
+    PIMPage.clickSave(1);
+
+    PIMPage.logout();
+  })
+})
