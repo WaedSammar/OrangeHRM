@@ -8,7 +8,7 @@ class LoginPage {
     username: "[name='username']",
     password: "[name='password']",
     loginBtn: "[type='submit']",
-    errorMsg: '.oxd-alert-content-text',
+    errorMsg: 'oxd-alert-content-text',
     requiredMsg: ".oxd-input-field-error-message",
   };
 

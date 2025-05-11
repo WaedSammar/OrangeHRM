@@ -7,14 +7,15 @@ export enum HTTP_METHODS {
 }
 
 export enum HTML_TAGS {
-  text = 'text',
-  body = 'body',
-  div = 'div',
-  span = 'span',
-  button = 'button',
-  a = 'a',
-  input = 'input',
-  textarea = 'textarea',
+  text = "text",
+  body = "body",
+  div = "div",
+  span = "span",
+  button = "button",
+  a = "a",
+  input = "input",
+  textarea = "textarea",
+  p = "p",
 }
 
 export enum SEPARATORS {

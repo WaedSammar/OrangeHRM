@@ -1,4 +1,4 @@
-import APIsHelper from "../../support/helpers/apis-helpers";
+import { APIsHelper } from "../../support/helpers/apis-helpers";
 import CommonHelper from "../../support/helpers/common-helper";
 import { PIMPage } from "../../support/page-objects/employee-page";
 import { LoginPage } from "../../support/page-objects/login-page";
@@ -38,7 +38,7 @@ describe("Employee management - Add and Save Test Cases", () => {
 
   it("Verify adding new employee", () => {
     LoginPage.login(adminName, adminPass);
-    const createLoadPIM = CommonHelper.generate_random_string(
+    const createLoadPIM = CommonHelper.generateRandomAlias(
       7,
       "loadPIM_"
     );
@@ -47,7 +47,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     APIsHelper.waitForApiResponse(createLoadPIM);
     PIMPage.goToAdd();
 
-    const createLoadPersonalDetails = CommonHelper.generate_random_string(
+    const createLoadPersonalDetails = CommonHelper.generateRandomAlias(
       7,
       "loadPersonalDetails"
     );
@@ -97,7 +97,7 @@ describe("Employee management - Add and Save Test Cases", () => {
 
     LoginPage.login(employeeUsername, employeePassword);
 
-    const verifyEmployeeInfo = CommonHelper.generate_random_string(
+    const verifyEmployeeInfo = CommonHelper.generateRandomAlias(
       7,
       "employeeInfo"
     );
