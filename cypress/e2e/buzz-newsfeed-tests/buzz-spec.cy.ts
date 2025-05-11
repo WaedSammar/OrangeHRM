@@ -2,6 +2,7 @@ import { APIsHelper } from "../../support/helpers/apis-helpers";
 import CommonHelper from "../../support/helpers/common-helper";
 import { BuzzPage, POST_FILTER_OPTION } from "../../support/page-objects/buzz-page";
 import { LoginPage } from "../../support/page-objects/login-page";
+import { CreatePostResponse } from "../../support/types/buzz-api-response";
 
 describe("Buzz News Feed Test Cases", () => {
 
@@ -52,7 +53,7 @@ describe("Buzz News Feed Test Cases", () => {
     BuzzPage.submitPost();
     APIsHelper.getInterceptionApiResponse(createPostAliasName)
       .then(
-        (response: any) => {
+        (response: CreatePostResponse) => {
           BuzzPage.verifyPosterName(response.data.employee);
           BuzzPage.verifyPost(postText);
         })
@@ -68,7 +69,8 @@ describe("Buzz News Feed Test Cases", () => {
     BuzzPage.submitPost();
     APIsHelper.getInterceptionApiResponse(createPostAliasName)
       .then(
-        (response: any) => {
+        (response: CreatePostResponse) => {
+          console.log(response);
           BuzzPage.verifyDateAndTime(response.data.createdAt);
         })
   });
