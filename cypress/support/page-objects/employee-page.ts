@@ -13,7 +13,8 @@ class PIMPage {
     validationMsg: ".oxd-input-group__message",
     dropDownList: ".oxd-userdropdown-name",
     selectField: ".oxd-select-text",
-    dropdownOption: ".oxd-select-dropdown"
+    dropdownOption: ".oxd-select-dropdown",
+    selectGender: `input[type="radio"][value="1"]`
   }
 
   /**
@@ -198,9 +199,7 @@ class PIMPage {
    * @param gender - employee gender
    */
   static selectGender(gender: "Male" | "Female") {
-    cy.contains("label", gender)
-      .parent()
-      .click();
+    cy.contains("label", gender).click({ force: true });
   }
 
   /**

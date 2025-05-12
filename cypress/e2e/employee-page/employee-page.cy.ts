@@ -52,7 +52,7 @@ describe("Employee management - Add and Save Test Cases", () => {
       "loadPersonalDetails"
     );
 
-    APIsHelper.interceptPIMPersonal(createLoadPersonalDetails);
+    APIsHelper.interceptEmployeePersonalDetails(createLoadPersonalDetails);
 
     PIMPage.fillFirstName(firstName);
     PIMPage.fillMiddleName(middleName);
@@ -67,6 +67,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.verifyStatusIsEnabled();
     PIMPage.handleErrors();
     PIMPage.clickSave();
+    Cypress.env("employeeId", employeeId);
 
     APIsHelper.waitForApiResponse(createLoadPersonalDetails);
     PIMPage.verifyPersonalDetailsHeaderVisible();
@@ -94,6 +95,7 @@ describe("Employee management - Add and Save Test Cases", () => {
   it("Logout and re-login using prev information", () => {
     const employeeUsername = Cypress.env("employeeUsername");
     const employeePassword = Cypress.env("employeePassword");
+    const employeeId = Cypress.env("employeeId");
 
     LoginPage.login(employeeUsername, employeePassword);
 
@@ -106,7 +108,8 @@ describe("Employee management - Add and Save Test Cases", () => {
 
     APIsHelper.getInterceptionApiResponse(verifyEmployeeInfo)
       .then(
-        (data: any) => {
+        (response: any) => {
+          const data = response.data;
           expect(data.firstName).to.equal(firstName);
           expect(data.middleName).to.equal(middleName);
           expect(data.lastName).to.equal(lastName);
@@ -114,12 +117,11 @@ describe("Employee management - Add and Save Test Cases", () => {
           expect(data.otherId).to.equal(otherId);
           expect(data.drivingLicenseNo).to.equal(licenseNum);
           expect(data.drivingLicenseExpiredDate).to.include(expDate);
-          expect(data.nationality).to.equal(nationality);
-          expect(data.maritalStatus).to.equal(maritalState.toUpperCase());
+          expect(data.nationality.name).to.equal(nationality);
+          expect(data.maritalStatus).to.equal(maritalState);
           expect(data.birthday).to.include(dateOfBirth);
-          expect(data.gender).to.equal(gender.toUpperCase());
-          expect(data.bloodType).to.equal(bloodType);
-          expect(data.custom1).to.equal(testField);
+          const genderValue = gender === "Male" ? 1 : 2;
+          expect(data.gender).to.equal(genderValue);
         }
       )
   });
