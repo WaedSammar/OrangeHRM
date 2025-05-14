@@ -70,7 +70,6 @@ describe("Employee management - Add and Save Test Cases", () => {
     Cypress.env("employeeId", employeeId);
 
     APIsHelper.waitForApiResponse(createLoadPersonalDetails);
-    PIMPage.verifyPersonalDetailsHeaderVisible();
 
     PIMPage.fillOtherId(otherId);
     PIMPage.fillLicenseNum(licenseNum);
@@ -104,7 +103,7 @@ describe("Employee management - Add and Save Test Cases", () => {
       "employeeInfo"
     );
     APIsHelper.interceptEmployeePersonalDetails(verifyEmployeeInfo);
-    PIMPage.goToInfoPage();
+    PIMPage.goToMyInfoPage();
 
     APIsHelper.getInterceptionApiResponse(verifyEmployeeInfo)
       .then(
@@ -116,10 +115,10 @@ describe("Employee management - Add and Save Test Cases", () => {
           expect(data.employeeId).to.equal(employeeId);
           expect(data.otherId).to.equal(otherId);
           expect(data.drivingLicenseNo).to.equal(licenseNum);
-          expect(data.drivingLicenseExpiredDate).to.include(expDate);
+          expect(data.drivingLicenseExpiredDate).to.equal(expDate);
           expect(data.nationality.name).to.equal(nationality);
           expect(data.maritalStatus).to.equal(maritalState);
-          expect(data.birthday).to.include(dateOfBirth);
+          expect(data.birthday).to.equal(dateOfBirth);
           const genderValue = gender === "Male" ? 1 : 2;
           expect(data.gender).to.equal(genderValue);
         }

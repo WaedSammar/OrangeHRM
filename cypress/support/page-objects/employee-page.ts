@@ -18,17 +18,32 @@ class PIMPage {
   }
 
   /**
+   * click on the selected page 
+   * @param label - label name
+   */
+  static clickMenuItem(label: string) {
+    cy.get(this.LOCATORS.menuBtn).contains(label).click();
+  }
+
+  /**
+   * click on buttons
+   * @param label - name of button needed
+   */
+  static clickButton(label: string) {
+    cy.get(this.LOCATORS.AddBtn).contains(label).click();
+  }
+  /**
    * go to PIM Page
    */
   static goToPIMPage() {
-    cy.get(this.LOCATORS.menuBtn).contains("PIM").click();
+    this.clickMenuItem("PIM");
   }
 
   /**
    * go to add employee
    */
   static goToAdd() {
-    cy.get(this.LOCATORS.AddBtn).contains("Add").click();
+    this.clickButton("Add");
   }
 
   /**
@@ -64,7 +79,16 @@ class PIMPage {
     return cy.contains("label", labelText)
       .parent()
       .next()
-      .find("input, select")
+      .find("input");
+  }
+
+  /**
+   * clear the written and type the required text
+   * @param label - field to fill
+   * @param text - text for label
+   */
+  static clearAndFill(label: string, text: string) {
+    this.findInputByLabel(label).clear().type(text);
   }
 
   /**
@@ -72,7 +96,7 @@ class PIMPage {
    * @param {string} employeeId - employee id
    */
   static fillEmployeeId(employeeId: string) {
-    this.findInputByLabel("Employee Id").clear().type(employeeId);
+    this.clearAndFill("Employee Id", employeeId);
   }
 
   /**
@@ -87,7 +111,7 @@ class PIMPage {
    * @param {string} username - enter username
    */
   static fillUsername(username: string) {
-    this.findInputByLabel("Username").clear().type(username);
+    this.clearAndFill("Username", username);
   }
 
   /**
@@ -95,7 +119,7 @@ class PIMPage {
    * @param {string} password - fill user password
    */
   static fillPassword(password: string) {
-    this.findInputByLabel("Password").clear().type(password);
+    this.clearAndFill("Password", password);
   }
 
   /**
@@ -103,7 +127,7 @@ class PIMPage {
    * @param {string} password - user password again
    */
   static fillConfirmPassword(password: string) {
-    this.findInputByLabel("Confirm Password").clear().type(password);
+    this.clearAndFill("Confirm Password", password);
   }
 
   /**
@@ -121,18 +145,11 @@ class PIMPage {
   }
 
   /**
-   * confirm going to personal details page successfully
-   */
-  static verifyPersonalDetailsHeaderVisible() {
-    cy.contains("h6", "Personal Details").should("be.visible");
-  }
-
-  /**
    * enter another id for employee
    * @param {string} id - other employee id
    */
   static fillOtherId(id: string) {
-    this.findInputByLabel("Other Id").clear().type(id);
+    this.clearAndFill("Other Id", id);
   }
 
   /**
@@ -153,7 +170,7 @@ class PIMPage {
       .eq(index)
       .should("be.visible")
       .clear()
-      .type(date)
+      .type(date);
   }
 
   /**
@@ -191,7 +208,7 @@ class PIMPage {
    * @param text - employee marital state
    */
   static selectMaritalStatus(text: string) {
-    this.selectDropdownByLabel("Marital Status", text)
+    this.selectDropdownByLabel("Marital Status", text);
   }
 
   /**
@@ -215,7 +232,7 @@ class PIMPage {
    * @param text - blood type
    */
   static selectBloodType(text: string) {
-    this.selectDropdownByLabel("Blood Type", text)
+    this.selectDropdownByLabel("Blood Type", text);
   }
 
   /**
@@ -223,11 +240,11 @@ class PIMPage {
    * @param text - value of test field
    */
   static fillTestField(text: string) {
-    this.findInputByLabel("Test_Field").type(text)
+    this.findInputByLabel("Test_Field").type(text);
   }
 
   /**
-   * make logout 
+   * logout from current user 
    */
   static logout() {
     cy.get(this.LOCATORS.dropDownList).click();
@@ -237,8 +254,8 @@ class PIMPage {
   /**
    * go to info page
    */
-  static goToInfoPage(){
-    cy.get(this.LOCATORS.menuBtn).contains("My Info").click();
+  static goToMyInfoPage() {
+    this.clickMenuItem("My Info");
   }
 }
 
