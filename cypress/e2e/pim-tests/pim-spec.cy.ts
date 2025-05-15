@@ -13,10 +13,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     cy.fixture("employee-page-mock").then((addEmployeeData) => {
       employeeMockData = addEmployeeData;
     });
-    cy.fixture("login-page-mock").then((loginData) => {
-      adminName = loginData.correctUsername;
-      adminPass = loginData.correctPassword;
-    });
+    cy.login(adminName, adminPass);
   });
 
   beforeEach(() => {
@@ -47,6 +44,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     );
     APIsHelper.interceptEmployeePersonalDetails(createLoadPersonalDetails);
     PIMPage.clickSave();
+
     APIsHelper.waitForApiResponse(createLoadPersonalDetails);
 
     PIMPage.fillPersonalDetails(employeeInfo);
@@ -57,7 +55,10 @@ describe("Employee management - Add and Save Test Cases", () => {
 
     ElementHandler.logout();
 
-    LoginPage.login(employeeInfo.userName, employeeInfo.password);
+
+
+
+    cy.login(employeeInfo.userName, employeeInfo.password);
 
     const verifyEmployeeInfo = CommonHelper.generate_random_string(
       7,

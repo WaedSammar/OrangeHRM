@@ -4,14 +4,13 @@ const LOCATORS = {
   menuBtn: "span.oxd-main-menu-item--name",
   menuItems: "span.oxd-main-menu-item--name",
   dropDownList: ".oxd-userdropdown-name",
-
 }
 
 class ElementHandler {
 
   /**
   * click on the selected page 
-  * @param label - label name
+  * @param {string} label - label name
   */
   static clickMenuItem(label: string) {
     cy.get(LOCATORS.menuItems).contains(label).click();
@@ -19,7 +18,7 @@ class ElementHandler {
 
   /**
    * click on buttons
-   * @param label - name of button needed
+   * @param {string} label - name of button needed
    */
   static clickButton(label: string) {
     cy.get(HTML_TAGS.button).contains(label).click();
@@ -39,8 +38,8 @@ class ElementHandler {
 
   /**
    * clear the written and type the required text
-   * @param label - field to fill
-   * @param text - text for label
+   * @param {string} label
+   * @param {string} text
    */
   static clearAndFill(label: string, text: string) {
     this.findInputByLabel(label).clear().type(text);
