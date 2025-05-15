@@ -1,11 +1,11 @@
-import CommonHelper from "../helpers/common-helper";
+import { ElementHandler } from "../element-handler";
 
 class MyInfo {
   /**
   * go to info page
   */
   static goToMyInfoPage() {
-    CommonHelper.clickMenuItem("My Info");
+    ElementHandler.clickMenuItem("My Info");
   }
 }
 export { MyInfo };

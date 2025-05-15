@@ -12,9 +12,8 @@ class APIsHelper {
     CommonHelper.interceptRequests(URLs.employees, HTTP_METHODS.GET, aliasName)
   }
 
-  static interceptEmployeePersonalDetails(aliasName: string, employeeNum: number) {
-    const url = `/pim/employees/${employeeNum}/personal-details`;
-    CommonHelper.interceptRequests(url, HTTP_METHODS.GET, aliasName);
+  static interceptEmployeePersonalDetails(aliasName: string) {
+    CommonHelper.interceptRequests(URLs.personalDetails, HTTP_METHODS.GET, aliasName);
   }
 
   static waitForApiResponse(

@@ -54,6 +54,10 @@ class ElementHandler {
     cy.get(selector).type(value);
   }
 
+  static getFieldValue(className: string) {
+    return cy.get(className).invoke("val");
+  }
+
   /**
   * logout from current user 
   */

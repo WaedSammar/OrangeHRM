@@ -15,7 +15,8 @@ class PIMPage {
     selectField: ".oxd-select-text",
     dropdownOption: ".oxd-select-dropdown",
     selectGender: `input[type="radio"][value="1"]`,
-    closeBtn: ".oxd-date-input-link.--close"
+    closeBtn: ".oxd-date-input-link.--close",
+    chosenGender: `input[type="radio"]:checked`
   }
 
   /**
@@ -202,6 +203,115 @@ class PIMPage {
   }
 
   /**
+   * verify first name
+   */
+  static getFirstName() {
+    return ElementHandler.getFieldValue(this.LOCATORS.firstName);
+  }
+
+  /**
+   * verify middle name
+   * @returns 
+   */
+  static getMiddleName() {
+    return ElementHandler.getFieldValue(this.LOCATORS.middleName);
+  }
+
+  /**
+   * verify last name
+   * @returns 
+   */
+  static getLastName() {
+    return ElementHandler.getFieldValue(this.LOCATORS.lastName);
+  }
+
+  /**
+   * verify employee ID
+   * @returns 
+   */
+  static getEmployeeId() {
+    return ElementHandler.findInputByLabel("Employee Id").invoke("val");
+  }
+
+  /**
+   * verify employee ID
+   * @returns 
+   */
+  static getOtherId() {
+    return ElementHandler.findInputByLabel("Other Id").invoke("val");
+  }
+
+  /**
+   * verify Driver's License Number
+   */
+  static getLicenseNum() {
+    return ElementHandler.findInputByLabel("Driver's License Number").invoke("val");
+  }
+
+  /**
+   * verify License Expiry Date
+   * @returns 
+   */
+  static getLicenseExp() {
+    return ElementHandler.findInputByLabel("License Expiry Date").invoke("val");
+  }
+
+  /**
+   * verify Nationality
+   * @returns 
+   */
+  static getNationality() {
+    return cy.contains("label", "Nationality")
+      .parents(this.LOCATORS.inputGroup)
+      .find(this.LOCATORS.selectField)
+      .invoke("text");
+  }
+
+  /**
+   * verify Marital Status
+   */
+  static getMaritalStatus() {
+    return cy.contains("label", "Marital Status")
+      .parents(this.LOCATORS.inputGroup)
+      .find(this.LOCATORS.selectField)
+      .invoke("text");
+  }
+
+  /**
+   * verify employee Birthday
+   */
+  static getBirthday() {
+    return ElementHandler.findInputByLabel("Date of Birth").invoke("val");
+  }
+
+  /**
+   * verify employee gender
+   * @returns 
+   */
+  static getGender() {
+    return cy.get(this.LOCATORS.chosenGender).invoke("val");
+  }
+
+  /**
+   * 
+   * @returns verify blood type
+   */
+  static getBloodType() {
+    return cy.contains("label", "Blood Type")
+      .parents(this.LOCATORS.inputGroup)
+      .find(this.LOCATORS.selectField)
+      .invoke("text");
+  }
+
+  /**
+   * verify test field
+   * @returns 
+   */
+  static getTestField() {
+    return ElementHandler.findInputByLabel("Test_Field").invoke("val");
+  }
+
+  /**
    * fill user basic information's
    * @param employeeInfo 
    */
@@ -240,6 +350,27 @@ class PIMPage {
   static fillAdditionalEmployeeDetails(employeeInfo: any) {
     PIMPage.selectBloodType(employeeInfo.bloodType);
     PIMPage.fillTestField(employeeInfo.testField);
+  }
+
+  /**
+   * verify employee Info
+   * @param employeeInfo 
+   */
+  static verifyEmployeeInfo(employeeInfo: any) {
+    this.getFirstName().should("eq", employeeInfo.firstName);
+    this.getMiddleName().should("eq", employeeInfo.middleName);
+    this.getLastName().should("eq", employeeInfo.lastName);
+    this.getEmployeeId().should("eq", employeeInfo.employeeId);
+    this.getOtherId().should("eq", employeeInfo.otherId);
+    this.getLicenseNum().should("eq", employeeInfo.licenseNum);
+    this.getLicenseExp().should("eq", employeeInfo.expDate);
+    this.getBirthday().should("eq", employeeInfo.dateOfBirth);
+    this.getNationality().should("eq", employeeInfo.nationality);
+    this.getMaritalStatus().should("eq", employeeInfo.maritalState);
+    const expectedGenderValue = employeeInfo.gender === "Male" ? "1" : "2";
+    this.getGender().should("eq", expectedGenderValue);
+    this.getBloodType().should("eq", employeeInfo.bloodType);
+    this.getTestField().should("eq", employeeInfo.testField);
   }
 }
 
