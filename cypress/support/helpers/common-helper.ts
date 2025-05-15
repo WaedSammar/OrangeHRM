@@ -2,7 +2,7 @@ import { HTTP_METHODS } from "./constants";
 
 class CommonHelper {
 
-  static generateRandomAlias(
+  static generateRandomString(
     length: number = 7,
     prefix: string = "",
     suffix: string = ""

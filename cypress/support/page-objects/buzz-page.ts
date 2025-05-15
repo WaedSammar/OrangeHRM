@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { HTML_TAGS, HTTP_METHODS, SEPARATORS } from "../helpers/constants";
+import { HTML_TAGS, HTTP_METHODS, PAGES, SEPARATORS } from "../helpers/constants";
 import { URLs } from "../helpers/apis-helpers";
 import { ElementHandler } from "../element-handler";
 
@@ -32,7 +32,7 @@ class BuzzPage {
    * go to to buzz page
    */
   static goToBuzzPage() {
-    cy.get(this.LOCATORS.buzzBtn).contains("Buzz").click();
+    cy.get(this.LOCATORS.buzzBtn).contains(PAGES.BUZZ).click();
     ElementHandler.waitLoaderToBeHidden();
   }
 

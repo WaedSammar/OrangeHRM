@@ -2,7 +2,29 @@ import { APIsHelper } from "../../support/helpers/apis-helpers";
 import CommonHelper from "../../support/helpers/common-helper";
 import { BuzzPage, POST_FILTER_OPTION } from "../../support/page-objects/buzz-page";
 import { LoginPage } from "../../support/page-objects/login-page";
-import { CreatePostResponse } from "../../support/types/buzz-api-response";
+
+interface Employee {
+  empNumber: number;
+  employeeId: string;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  terminationId: null | string;
+}
+
+interface Post {
+  id: number;
+}
+
+interface CreatePostResponse {
+  data: {
+    employee: Employee;
+    post: Post;
+    createdAt: string;
+    meta: any[];
+    rels: any[];
+  }
+}
 
 describe("Buzz News Feed Test Cases", () => {
 
@@ -32,7 +54,7 @@ describe("Buzz News Feed Test Cases", () => {
 
   it("Write a successful post via UI", () => {
     BuzzPage.writePost(postText);
-    const createPostAliasName = CommonHelper.generateRandomAlias(
+    const createPostAliasName = CommonHelper.generateRandomString(
       7,
       "CreatePost_"
     );
@@ -45,7 +67,7 @@ describe("Buzz News Feed Test Cases", () => {
 
   it("Verify poster name who created the post", () => {
     BuzzPage.writePost(postText);
-    const createPostAliasName = CommonHelper.generateRandomAlias(
+    const createPostAliasName = CommonHelper.generateRandomString(
       4,
       "CreatePost_"
     );
@@ -61,7 +83,7 @@ describe("Buzz News Feed Test Cases", () => {
 
   it("Verify date and time for the post", () => {
     BuzzPage.writePost(postText);
-    const createPostAliasName = CommonHelper.generateRandomAlias(
+    const createPostAliasName = CommonHelper.generateRandomString(
       2,
       "CreatePost_"
     );
@@ -76,7 +98,7 @@ describe("Buzz News Feed Test Cases", () => {
   });
 
   it("Filter and Verify most liked post", () => {
-    const mostLikedFilterAliasName = CommonHelper.generateRandomAlias(
+    const mostLikedFilterAliasName = CommonHelper.generateRandomString(
       2,
       "mostLikedPost"
     );
