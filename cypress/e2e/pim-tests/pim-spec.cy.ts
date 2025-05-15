@@ -25,7 +25,7 @@ describe("Employee management - Add and Save Test Cases", () => {
 
   });
 
-  it("Verify adding new employee", () => {
+  it("Adding a new employee, saving information and verifying it", () => {
 
     const createLoadPIM = CommonHelper.generate_random_string(
       7,
