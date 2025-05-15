@@ -1,6 +1,12 @@
+export enum PAGES {
+  BUZZ = "Buzz",
+  PIM = "PIM",
+  MY_INFO = "My Info"
+}
+
 export enum HTTP_METHODS {
-  GET = 'GET',
-  POST = 'POST',
+  GET = "GET",
+  POST = "POST",
   PUT = "PUT",
   PATCH = "PATCH",
   DELETE = "DELETE",

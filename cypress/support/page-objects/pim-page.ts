@@ -1,8 +1,9 @@
+import { ElementHandler } from "../element-handler";
+import { PAGES } from "../helpers/constants";
+
 class PIMPage {
 
   private static LOCATORS = {
-    menuBtn: "span.oxd-main-menu-item--name",
-    AddBtn: "button",
     firstName: ".orangehrm-firstname",
     middleName: ".orangehrm-middlename",
     lastName: ".orangehrm-lastname",
@@ -11,39 +12,24 @@ class PIMPage {
     submitBtn: "button[type='submit']",
     dateInput: "input[placeholder='yyyy-dd-mm']",
     validationMsg: ".oxd-input-group__message",
-    dropDownList: ".oxd-userdropdown-name",
     selectField: ".oxd-select-text",
     dropdownOption: ".oxd-select-dropdown",
-    selectGender: `input[type="radio"][value="1"]`
+    selectGender: `input[type="radio"][value="1"]`,
+    closeBtn: ".oxd-date-input-link.--close"
   }
 
-  /**
-   * click on the selected page 
-   * @param label - label name
-   */
-  static clickMenuItem(label: string) {
-    cy.get(this.LOCATORS.menuBtn).contains(label).click();
-  }
-
-  /**
-   * click on buttons
-   * @param label - name of button needed
-   */
-  static clickButton(label: string) {
-    cy.get(this.LOCATORS.AddBtn).contains(label).click();
-  }
   /**
    * go to PIM Page
    */
   static goToPIMPage() {
-    this.clickMenuItem("PIM");
+    ElementHandler.clickMenuItem(PAGES.PIM);
   }
 
   /**
    * go to add employee
    */
-  static goToAdd() {
-    this.clickButton("Add");
+  static clickAddBtn() {
+    ElementHandler.clickButton("Add");
   }
 
   /**
@@ -51,7 +37,7 @@ class PIMPage {
    * @param {string} firstName - first name
    */
   static fillFirstName(firstName: string) {
-    cy.get(this.LOCATORS.firstName).type(firstName);
+    ElementHandler.typeIntoField(this.LOCATORS.firstName, firstName);
   }
 
   /**
@@ -59,7 +45,7 @@ class PIMPage {
    * @param {string} middleName - middle name
    */
   static fillMiddleName(middleName: string) {
-    cy.get(this.LOCATORS.middleName).type(middleName);
+    ElementHandler.typeIntoField(this.LOCATORS.middleName, middleName);
   }
 
   /**
@@ -67,28 +53,7 @@ class PIMPage {
    * @param {string} lastName - last name
    */
   static fillLastName(lastName: string) {
-    cy.get(this.LOCATORS.lastName).type(lastName);
-  }
-
-  /**
-   * get input using label
-   * @param {string} labelText - label for input box
-   * @returns - label user want
-   */
-  static findInputByLabel(labelText: string) {
-    return cy.contains("label", labelText)
-      .parent()
-      .next()
-      .find("input");
-  }
-
-  /**
-   * clear the written and type the required text
-   * @param label - field to fill
-   * @param text - text for label
-   */
-  static clearAndFill(label: string, text: string) {
-    this.findInputByLabel(label).clear().type(text);
+    ElementHandler.typeIntoField(this.LOCATORS.lastName, lastName);
   }
 
   /**
@@ -96,7 +61,7 @@ class PIMPage {
    * @param {string} employeeId - employee id
    */
   static fillEmployeeId(employeeId: string) {
-    this.clearAndFill("Employee Id", employeeId);
+    ElementHandler.clearAndFill("Employee Id", employeeId);
   }
 
   /**
@@ -111,7 +76,7 @@ class PIMPage {
    * @param {string} username - enter username
    */
   static fillUsername(username: string) {
-    this.clearAndFill("Username", username);
+    ElementHandler.clearAndFill("Username", username);
   }
 
   /**
@@ -119,7 +84,7 @@ class PIMPage {
    * @param {string} password - fill user password
    */
   static fillPassword(password: string) {
-    this.clearAndFill("Password", password);
+    ElementHandler.clearAndFill("Password", password);
   }
 
   /**
@@ -127,7 +92,7 @@ class PIMPage {
    * @param {string} password - user password again
    */
   static fillConfirmPassword(password: string) {
-    this.clearAndFill("Confirm Password", password);
+    ElementHandler.clearAndFill("Confirm Password", password);
   }
 
   /**
@@ -138,18 +103,11 @@ class PIMPage {
   }
 
   /**
-   * ensure all required field are fill
-   */
-  static handleErrors() {
-    cy.get(this.LOCATORS.validationMsg).should("have.length", 0);
-  }
-
-  /**
    * enter another id for employee
    * @param {string} id - other employee id
    */
   static fillOtherId(id: string) {
-    this.clearAndFill("Other Id", id);
+    ElementHandler.clearAndFill("Other Id", id);
   }
 
   /**
@@ -157,7 +115,7 @@ class PIMPage {
    * @param {string} license - driver license num
    */
   static fillLicenseNum(license: string) {
-    this.findInputByLabel("Driver's License Number").type(license);
+    ElementHandler.findInputByLabel("Driver's License Number").type(license);
   }
 
   /**
@@ -176,8 +134,8 @@ class PIMPage {
   /**
    * remove focus to remove calender
    */
-  static removeFocusFromDatePicker() {
-    cy.get("h6").first().click();
+  static closeCalender() {
+    cy.get(this.LOCATORS.closeBtn).should("be.visible").click();
   }
 
   /**
@@ -240,22 +198,48 @@ class PIMPage {
    * @param text - value of test field
    */
   static fillTestField(text: string) {
-    this.findInputByLabel("Test_Field").type(text);
+    ElementHandler.findInputByLabel("Test_Field").type(text);
   }
 
   /**
-   * logout from current user 
+   * fill user basic information's
+   * @param employeeInfo 
    */
-  static logout() {
-    cy.get(this.LOCATORS.dropDownList).click();
-    cy.contains("Logout").click();
+  static fillEmployeeInfo(employeeInfo: any) {
+    this.fillFirstName(employeeInfo.firstName);
+    this.fillMiddleName(employeeInfo.middleName);
+    this.fillLastName(employeeInfo.lastName);
+    this.fillEmployeeId(employeeInfo.employeeId);
+
+    this.ensureLoginButtonActive();
+    this.fillUsername(employeeInfo.userName);
+    this.fillPassword(employeeInfo.password);
+    this.fillConfirmPassword(employeeInfo.password);
+    this.verifyStatusIsEnabled();
   }
 
   /**
-   * go to info page
+   * fill user personal details
+   * @param employeeInfo 
    */
-  static goToMyInfoPage() {
-    this.clickMenuItem("My Info");
+  static fillPersonalDetails(employeeInfo: any) {
+    PIMPage.fillOtherId(employeeInfo.otherId);
+    PIMPage.fillLicenseNum(employeeInfo.licenseNum);
+    PIMPage.selectDate(employeeInfo.expDate);
+    PIMPage.closeCalender();
+    PIMPage.selectNationality(employeeInfo.nationality);
+    PIMPage.selectMaritalStatus(employeeInfo.maritalState);
+    PIMPage.selectDate(employeeInfo.dateOfBirth, 1);
+    PIMPage.selectGender(employeeInfo.gender);
+  }
+
+  /**
+   * fill user additional information
+   * @param employeeInfo 
+   */
+  static fillAdditionalEmployeeDetails(employeeInfo: any) {
+    PIMPage.selectBloodType(employeeInfo.bloodType);
+    PIMPage.fillTestField(employeeInfo.testField);
   }
 }
 
