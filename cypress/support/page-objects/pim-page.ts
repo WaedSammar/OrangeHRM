@@ -1,7 +1,7 @@
 import { ElementHandler } from "../element-handler";
 import { PAGES } from "../helpers/constants";
 
-interface EmployeeFormInfo {
+interface IEmployeeFormInfo {
 
   firstName: string;
   middleName: string;
@@ -334,7 +334,7 @@ class PIMPage {
    * fill user basic information's
    * @param employeeInfo 
    */
-  static fillEmployeeInfo(employeeInfo: EmployeeFormInfo) {
+  static fillEmployeeInfo(employeeInfo: IEmployeeFormInfo) {
     this.fillFirstName(employeeInfo.firstName);
     this.fillMiddleName(employeeInfo.middleName);
     this.fillLastName(employeeInfo.lastName);
@@ -351,7 +351,7 @@ class PIMPage {
    * fill user personal details
    * @param employeeInfo 
    */
-  static fillPersonalDetails(employeeInfo: EmployeeFormInfo) {
+  static fillPersonalDetails(employeeInfo: IEmployeeFormInfo) {
     PIMPage.fillOtherId(employeeInfo.otherId);
     PIMPage.fillLicenseNum(employeeInfo.licenseNum);
     PIMPage.selectDate(employeeInfo.expDate);
@@ -366,7 +366,7 @@ class PIMPage {
    * fill user additional information
    * @param employeeInfo 
    */
-  static fillAdditionalEmployeeDetails(employeeInfo: EmployeeFormInfo) {
+  static fillAdditionalEmployeeDetails(employeeInfo: IEmployeeFormInfo) {
     PIMPage.selectBloodType(employeeInfo.bloodType);
     PIMPage.fillTestField(employeeInfo.testField);
   }
@@ -375,7 +375,7 @@ class PIMPage {
    * verify employee Info
    * @param employeeInfo 
    */
-  static verifyEmployeeInfo(employeeInfo: EmployeeFormInfo) {
+  static verifyEmployeeInfo(employeeInfo: IEmployeeFormInfo) {
     this.getFirstName().should("eq", employeeInfo.firstName);
     this.getMiddleName().should("eq", employeeInfo.middleName);
     this.getLastName().should("eq", employeeInfo.lastName);

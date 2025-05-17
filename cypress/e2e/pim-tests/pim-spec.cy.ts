@@ -20,9 +20,8 @@ describe("Employee management - Add and Save Test Cases", () => {
     employeeInfo = {
       ...employeeMockData,
       employeeId: `${employeeMockData.employeeId}${randomNum}`,
-      userName: `${employeeMockData.userName}${randomNum}`,
+      userName: `${employeeMockData.userName}${randomNum}`
     };
-
   });
 
   it("Adding a new employee, saving information and verifying it", () => {
