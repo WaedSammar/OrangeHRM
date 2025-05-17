@@ -4,14 +4,13 @@ const LOCATORS = {
   menuBtn: "span.oxd-main-menu-item--name",
   menuItems: "span.oxd-main-menu-item--name",
   dropDownList: ".oxd-userdropdown-name",
-}
+};
 
 class ElementHandler {
-
   /**
-  * click on the selected page 
-  * @param {string} label - label name
-  */
+   * click on the selected page
+   * @param {string} label - label name
+   */
   static clickMenuItem(label: string) {
     cy.get(LOCATORS.menuItems).contains(label).click();
   }
@@ -30,10 +29,7 @@ class ElementHandler {
    * @returns - label user want
    */
   static findInputByLabel(labelText: string) {
-    return cy.contains("label", labelText)
-      .parent()
-      .next()
-      .find("input");
+    return cy.contains("label", labelText).parent().next().find("input");
   }
 
   /**
@@ -46,21 +42,26 @@ class ElementHandler {
   }
 
   /**
- * type value for given field
- * @param {string} selector 
- * @param {string} value 
- */
+   * type value for given field
+   * @param {string} selector
+   * @param {string} value
+   */
   static typeIntoField(selector: string, value: string) {
     cy.get(selector).type(value);
   }
 
+  /**
+   * get the value for given field
+   * @param {string} className
+   * @returns
+   */
   static getFieldValue(className: string) {
     return cy.get(className).invoke("val");
   }
 
   /**
-  * logout from current user 
-  */
+   * logout from current user
+   */
   static logout() {
     cy.get(LOCATORS.dropDownList).click();
     cy.contains("Logout").click();

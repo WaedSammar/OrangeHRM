@@ -21,6 +21,7 @@ export enum HTML_TAGS {
   a = 'a',
   input = 'input',
   textarea = 'textarea',
+  label = "label",
 }
 
 export enum SEPARATORS {

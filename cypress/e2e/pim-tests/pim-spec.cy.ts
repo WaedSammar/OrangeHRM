@@ -5,7 +5,6 @@ import { MyInfo } from "../../support/page-objects/my-info-page";
 import { PIMPage } from "../../support/page-objects/pim-page";
 
 describe("Employee management - Add and Save Test Cases", () => {
-
   let employeeMockData, employeeInfo;
 
   before(() => {
@@ -20,16 +19,12 @@ describe("Employee management - Add and Save Test Cases", () => {
     employeeInfo = {
       ...employeeMockData,
       employeeId: `${employeeMockData.employeeId}${randomNum}`,
-      userName: `${employeeMockData.userName}${randomNum}`
+      userName: `${employeeMockData.userName}${randomNum}`,
     };
   });
 
   it("Adding a new employee, saving information and verifying it", () => {
-
-    const createLoadPIM = CommonHelper.generate_random_string(
-      7,
-      "loadPIM_"
-    );
+    const createLoadPIM = CommonHelper.generate_random_string(7, "loadPIM_");
     APIsHelper.interceptPIMEmployee(createLoadPIM);
     PIMPage.goToPIMPage();
     APIsHelper.waitForApiResponse(createLoadPIM);
@@ -59,8 +54,8 @@ describe("Employee management - Add and Save Test Cases", () => {
       "employeeInfo"
     );
     APIsHelper.interceptEmployeePersonalDetails(verifyEmployeeInfo);
-  
+
     MyInfo.goToMyInfoPage();
     PIMPage.verifyEmployeeInfo(employeeInfo);
   });
-})
+});
