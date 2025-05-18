@@ -1,6 +1,9 @@
 import { APIsHelper } from "../../support/helpers/apis-helpers";
 import CommonHelper from "../../support/helpers/common-helper";
-import { BuzzPage, POST_FILTER_OPTION } from "../../support/page-objects/buzz-page";
+import {
+  BuzzPage,
+  POST_FILTER_OPTION,
+} from "../../support/page-objects/buzz-page";
 import { LoginPage } from "../../support/page-objects/login-page";
 
 interface IEmployee {
@@ -23,15 +26,13 @@ interface ICreatePostResponse {
     createdAt: string;
     meta: any[];
     rels: any[];
-  }
+  };
 }
 
 describe("Buzz News Feed Test Cases", () => {
-
   let postText, correctUsername, correctPassword;
 
   beforeEach(() => {
-
     cy.fixture("buzz-post-mock").then((postData) => {
       postText = postData.postText;
     });
@@ -49,8 +50,8 @@ describe("Buzz News Feed Test Cases", () => {
     BuzzPage.createPostViaAPI(postText).then(() => {
       BuzzPage.goToBuzzPage();
       BuzzPage.verifyPost(postText);
-    })
-  })
+    });
+  });
 
   it("Write a successful post via UI", () => {
     BuzzPage.writePost(postText);
@@ -62,7 +63,7 @@ describe("Buzz News Feed Test Cases", () => {
     BuzzPage.submitPost();
     APIsHelper.getInterceptionApiResponse(createPostAliasName).then(() => {
       BuzzPage.verifyPost(postText);
-    })
+    });
   });
 
   it("Verify poster name who created the post", () => {
@@ -73,12 +74,12 @@ describe("Buzz News Feed Test Cases", () => {
     );
     APIsHelper.interceptPostRequest(createPostAliasName);
     BuzzPage.submitPost();
-    APIsHelper.getInterceptionApiResponse(createPostAliasName)
-      .then(
-        (response: ICreatePostResponse) => {
-          BuzzPage.verifyPosterName(response.data.employee);
-          BuzzPage.verifyPost(postText);
-        })
+    APIsHelper.getInterceptionApiResponse(createPostAliasName).then(
+      (response: ICreatePostResponse) => {
+        BuzzPage.verifyPosterName(response.data.employee);
+        BuzzPage.verifyPost(postText);
+      }
+    );
   });
 
   it("Verify date and time for the post", () => {
@@ -89,12 +90,12 @@ describe("Buzz News Feed Test Cases", () => {
     );
     APIsHelper.interceptPostRequest(createPostAliasName);
     BuzzPage.submitPost();
-    APIsHelper.getInterceptionApiResponse(createPostAliasName)
-      .then(
-        (response: ICreatePostResponse) => {
-          console.log(response);
-          BuzzPage.verifyDateAndTime(response.data.createdAt);
-        })
+    APIsHelper.getInterceptionApiResponse(createPostAliasName).then(
+      (response: ICreatePostResponse) => {
+        console.log(response);
+        BuzzPage.verifyDateAndTime(response.data.createdAt);
+      }
+    );
   });
 
   it("Filter and Verify most liked post", () => {
@@ -102,9 +103,9 @@ describe("Buzz News Feed Test Cases", () => {
       2,
       "mostLikedPost"
     );
-    APIsHelper.interceptPostFilter(mostLikedFilterAliasName)
+    APIsHelper.interceptPostFilter(mostLikedFilterAliasName);
     BuzzPage.applyPostFilter(POST_FILTER_OPTION.MOST_LIKED);
     APIsHelper.waitForApiResponse(mostLikedFilterAliasName);
     BuzzPage.verifyMostLikedPost();
   });
-})
+});

@@ -1,10 +1,10 @@
 export enum PAGES {
-  BUZZ = "Buzz"
+  BUZZ = "Buzz",
 }
 
 export enum HTTP_METHODS {
-  GET = 'GET',
-  POST = 'POST',
+  GET = "GET",
+  POST = "POST",
   PUT = "PUT",
   PATCH = "PATCH",
   DELETE = "DELETE",

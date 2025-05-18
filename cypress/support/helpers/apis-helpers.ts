@@ -6,11 +6,10 @@ const URLs = {
   posts: `${baseURL}/web/index.php/api/v2/buzz/posts`,
   feed: `${baseURL}/web/index.php/api/v2/buzz/feed**`,
   employees: `/api/v2/pim/employees`,
-  personalDetails: `/pim/employees/**/personal-details`
-}
+  personalDetails: `/pim/employees/**/personal-details`,
+};
 
 class APIsHelper {
-
   static interceptPostRequest(aliasName: string) {
     CommonHelper.interceptRequests(URLs.posts, HTTP_METHODS.POST, aliasName);
   }
@@ -20,11 +19,15 @@ class APIsHelper {
   }
 
   static interceptPIMEmployee(aliasName: string) {
-    CommonHelper.interceptRequests(URLs.employees, HTTP_METHODS.GET, aliasName)
+    CommonHelper.interceptRequests(URLs.employees, HTTP_METHODS.GET, aliasName);
   }
 
   static interceptPIMPersonal(aliasName: string) {
-    CommonHelper.interceptRequests(URLs.personalDetails, HTTP_METHODS.GET, aliasName);
+    CommonHelper.interceptRequests(
+      URLs.personalDetails,
+      HTTP_METHODS.GET,
+      aliasName
+    );
   }
 
   static interceptEmployeePersonalDetails(aliasName: string) {
@@ -49,4 +52,4 @@ class APIsHelper {
     });
   }
 }
-export {APIsHelper, URLs};
+export { APIsHelper, URLs };
