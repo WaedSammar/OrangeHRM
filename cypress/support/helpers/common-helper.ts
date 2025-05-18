@@ -20,6 +20,10 @@ class CommonHelper {
     return Math.floor(Math.random() * max);
   }
 
+  static generateRandomNumber(max: number = 10000): number {
+    return Math.floor(Math.random() * max);
+  }
+
   static interceptRequests(
     requestURL: string,
     httpRequestMethod: HTTP_METHODS,
