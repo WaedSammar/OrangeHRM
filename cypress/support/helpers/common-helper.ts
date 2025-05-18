@@ -1,3 +1,5 @@
+import { HTTP_METHODS } from "./constants";
+
 class CommonHelper {
 
   static generate_random_string(
@@ -12,6 +14,24 @@ class CommonHelper {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return `${prefix} ${text} ${suffix}`
+  }
+
+  static generateRandomNumber(max: number = 10000): number {
+    return Math.floor(Math.random() * max);
+  }
+
+  static interceptRequests(
+    requestURL: string,
+    httpRequestMethod: HTTP_METHODS,
+    aliasName: string
+  ) {
+    return new Cypress.Promise((resolve) => {
+      cy.intercept({
+        url: `**${requestURL}*`,
+        method: httpRequestMethod,
+      }).as(aliasName)
+        .then(resolve);
+    })
   }
 }
 export default CommonHelper;
