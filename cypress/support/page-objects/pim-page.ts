@@ -1,5 +1,5 @@
 import { ElementHandler } from "../element-handler";
-import APIsHelper from "../helpers/apis-helpers";
+import { APIsHelper } from "../helpers/apis-helpers";
 import CommonHelper from "../helpers/common-helper";
 import { HTML_TAGS, PAGES } from "../helpers/constants";
 import { IEmployeeInfo } from "../types/employee.types";
@@ -45,7 +45,7 @@ class PIMPage {
    * go to PIM Page
    */
   static goToPIMPage() {
-    const loadGetEmployeesList = CommonHelper.generate_random_string(
+    const loadGetEmployeesList = CommonHelper.generateRandomString(
       7,
       "loadPIM_"
     );

@@ -4,6 +4,7 @@ const LOCATORS = {
   menuBtn: "span.oxd-main-menu-item--name",
   menuItems: "span.oxd-main-menu-item--name",
   dropDownList: ".oxd-userdropdown-name",
+  loaderIcon: ".oxd-loading-spinner",
 };
 
 enum DROP_DOWN {
@@ -14,6 +15,17 @@ enum DROP_DOWN {
 }
 
 class ElementHandler {
+  /**
+   * wait for the loader to be hidden
+   */
+  static waitLoaderToBeHidden() {
+    cy.get(HTML_TAGS.body, { timeout: 10000 }).within(($body) => {
+      if (!$body.find(LOCATORS.loaderIcon).length) {
+        cy.get(LOCATORS.loaderIcon, { timeout: 10000 }).should("not.exist");
+      }
+    });
+  }
+
   /**
    * click on the selected page
    * @param {string} label - label name

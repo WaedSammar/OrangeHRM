@@ -1,19 +1,19 @@
 import { HTTP_METHODS } from "./constants";
 
 class CommonHelper {
-
-  static generate_random_string(
+  static generateRandomString(
     length: number = 7,
     prefix: string = "",
     suffix: string = ""
   ): string {
-    const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const possible =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let text = "";
 
     for (let i = 0; i < length; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
-    return `${prefix} ${text} ${suffix}`
+    return `${prefix} ${text} ${suffix}`;
   }
 
   static generateRandomNumber(max: number = 10000): number {
@@ -29,9 +29,10 @@ class CommonHelper {
       cy.intercept({
         url: `**${requestURL}*`,
         method: httpRequestMethod,
-      }).as(aliasName)
+      })
+        .as(aliasName)
         .then(resolve);
-    })
+    });
   }
 }
 export default CommonHelper;
