@@ -6,6 +6,13 @@ const LOCATORS = {
   dropDownList: ".oxd-userdropdown-name",
 };
 
+enum DROP_DOWN {
+  ABOUT = "About",
+  SUPPORT = "Support",
+  CHANGE_PASSWORD = "Change Password",
+  LOGOUT = "Logout",
+}
+
 class ElementHandler {
   /**
    * click on the selected page
@@ -29,7 +36,11 @@ class ElementHandler {
    * @returns - label user want
    */
   static findInputByLabel(labelText: string) {
-    return cy.contains("label", labelText).parent().next().find("input");
+    return cy
+      .contains(HTML_TAGS.label, labelText)
+      .parent()
+      .next()
+      .find(HTML_TAGS.input);
   }
 
   /**
@@ -64,7 +75,7 @@ class ElementHandler {
    */
   static logout() {
     cy.get(LOCATORS.dropDownList).click();
-    cy.contains("Logout").click();
+    cy.contains(DROP_DOWN.LOGOUT).click();
   }
 }
 export { ElementHandler };

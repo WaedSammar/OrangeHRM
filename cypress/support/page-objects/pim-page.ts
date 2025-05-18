@@ -1,23 +1,8 @@
 import { ElementHandler } from "../element-handler";
+import APIsHelper from "../helpers/apis-helpers";
+import CommonHelper from "../helpers/common-helper";
 import { HTML_TAGS, PAGES } from "../helpers/constants";
-
-interface IEmployeeFormInfo {
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  employeeId: string;
-  userName: string;
-  password: string;
-  otherId: string;
-  licenseNum: string;
-  expDate: string;
-  nationality: string;
-  maritalState: string;
-  dateOfBirth: string;
-  gender: GENDER;
-  bloodType: string;
-  testField: string;
-}
+import { IEmployeeInfo } from "../types/employee.types";
 
 enum LABELS {
   EMPLOYEE_ID = "Employee Id",
@@ -34,7 +19,7 @@ enum LABELS {
   TEST_FIELD = "Test_Field",
 }
 
-enum GENDER {
+export enum GENDER {
   MALE = "Male",
   FEMALE = "Female",
 }
@@ -44,23 +29,29 @@ class PIMPage {
     firstName: ".orangehrm-firstname",
     middleName: ".orangehrm-middlename",
     lastName: ".orangehrm-lastname",
-    createLoginCheckbox: "input[type='checkbox']",
+    createLoginCheckbox: `${HTML_TAGS.input}[type='checkbox']`,
     inputGroup: ".oxd-input-group",
-    submitBtn: "button[type='submit']",
-    dateInput: "input[placeholder='yyyy-dd-mm']",
+    submitBtn: `${HTML_TAGS.button}[type='submit']`,
+    dateInput: `${HTML_TAGS.input}[placeholder='yyyy-dd-mm']`,
     validationMsg: ".oxd-input-group__message",
     selectField: ".oxd-select-text",
     dropdownOption: ".oxd-select-dropdown",
-    selectGender: `input[type="radio"][value="1"]`,
+    selectGender: `${HTML_TAGS.input}[type="radio"][value="1"]`,
     closeBtn: ".oxd-date-input-link.--close",
-    chosenGender: `input[type="radio"]:checked`,
+    chosenGender: `${HTML_TAGS.input}[type="radio"]:checked`,
   };
 
   /**
    * go to PIM Page
    */
   static goToPIMPage() {
+    const loadGetEmployeesList = CommonHelper.generate_random_string(
+      7,
+      "loadPIM_"
+    );
+    APIsHelper.interceptGetEmployeesRequest(loadGetEmployeesList);
     ElementHandler.clickMenuItem(PAGES.PIM);
+    APIsHelper.waitForApiResponse(loadGetEmployeesList);
   }
 
   /**
@@ -353,7 +344,7 @@ class PIMPage {
    * fill user basic information's
    * @param employeeInfo
    */
-  static fillEmployeeInfo(employeeInfo: IEmployeeFormInfo) {
+  static fillEmployeeInfo(employeeInfo: IEmployeeInfo) {
     this.fillFirstName(employeeInfo.firstName);
     this.fillMiddleName(employeeInfo.middleName);
     this.fillLastName(employeeInfo.lastName);
@@ -370,7 +361,7 @@ class PIMPage {
    * fill user personal details
    * @param employeeInfo
    */
-  static fillPersonalDetails(employeeInfo: IEmployeeFormInfo) {
+  static fillPersonalDetails(employeeInfo: IEmployeeInfo) {
     PIMPage.fillOtherId(employeeInfo.otherId);
     PIMPage.fillLicenseNum(employeeInfo.licenseNum);
     PIMPage.selectDate(employeeInfo.expDate);
@@ -385,7 +376,7 @@ class PIMPage {
    * fill user additional information
    * @param employeeInfo
    */
-  static fillAdditionalEmployeeDetails(employeeInfo: IEmployeeFormInfo) {
+  static fillAdditionalEmployeeDetails(employeeInfo: IEmployeeInfo) {
     PIMPage.selectBloodType(employeeInfo.bloodType);
     PIMPage.fillTestField(employeeInfo.testField);
   }
@@ -394,7 +385,7 @@ class PIMPage {
    * verify employee Info
    * @param employeeInfo
    */
-  static verifyEmployeeInfo(employeeInfo: IEmployeeFormInfo) {
+  static verifyEmployeeInfo(employeeInfo: IEmployeeInfo) {
     this.getFirstName().should("eq", employeeInfo.firstName);
     this.getMiddleName().should("eq", employeeInfo.middleName);
     this.getLastName().should("eq", employeeInfo.lastName);

@@ -1,7 +1,7 @@
 export enum PAGES {
   BUZZ = "Buzz",
   PIM = "PIM",
-  MY_INFO = "My Info"
+  MY_INFO = "My Info",
 }
 
 export enum HTTP_METHODS {
@@ -13,14 +13,14 @@ export enum HTTP_METHODS {
 }
 
 export enum HTML_TAGS {
-  text = 'text',
-  body = 'body',
-  div = 'div',
-  span = 'span',
-  button = 'button',
-  a = 'a',
-  input = 'input',
-  textarea = 'textarea',
+  text = "text",
+  body = "body",
+  div = "div",
+  span = "span",
+  button = "button",
+  a = "a",
+  input = "input",
+  textarea = "textarea",
   label = "label",
 }
 

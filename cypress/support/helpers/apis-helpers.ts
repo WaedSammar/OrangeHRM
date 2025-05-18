@@ -3,17 +3,20 @@ import { HTTP_METHODS, HTTP_STATUS_CODE } from "./constants";
 
 const URLs = {
   employees: `/api/v2/pim/employees`,
-  personalDetails: `/pim/employees/**/personal-details`
-}
+  personalDetails: `/pim/employees/**/personal-details`,
+};
 
 class APIsHelper {
-
-  static interceptPIMEmployee(aliasName: string) {
-    CommonHelper.interceptRequests(URLs.employees, HTTP_METHODS.GET, aliasName)
+  static interceptGetEmployeesRequest(aliasName: string) {
+    CommonHelper.interceptRequests(URLs.employees, HTTP_METHODS.GET, aliasName);
   }
 
-  static interceptEmployeePersonalDetails(aliasName: string) {
-    CommonHelper.interceptRequests(URLs.personalDetails, HTTP_METHODS.GET, aliasName);
+  static interceptGetEmployeeDetailsRequest(aliasName: string) {
+    CommonHelper.interceptRequests(
+      URLs.personalDetails,
+      HTTP_METHODS.GET,
+      aliasName
+    );
   }
 
   static waitForApiResponse(
