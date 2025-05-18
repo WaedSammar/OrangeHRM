@@ -18,19 +18,7 @@ class APIsHelper {
     CommonHelper.interceptRequests(URLs.feed, HTTP_METHODS.GET, aliasName);
   }
 
-  static interceptPIMEmployee(aliasName: string) {
-    CommonHelper.interceptRequests(URLs.employees, HTTP_METHODS.GET, aliasName);
-  }
-
-  static interceptPIMPersonal(aliasName: string) {
-    CommonHelper.interceptRequests(
-      URLs.personalDetails,
-      HTTP_METHODS.GET,
-      aliasName
-    );
-  }
-
-  static interceptEmployeePersonalDetails(aliasName: string) {
+  static interceptGetEmployeesRequest(aliasName: string) {
     CommonHelper.interceptRequests(URLs.employees, HTTP_METHODS.GET, aliasName);
   }
 
@@ -40,6 +28,10 @@ class APIsHelper {
       HTTP_METHODS.GET,
       aliasName
     );
+  }
+
+  static interceptEmployeePersonalDetails(aliasName: string) {
+    CommonHelper.interceptRequests(URLs.employees, HTTP_METHODS.GET, aliasName);
   }
 
   static waitForApiResponse(

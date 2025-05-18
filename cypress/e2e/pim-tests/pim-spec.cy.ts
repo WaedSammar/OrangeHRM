@@ -1,5 +1,5 @@
 import { ElementHandler } from "../../support/element-handler";
-import APIsHelper from "../../support/helpers/apis-helpers";
+import { APIsHelper } from "../../support/helpers/apis-helpers";
 import CommonHelper from "../../support/helpers/common-helper";
 import { MyInfo } from "../../support/page-objects/my-info-page";
 import { PIMPage } from "../../support/page-objects/pim-page";
@@ -29,7 +29,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.clickAddBtn();
     PIMPage.fillEmployeeInfo(employeeInfo);
 
-    const createLoadPersonalDetails = CommonHelper.generate_random_string(
+    const createLoadPersonalDetails = CommonHelper.generateRandomString(
       7,
       "loadPersonalDetails"
     );
