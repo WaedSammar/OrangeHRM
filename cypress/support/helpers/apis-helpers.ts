@@ -34,6 +34,14 @@ class APIsHelper {
     CommonHelper.interceptRequests(URLs.employees, HTTP_METHODS.GET, aliasName);
   }
 
+  static interceptGetEmployeeDetailsRequest(aliasName: string) {
+    CommonHelper.interceptRequests(
+      URLs.personalDetails,
+      HTTP_METHODS.GET,
+      aliasName
+    );
+  }
+
   static waitForApiResponse(
     aliasName: string,
     expectedStatus: number = HTTP_STATUS_CODE.success

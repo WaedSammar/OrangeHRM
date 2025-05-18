@@ -1,5 +1,7 @@
 export enum PAGES {
   BUZZ = "Buzz",
+  PIM = "PIM",
+  MY_INFO = "My Info",
 }
 
 export enum HTTP_METHODS {
@@ -20,6 +22,7 @@ export enum HTML_TAGS {
   input = "input",
   textarea = "textarea",
   p = "p",
+  label = "label",
 }
 
 export enum SEPARATORS {
