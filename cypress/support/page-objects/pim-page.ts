@@ -7,6 +7,8 @@ import { IEmployeeInfo } from "../types/employee.types";
 const URLs = {
   employees: `/web/index.php/api/v2/pim/employees`,
   createUser: `/web/index.php/api/v2/admin/users`,
+  personalDetails: `personal-details`,
+  customField: `custom-fields`,
 };
 
 enum LABELS {
@@ -27,6 +29,11 @@ enum LABELS {
 export enum GENDER {
   MALE = "Male",
   FEMALE = "Female",
+}
+
+enum UserRole {
+  ADMIN = 1,
+  ESS = 2,
 }
 
 class PIMPage {
@@ -351,7 +358,7 @@ class PIMPage {
    * @returns - API response
    */
   static createEmployeeViaAPI(employeeInfo: IEmployeeInfo) {
-    return APIsHelper.sendAPIResponse(HTTP_METHODS.POST, URLs.employees, {
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.employees, {
       firstName: employeeInfo.firstName,
       middleName: employeeInfo.middleName,
       lastName: employeeInfo.lastName,
@@ -365,12 +372,12 @@ class PIMPage {
    * @param {number} empNumber
    */
   static createUserViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
-    APIsHelper.sendAPIResponse(HTTP_METHODS.POST, URLs.createUser, {
+    CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.createUser, {
       username: employeeInfo.userName,
       password: employeeInfo.password,
-      status: true,
-      userRoleId: 2,
-      empNumber: empNumber,
+      status: employeeInfo.status,
+      userRoleId: UserRole.ESS,
+      empNumber,
     });
   }
 
@@ -383,8 +390,8 @@ class PIMPage {
     employeeInfo: IEmployeeInfo,
     empNumber: number
   ) {
-    const url = `/web/index.php/api/v2/pim/employees/${empNumber}/personal-details`;
-    APIsHelper.sendAPIResponse(HTTP_METHODS.PUT, url, {
+    const url = `${URLs.employees}/${empNumber}/${URLs.personalDetails}`;
+    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, {
       firstName: employeeInfo.firstName,
       middleName: employeeInfo.middleName,
       lastName: employeeInfo.lastName,
@@ -393,7 +400,7 @@ class PIMPage {
       drivingLicenseNo: employeeInfo.licenseNum,
       drivingLicenseExpiredDate: employeeInfo.expDate,
       birthday: employeeInfo.dateOfBirth,
-      gender: 1,
+      gender: employeeInfo.gender,
       maritalStatus: employeeInfo.maritalState,
       nationalityId: 27,
     });
@@ -408,8 +415,8 @@ class PIMPage {
     employeeInfo: IEmployeeInfo,
     empNumber: number
   ) {
-    const url = `/web/index.php/api/v2/pim/employees/${empNumber}/custom-fields`;
-    APIsHelper.sendAPIResponse(HTTP_METHODS.PUT, url, {
+    const url = `${URLs.employees}/${empNumber}/${URLs.customField}`;
+    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, {
       custom1: employeeInfo.bloodType,
       custom2: employeeInfo.testField,
     });
@@ -471,8 +478,7 @@ class PIMPage {
     this.getBirthday().should("eq", employeeInfo.dateOfBirth);
     this.getNationality().should("eq", employeeInfo.nationality);
     this.getMaritalStatus().should("eq", employeeInfo.maritalState);
-    const expectedGenderValue = employeeInfo.gender === GENDER.MALE ? "1" : "2";
-    this.getGender().should("eq", expectedGenderValue);
+    this.getGender().should("eq", employeeInfo.gender);
     this.getBloodType().should("eq", employeeInfo.bloodType);
     this.getTestField().should("eq", employeeInfo.testField);
   }

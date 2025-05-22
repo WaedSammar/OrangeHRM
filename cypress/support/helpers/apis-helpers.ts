@@ -51,18 +51,5 @@ class APIsHelper {
       });
     });
   }
-
-  static sendAPIResponse(method: string, url: string, body: string | any) {
-    return cy
-      .request({
-        method,
-        url,
-        body,
-      })
-      .then((response) => {
-        expect(response.status).to.eq(200);
-        return response;
-      });
-  }
 }
 export { APIsHelper, URLs };

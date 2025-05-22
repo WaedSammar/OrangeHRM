@@ -11,7 +11,8 @@
   "nationality": "British",
   "maritalState": "Single",
   "dateOfBirth": "2011-02-02",
-  "gender": "Male",
+  "gender": "1",
   "bloodType": "O+",
-  "testField": "22"
+  "testField": "22",
+  "status": true
 }
