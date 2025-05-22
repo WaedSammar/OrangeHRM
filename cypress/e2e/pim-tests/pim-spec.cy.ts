@@ -51,71 +51,16 @@ describe("Employee management - Add and Save Test Cases", () => {
   });
 
   it("Adding employee via API", () => {
-    cy.request({
-      method: "POST",
-      url: `/web/index.php/api/v2/pim/employees`,
-      body: {
-        firstName: employeeInfo.firstName,
-        middleName: employeeInfo.middleName,
-        lastName: employeeInfo.lastName,
-        employeeId: employeeInfo.employeeId,
-      },
-    }).then((response) => {
-      cy.log(response.body);
-      expect(response.status).to.eq(200);
+    PIMPage.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber;
-
-      cy.request({
-        method: "POST",
-        url: `/web/index.php/api/v2/admin/users`,
-        body: {
-          username: employeeInfo.userName,
-          password: employeeInfo.password,
-          status: true,
-          userRoleId: 2,
-          empNumber: empNumber,
-        },
-      }).then((response) => {
-        cy.log(response.body);
-        expect(response.status).to.eq(200);
-      });
-
-      cy.request({
-        method: "PUT",
-        url: `/web/index.php/api/v2/pim/employees/${empNumber}/personal-details`,
-        body: {
-          firstName: employeeInfo.firstName,
-          middleName: employeeInfo.middleName,
-          lastName: employeeInfo.lastName,
-          employeeId: employeeInfo.employeeId,
-          otherId: employeeInfo.otherId,
-          drivingLicenseNo: employeeInfo.licenseNum,
-          drivingLicenseExpiredDate: employeeInfo.expDate,
-          birthday: employeeInfo.dateOfBirth,
-          gender: 1,
-          maritalStatus: employeeInfo.maritalState,
-          nationalityId: 27,
-        },
-      }).then((response) => {
-        cy.log(response.body);
-        expect(response.status).to.eq(200);
-      });
-
-      cy.request({
-        method: "PUT",
-        url: `/web/index.php/api/v2/pim/employees/${empNumber}/custom-fields`,
-        body: {
-          custom1: employeeInfo.bloodType,
-          custom2: employeeInfo.testField,
-        },
-      }).then((response) => {
-        expect(response.status).to.eq(200);
-      });
-
-      ElementHandler.logout();
-      cy.login(employeeInfo.userName, employeeInfo.password);
-      MyInfo.goToMyInfoPage();
-      PIMPage.verifyEmployeeInfo(employeeInfo);
+      PIMPage.createUserViaAPI(employeeInfo, empNumber);
+      PIMPage.updateEmployeeDetailsViaAPI(employeeInfo, empNumber);
+      PIMPage.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber);
     });
+
+    ElementHandler.logout();
+    cy.login(employeeInfo.userName, employeeInfo.password);
+    MyInfo.goToMyInfoPage();
+    PIMPage.verifyEmployeeInfo(employeeInfo);
   });
 });

@@ -1,8 +1,13 @@
 import { ElementHandler } from "../element-handler";
 import { APIsHelper } from "../helpers/apis-helpers";
 import CommonHelper from "../helpers/common-helper";
-import { HTML_TAGS, PAGES } from "../helpers/constants";
+import { HTML_TAGS, HTTP_METHODS, PAGES } from "../helpers/constants";
 import { IEmployeeInfo } from "../types/employee.types";
+
+const URLs = {
+  employees: `/web/index.php/api/v2/pim/employees`,
+  createUser: `/web/index.php/api/v2/admin/users`,
+};
 
 enum LABELS {
   EMPLOYEE_ID = "Employee Id",
@@ -338,6 +343,76 @@ class PIMPage {
    */
   static getTestField() {
     return ElementHandler.findInputByLabel(LABELS.TEST_FIELD).invoke("val");
+  }
+
+  /**
+   * create employee basic via API
+   * @param {IEmployeeInfo} employeeInfo
+   * @returns - API response
+   */
+  static createEmployeeViaAPI(employeeInfo: IEmployeeInfo) {
+    return APIsHelper.sendAPIResponse(HTTP_METHODS.POST, URLs.employees, {
+      firstName: employeeInfo.firstName,
+      middleName: employeeInfo.middleName,
+      lastName: employeeInfo.lastName,
+      employeeId: employeeInfo.employeeId,
+    });
+  }
+
+  /**
+   * add username and password for the employee
+   * @param {IEmployeeInfo} employeeInfo
+   * @param {number} empNumber
+   */
+  static createUserViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
+    APIsHelper.sendAPIResponse(HTTP_METHODS.POST, URLs.createUser, {
+      username: employeeInfo.userName,
+      password: employeeInfo.password,
+      status: true,
+      userRoleId: 2,
+      empNumber: empNumber,
+    });
+  }
+
+  /**
+   * update employee personal details
+   * @param {IEmployeeInfo} employeeInfo
+   * @param {number} empNumber
+   */
+  static updateEmployeeDetailsViaAPI(
+    employeeInfo: IEmployeeInfo,
+    empNumber: number
+  ) {
+    const url = `/web/index.php/api/v2/pim/employees/${empNumber}/personal-details`;
+    APIsHelper.sendAPIResponse(HTTP_METHODS.PUT, url, {
+      firstName: employeeInfo.firstName,
+      middleName: employeeInfo.middleName,
+      lastName: employeeInfo.lastName,
+      employeeId: employeeInfo.employeeId,
+      otherId: employeeInfo.otherId,
+      drivingLicenseNo: employeeInfo.licenseNum,
+      drivingLicenseExpiredDate: employeeInfo.expDate,
+      birthday: employeeInfo.dateOfBirth,
+      gender: 1,
+      maritalStatus: employeeInfo.maritalState,
+      nationalityId: 27,
+    });
+  }
+
+  /**
+   * update employee custom field
+   * @param {IEmployeeInfo} employeeInfo
+   * @param {number} empNumber
+   */
+  static updateEmployeeCustomFieldsViaAPI(
+    employeeInfo: IEmployeeInfo,
+    empNumber: number
+  ) {
+    const url = `/web/index.php/api/v2/pim/employees/${empNumber}/custom-fields`;
+    APIsHelper.sendAPIResponse(HTTP_METHODS.PUT, url, {
+      custom1: employeeInfo.bloodType,
+      custom2: employeeInfo.testField,
+    });
   }
 
   /**
