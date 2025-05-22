@@ -12,7 +12,6 @@ describe("Employee management - Add and Save Test Cases", () => {
     cy.fixture("employee-page-mock").then((addEmployeeData) => {
       employeeMockData = addEmployeeData;
     });
-    cy.login();
   });
 
   beforeEach(() => {
@@ -22,6 +21,7 @@ describe("Employee management - Add and Save Test Cases", () => {
       employeeId: `${employeeMockData.employeeId}${randomNum}`,
       userName: `${employeeMockData.userName}${randomNum}`,
     };
+    cy.login();
   });
 
   it("Adding a new employee, saving information and verifying it", () => {

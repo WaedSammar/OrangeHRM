@@ -31,6 +31,11 @@ export enum GENDER {
   FEMALE = "Female",
 }
 
+const GenderMap: Record<GENDER, number> = {
+  [GENDER.MALE]: 1,
+  [GENDER.FEMALE]: 2,
+};
+
 enum UserRole {
   ADMIN = 1,
   ESS = 2,
@@ -400,7 +405,7 @@ class PIMPage {
       drivingLicenseNo: employeeInfo.licenseNum,
       drivingLicenseExpiredDate: employeeInfo.expDate,
       birthday: employeeInfo.dateOfBirth,
-      gender: employeeInfo.gender,
+      gender: GenderMap[employeeInfo.gender],
       maritalStatus: employeeInfo.maritalState,
       nationalityId: 27,
     });
@@ -478,7 +483,8 @@ class PIMPage {
     this.getBirthday().should("eq", employeeInfo.dateOfBirth);
     this.getNationality().should("eq", employeeInfo.nationality);
     this.getMaritalStatus().should("eq", employeeInfo.maritalState);
-    this.getGender().should("eq", employeeInfo.gender);
+    const expectedGenderValue = employeeInfo.gender === GENDER.MALE ? "1" : "2";
+    this.getGender().should("eq", expectedGenderValue);
     this.getBloodType().should("eq", employeeInfo.bloodType);
     this.getTestField().should("eq", employeeInfo.testField);
   }
