@@ -12,7 +12,6 @@ describe("Employee management - Add and Save Test Cases", () => {
     cy.fixture("employee-page-mock").then((addEmployeeData) => {
       employeeMockData = addEmployeeData;
     });
-    cy.login();
   });
 
   beforeEach(() => {
@@ -22,6 +21,7 @@ describe("Employee management - Add and Save Test Cases", () => {
       employeeId: `${employeeMockData.employeeId}${randomNum}`,
       userName: `${employeeMockData.userName}${randomNum}`,
     };
+    cy.login();
   });
 
   it("Adding a new employee, saving information and verifying it", () => {
@@ -46,6 +46,20 @@ describe("Employee management - Add and Save Test Cases", () => {
 
     cy.login(employeeInfo.userName, employeeInfo.password);
 
+    MyInfo.goToMyInfoPage();
+    PIMPage.verifyEmployeeInfo(employeeInfo);
+  });
+
+  it("Adding employee via API", () => {
+    PIMPage.createEmployeeViaAPI(employeeInfo).then((response) => {
+      const empNumber = response.body.data.empNumber;
+      PIMPage.createUserViaAPI(employeeInfo, empNumber);
+      PIMPage.updateEmployeeDetailsViaAPI(employeeInfo, empNumber);
+      PIMPage.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber);
+    });
+
+    ElementHandler.logout();
+    cy.login(employeeInfo.userName, employeeInfo.password);
     MyInfo.goToMyInfoPage();
     PIMPage.verifyEmployeeInfo(employeeInfo);
   });

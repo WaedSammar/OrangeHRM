@@ -16,4 +16,5 @@ export interface IEmployeeInfo {
   gender: GENDER;
   bloodType: string;
   testField: string;
+  status: true;
 }

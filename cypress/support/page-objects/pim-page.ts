@@ -1,8 +1,15 @@
 import { ElementHandler } from "../element-handler";
 import { APIsHelper } from "../helpers/apis-helpers";
 import CommonHelper from "../helpers/common-helper";
-import { HTML_TAGS, PAGES } from "../helpers/constants";
+import { HTML_TAGS, HTTP_METHODS, PAGES } from "../helpers/constants";
 import { IEmployeeInfo } from "../types/employee.types";
+
+const URLs = {
+  employees: `/web/index.php/api/v2/pim/employees`,
+  createUser: `/web/index.php/api/v2/admin/users`,
+  personalDetails: `personal-details`,
+  customField: `custom-fields`,
+};
 
 enum LABELS {
   EMPLOYEE_ID = "Employee Id",
@@ -22,6 +29,16 @@ enum LABELS {
 export enum GENDER {
   MALE = "Male",
   FEMALE = "Female",
+}
+
+const GenderMap: Record<GENDER, number> = {
+  [GENDER.MALE]: 1,
+  [GENDER.FEMALE]: 2,
+};
+
+enum UserRole {
+  ADMIN = 1,
+  ESS = 2,
 }
 
 class PIMPage {
@@ -338,6 +355,76 @@ class PIMPage {
    */
   static getTestField() {
     return ElementHandler.findInputByLabel(LABELS.TEST_FIELD).invoke("val");
+  }
+
+  /**
+   * create employee basic via API
+   * @param {IEmployeeInfo} employeeInfo
+   * @returns - API response
+   */
+  static createEmployeeViaAPI(employeeInfo: IEmployeeInfo) {
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.employees, {
+      firstName: employeeInfo.firstName,
+      middleName: employeeInfo.middleName,
+      lastName: employeeInfo.lastName,
+      employeeId: employeeInfo.employeeId,
+    });
+  }
+
+  /**
+   * add username and password for the employee
+   * @param {IEmployeeInfo} employeeInfo
+   * @param {number} empNumber
+   */
+  static createUserViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
+    CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.createUser, {
+      username: employeeInfo.userName,
+      password: employeeInfo.password,
+      status: employeeInfo.status,
+      userRoleId: UserRole.ESS,
+      empNumber,
+    });
+  }
+
+  /**
+   * update employee personal details
+   * @param {IEmployeeInfo} employeeInfo
+   * @param {number} empNumber
+   */
+  static updateEmployeeDetailsViaAPI(
+    employeeInfo: IEmployeeInfo,
+    empNumber: number
+  ) {
+    const url = `${URLs.employees}/${empNumber}/${URLs.personalDetails}`;
+    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, {
+      firstName: employeeInfo.firstName,
+      middleName: employeeInfo.middleName,
+      lastName: employeeInfo.lastName,
+      employeeId: employeeInfo.employeeId,
+      otherId: employeeInfo.otherId,
+      drivingLicenseNo: employeeInfo.licenseNum,
+      drivingLicenseExpiredDate: employeeInfo.expDate,
+      birthday: employeeInfo.dateOfBirth,
+      gender: GenderMap[employeeInfo.gender],
+      maritalStatus: employeeInfo.maritalState,
+      nationalityId: 27,
+    });
+  }
+
+  /**
+   * update employee custom field
+   * @param {IEmployeeInfo} employeeInfo
+   * @param {number} empNumber
+   */
+  static updateEmployeeCustomFieldsViaAPI(
+    employeeInfo: IEmployeeInfo,
+    empNumber: number
+  ) {
+    const url = `${URLs.employees}/${empNumber}/${URLs.customField}`;
+    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, {
+      custom1: employeeInfo.bloodType,
+      custom2: employeeInfo.testField,
+    });
   }
 
   /**

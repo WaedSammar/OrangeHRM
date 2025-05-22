@@ -13,5 +13,6 @@
   "dateOfBirth": "2011-02-02",
   "gender": "Male",
   "bloodType": "O+",
-  "testField": "22"
+  "testField": "22",
+  "status": true
 }
