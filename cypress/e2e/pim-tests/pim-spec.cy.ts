@@ -25,7 +25,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     cy.login();
   });
 
-  it("Adding a new employee, saving information and verifying it", () => {
+  it.only("Adding a new employee, saving information and verifying it", () => {
     PIMPage.goToPIMPage();
     PIMPage.clickAddBtn();
     PIMPage.fillEmployeeInfo(employeeInfo);
@@ -37,17 +37,21 @@ describe("Employee management - Add and Save Test Cases", () => {
     APIsHelper.interceptGetEmployeeDetailsRequest(createLoadPersonalDetails);
     ElementHandler.clickSave();
     APIsHelper.waitForApiResponse(createLoadPersonalDetails);
+    cy.wait(5000);
+    // PIMPage.fillPersonalDetails(employeeInfo);
+    // ElementHandler.clickSave();
+    // PIMPage.fillAdditionalEmployeeDetails(employeeInfo);
+    // ElementHandler.clickSave(1);
 
-    PIMPage.fillPersonalDetails(employeeInfo);
-    ElementHandler.clickSave();
-    PIMPage.fillAdditionalEmployeeDetails(employeeInfo);
-    ElementHandler.clickSave(1);
+    PIMPage.uploadAttachment();
+    ElementHandler.clickSave(2);
 
     ElementHandler.logout();
 
     cy.login(employeeInfo.userName, employeeInfo.password);
-
+    
     MyInfo.goToMyInfoPage();
+    PIMPage.downloadUploadedFile();
     PIMPage.verifyEmployeeInfo(employeeInfo);
   });
 
@@ -57,14 +61,14 @@ describe("Employee management - Add and Save Test Cases", () => {
       PIMPage.createUserViaAPI(employeeInfo, empNumber);
       PIMPage.updateEmployeeDetailsViaAPI(employeeInfo, empNumber);
       PIMPage.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber);
-    });    
+    });
     ElementHandler.logout();
     cy.login(employeeInfo.userName, employeeInfo.password);
     MyInfo.goToMyInfoPage();
     PIMPage.verifyEmployeeInfo(employeeInfo);
   });
 
-  it.only("Adding employee upload attachment and verify it", () => {
+  it("Adding employee upload attachment and verify it", () => {
     AdminPage.goToAdminPage();
     AdminPage.clickNationality();
     AdminPage.clickAddBtn();

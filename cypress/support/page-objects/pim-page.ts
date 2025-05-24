@@ -56,6 +56,7 @@ class PIMPage {
     selectGender: `${HTML_TAGS.input}[type="radio"][value="1"]`,
     closeBtn: ".oxd-date-input-link.--close",
     chosenGender: `${HTML_TAGS.input}[type="radio"]:checked`,
+    uploadFile: `${HTML_TAGS.input}[type="file"]`
   };
 
   /**
@@ -348,6 +349,23 @@ class PIMPage {
   static getTestField() {
     return ElementHandler.findInputByLabel(LABELS.TEST_FIELD).invoke("val");
   }
+
+  /**
+   * upload file
+   */
+  static uploadAttachment() {
+    this.clickAddBtn();
+    cy.get(this.LOCATORS.uploadFile).selectFile("cypress/fixtures/sheet.xlsx", {
+      force: true,
+    });
+  }
+
+  /**
+   * download file to compare
+   */
+   static downloadUploadedFile(){
+    cy.get(".oxd-icon.bi-download").click();
+   }
 
   /**
    * create employee basic via API

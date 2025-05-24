@@ -8,7 +8,7 @@ enum LABELS {
 
 const URLs = {
   getNationality: `/web/index.php/api/v2/admin/nationalities?limit=1000`,
-  deleteNationality: `/web/index.php/api/v2/admin/nationalities`
+  deleteNationality: `/web/index.php/api/v2/admin/nationalities`,
 };
 
 class AdminPage {
@@ -16,26 +16,47 @@ class AdminPage {
     nationalityTab: ".oxd-topbar-body-nav-tab-item",
   };
 
+  /**
+   * go to admin page
+   */
   static goToAdminPage() {
     ElementHandler.clickMenuItem(PAGES.ADMIN);
   }
 
+  /**
+   * click on nationalities tab
+   */
   static clickNationality() {
     cy.get(this.LOCATORS.nationalityTab).contains("Nationalities").click();
   }
 
+  /**
+   * click add button
+   */
   static clickAddBtn() {
     ElementHandler.clickButton("Add");
   }
 
+  /**
+   * add new nationality
+   * @param {string} nationality
+   */
   static addNationality(nationality: string) {
     ElementHandler.findInputByLabel(LABELS.NAME).type(nationality);
   }
 
+  /**
+   * get nationality made prev
+   * @returns
+   */
   static getNationality() {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.GET, URLs.getNationality);
   }
 
+  /**
+   * delete created nationality
+   * @param {number} id
+   */
   static deleteNationality(id: number) {
     CommonHelper.sendAPIRequest(
       HTTP_METHODS.DELETE,
