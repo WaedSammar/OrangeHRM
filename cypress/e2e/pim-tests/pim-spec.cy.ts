@@ -38,10 +38,10 @@ describe("Employee management - Add and Save Test Cases", () => {
     ElementHandler.clickSave();
     APIsHelper.waitForApiResponse(createLoadPersonalDetails);
     cy.wait(5000);
-    // PIMPage.fillPersonalDetails(employeeInfo);
-    // ElementHandler.clickSave();
-    // PIMPage.fillAdditionalEmployeeDetails(employeeInfo);
-    // ElementHandler.clickSave(1);
+    PIMPage.fillPersonalDetails(employeeInfo);
+    ElementHandler.clickSave();
+    PIMPage.fillAdditionalEmployeeDetails(employeeInfo);
+    ElementHandler.clickSave(1);
 
     PIMPage.uploadAttachment();
     ElementHandler.clickSave(2);
@@ -49,9 +49,10 @@ describe("Employee management - Add and Save Test Cases", () => {
     ElementHandler.logout();
 
     cy.login(employeeInfo.userName, employeeInfo.password);
-    
+
     MyInfo.goToMyInfoPage();
     PIMPage.downloadUploadedFile();
+    PIMPage.verifyUploadedFile();
     PIMPage.verifyEmployeeInfo(employeeInfo);
   });
 

@@ -11,6 +11,11 @@ const URLs = {
   customField: `custom-fields`,
 };
 
+enum FILES {
+  ORIGINAL_FILE = "cypress/fixtures/sheet.xlsx",
+  DOWNLOADED_FILE = "cypress/downloads/sheet.xlsx",
+}
+
 enum LABELS {
   EMPLOYEE_ID = "Employee Id",
   USERNAME = "Username",
@@ -56,7 +61,7 @@ class PIMPage {
     selectGender: `${HTML_TAGS.input}[type="radio"][value="1"]`,
     closeBtn: ".oxd-date-input-link.--close",
     chosenGender: `${HTML_TAGS.input}[type="radio"]:checked`,
-    uploadFile: `${HTML_TAGS.input}[type="file"]`
+    uploadFile: `${HTML_TAGS.input}[type="file"]`,
   };
 
   /**
@@ -363,9 +368,9 @@ class PIMPage {
   /**
    * download file to compare
    */
-   static downloadUploadedFile(){
+  static downloadUploadedFile() {
     cy.get(".oxd-icon.bi-download").click();
-   }
+  }
 
   /**
    * create employee basic via API
@@ -498,6 +503,21 @@ class PIMPage {
     this.getBloodType().should("eq", employeeInfo.bloodType);
     this.getTestField().should("eq", employeeInfo.testField);
   }
-}
 
+  /**
+   * verify that uploaded file has the same content of downloaded one
+   */
+  static verifyUploadedFile() {
+    cy.readFile(FILES.DOWNLOADED_FILE, { timeout: 10000 }).should("exist");
+    cy.task("parseXlsxToJson", { filePath: FILES.ORIGINAL_FILE }).then(
+      (originalData) => {
+        cy.task("parseXlsxToJson", { filePath: FILES.DOWNLOADED_FILE }).then(
+          (downloadedData) => {
+            expect(downloadedData).to.deep.equal(originalData);
+          }
+        );
+      }
+    );
+  }
+}
 export { PIMPage };
