@@ -17,4 +17,5 @@ export interface IEmployeeInfo {
   bloodType: string;
   testField: string;
   status: true;
+  newNationality: string;
 }

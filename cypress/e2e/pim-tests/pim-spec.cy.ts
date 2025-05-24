@@ -1,6 +1,7 @@
 import { ElementHandler } from "../../support/element-handler";
 import { APIsHelper } from "../../support/helpers/apis-helpers";
 import CommonHelper from "../../support/helpers/common-helper";
+import { AdminPage } from "../../support/page-objects/admin-page";
 import { MyInfo } from "../../support/page-objects/my-info-page";
 import { PIMPage } from "../../support/page-objects/pim-page";
 import { IEmployeeInfo } from "../../support/types/employee.types";
@@ -34,13 +35,13 @@ describe("Employee management - Add and Save Test Cases", () => {
       "loadPersonalDetails"
     );
     APIsHelper.interceptGetEmployeeDetailsRequest(createLoadPersonalDetails);
-    PIMPage.clickSave();
+    ElementHandler.clickSave();
     APIsHelper.waitForApiResponse(createLoadPersonalDetails);
 
     PIMPage.fillPersonalDetails(employeeInfo);
-    PIMPage.clickSave();
+    ElementHandler.clickSave();
     PIMPage.fillAdditionalEmployeeDetails(employeeInfo);
-    PIMPage.clickSave(1);
+    ElementHandler.clickSave(1);
 
     ElementHandler.logout();
 
@@ -56,11 +57,28 @@ describe("Employee management - Add and Save Test Cases", () => {
       PIMPage.createUserViaAPI(employeeInfo, empNumber);
       PIMPage.updateEmployeeDetailsViaAPI(employeeInfo, empNumber);
       PIMPage.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber);
-    });
-
+    });    
     ElementHandler.logout();
     cy.login(employeeInfo.userName, employeeInfo.password);
     MyInfo.goToMyInfoPage();
     PIMPage.verifyEmployeeInfo(employeeInfo);
+  });
+
+  it.only("Adding employee upload attachment and verify it", () => {
+    AdminPage.goToAdminPage();
+    AdminPage.clickNationality();
+    AdminPage.clickAddBtn();
+    AdminPage.addNationality(employeeInfo.newNationality);
+    ElementHandler.clickSave();
+
+    cy.wait(5000);
+
+    AdminPage.getNationality().then((res) => {
+      const added = res.body.data.find(
+        (n) => n.name === employeeInfo.newNationality
+      );
+      let addedId = added.id;
+      AdminPage.deleteNationality(addedId);
+    });
   });
 });

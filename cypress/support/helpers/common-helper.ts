@@ -35,12 +35,22 @@ class CommonHelper {
     });
   }
 
-  static sendAPIRequest(method: string, url: string, body: string | any) {
+  static sendAPIRequest(
+    method: string,
+    url: string,
+    body?: string | object,
+    header?: Record<string, string>
+  ) {
+    const hasBody = body !== undefined;
     return cy
       .request({
         method,
         url,
-        body,
+        ...(hasBody && { body }),
+        headers: {
+          ...(hasBody ? { "Content-Type": "application/json" } : {}),
+          ...(header || {}),
+        },
       })
       .then((response) => {
         expect(response.status).to.eq(200);

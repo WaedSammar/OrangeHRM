@@ -14,5 +14,6 @@
   "gender": "Male",
   "bloodType": "O+",
   "testField": "22",
-  "status": true
+  "status": true,
+  "newNationality": "Palestinian"
 }

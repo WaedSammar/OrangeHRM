@@ -5,6 +5,7 @@ const LOCATORS = {
   menuItems: "span.oxd-main-menu-item--name",
   dropDownList: ".oxd-userdropdown-name",
   loaderIcon: ".oxd-loading-spinner",
+  submitBtn: `${HTML_TAGS.button}[type='submit']`,
 };
 
 enum DROP_DOWN {
@@ -80,6 +81,14 @@ class ElementHandler {
    */
   static getFieldValue(className: string) {
     return cy.get(className).invoke("val");
+  }
+
+  /**
+   * save information user entered
+   * @param index
+   */
+  static clickSave(index: number = 0) {
+    cy.get(LOCATORS.submitBtn).eq(index).click().contains("Save");
   }
 
   /**

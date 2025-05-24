@@ -222,14 +222,6 @@ class PIMPage {
   }
 
   /**
-   * save information user entered
-   * @param index - save button index
-   */
-  static clickSave(index: number = 0) {
-    cy.get(this.LOCATORS.submitBtn).eq(index).click().contains("Save");
-  }
-
-  /**
    * select user blood type
    * @param text - blood type
    */
