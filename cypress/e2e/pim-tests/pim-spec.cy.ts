@@ -7,7 +7,9 @@ import { PIMPage } from "../../support/page-objects/pim-page";
 import { IEmployeeInfo } from "../../support/types/employee.types";
 
 describe("Employee management - Add and Save Test Cases", () => {
-  let employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo;
+  let employeeMockData: IEmployeeInfo,
+    employeeInfo: IEmployeeInfo,
+    addedNationalityId: number;
 
   before(() => {
     cy.fixture("employee-page-mock").then((addEmployeeData) => {
@@ -25,7 +27,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     cy.login();
   });
 
-  it.only("Adding a new employee, saving information and verifying it", () => {
+  it("Adding a new employee, saving information and verifying it", () => {
     PIMPage.goToPIMPage();
     PIMPage.clickAddBtn();
     PIMPage.fillEmployeeInfo(employeeInfo);
@@ -43,16 +45,11 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.fillAdditionalEmployeeDetails(employeeInfo);
     ElementHandler.clickSave(1);
 
-    PIMPage.uploadAttachment();
-    ElementHandler.clickSave(2);
-
     ElementHandler.logout();
 
     cy.login(employeeInfo.userName, employeeInfo.password);
 
     MyInfo.goToMyInfoPage();
-    PIMPage.downloadUploadedFile();
-    PIMPage.verifyUploadedFile();
     PIMPage.verifyEmployeeInfo(employeeInfo);
   });
 
@@ -69,11 +66,12 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.verifyEmployeeInfo(employeeInfo);
   });
 
-  it("Adding employee upload attachment and verify it", () => {
+  it.only("Adding employee upload attachment and verify it", () => {
     AdminPage.goToAdminPage();
     AdminPage.clickNationality();
     AdminPage.clickAddBtn();
     AdminPage.addNationality(employeeInfo.newNationality);
+    employeeInfo.nationality = employeeInfo.newNationality;
     ElementHandler.clickSave();
 
     cy.wait(5000);
@@ -82,8 +80,46 @@ describe("Employee management - Add and Save Test Cases", () => {
       const added = res.body.data.find(
         (n) => n.name === employeeInfo.newNationality
       );
-      let addedId = added.id;
-      AdminPage.deleteNationality(addedId);
+      addedNationalityId = added.id;
     });
+
+    PIMPage.goToPIMPage();
+    PIMPage.clickAddBtn();
+    PIMPage.fillEmployeeInfo(employeeInfo);
+
+    const createLoadPersonalDetails = CommonHelper.generateRandomString(
+      7,
+      "loadPersonalDetails"
+    );
+    APIsHelper.interceptGetEmployeeDetailsRequest(createLoadPersonalDetails);
+    ElementHandler.clickSave();
+    APIsHelper.waitForApiResponse(createLoadPersonalDetails);
+    cy.wait(5000);
+
+    PIMPage.fillPersonalDetails(employeeInfo);
+    ElementHandler.clickSave();
+    PIMPage.fillAdditionalEmployeeDetails(employeeInfo);
+    ElementHandler.clickSave(1);
+    PIMPage.uploadAttachment();
+    ElementHandler.clickSave(2);
+
+    ElementHandler.logout();
+
+    cy.login(employeeInfo.userName, employeeInfo.password);
+
+    MyInfo.goToMyInfoPage();
+    PIMPage.downloadUploadedFile();
+    PIMPage.verifyUploadedFile();
+    PIMPage.verifyEmployeeInfo(employeeInfo);
+    ElementHandler.logout();
+  });
+
+  after(() => {
+    if (addedNationalityId) {
+      cy.login();
+      AdminPage.goToAdminPage();
+      AdminPage.clickNationality();
+      AdminPage.deleteNationality(addedNationalityId);
+    }
   });
 });
