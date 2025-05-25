@@ -51,8 +51,9 @@ describe("Employee management - Add and Save Test Cases", () => {
     );
     APIsHelper.interceptGetEmployeeDetailsRequest(createLoadPersonalDetails);
     ElementHandler.clickSave();
-    APIsHelper.waitForApiResponse(createLoadPersonalDetails);
     cy.wait(5000);
+    APIsHelper.waitForApiResponse(createLoadPersonalDetails);
+    
     PIMPage.fillPersonalDetails(employeeInfo);
     ElementHandler.clickSave();
     PIMPage.fillAdditionalEmployeeDetails(employeeInfo);
