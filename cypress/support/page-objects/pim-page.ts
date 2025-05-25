@@ -62,6 +62,7 @@ class PIMPage {
     closeBtn: ".oxd-date-input-link.--close",
     chosenGender: `${HTML_TAGS.input}[type="radio"]:checked`,
     uploadFile: `${HTML_TAGS.input}[type="file"]`,
+    downloadIcon: ".oxd-icon.bi-download",
   };
 
   /**
@@ -360,7 +361,7 @@ class PIMPage {
    */
   static uploadAttachment() {
     this.clickAddBtn();
-    cy.get(this.LOCATORS.uploadFile).selectFile("cypress/fixtures/sheet.xlsx", {
+    cy.get(this.LOCATORS.uploadFile).selectFile(FILES.ORIGINAL_FILE, {
       force: true,
     });
   }
@@ -369,7 +370,7 @@ class PIMPage {
    * download file to compare
    */
   static downloadUploadedFile() {
-    cy.get(".oxd-icon.bi-download").click();
+    cy.get(this.LOCATORS.downloadIcon).click();
   }
 
   /**
@@ -422,7 +423,7 @@ class PIMPage {
       birthday: employeeInfo.dateOfBirth,
       gender: GenderMap[employeeInfo.gender],
       maritalStatus: employeeInfo.maritalState,
-      nationalityId: 27,
+      nationalityId: employeeInfo.nationalityId,
     });
   }
 

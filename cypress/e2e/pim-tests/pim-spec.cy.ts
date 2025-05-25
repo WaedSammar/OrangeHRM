@@ -7,9 +7,7 @@ import { PIMPage } from "../../support/page-objects/pim-page";
 import { IEmployeeInfo } from "../../support/types/employee.types";
 
 describe("Employee management - Add and Save Test Cases", () => {
-  let employeeMockData: IEmployeeInfo,
-    employeeInfo: IEmployeeInfo,
-    addedNationalityId: number;
+  let employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo;
 
   before(() => {
     cy.fixture("employee-page-mock").then((addEmployeeData) => {
@@ -25,6 +23,21 @@ describe("Employee management - Add and Save Test Cases", () => {
       userName: `${employeeMockData.userName}${randomNum}`,
     };
     cy.login();
+
+    AdminPage.goToAdminPage();
+    AdminPage.clickNationality();
+    AdminPage.clickAddBtn();
+    AdminPage.addNationality(employeeInfo.newNationality);
+    employeeInfo.nationality = employeeInfo.newNationality;
+    ElementHandler.clickSave();
+    cy.wait(5000);
+
+    AdminPage.getNationality().then((res) => {
+      const added = res.body.data.find(
+        (n) => n.name === employeeInfo.newNationality
+      );
+      employeeInfo.nationalityId = added.id;
+    });
   });
 
   it("Adding a new employee, saving information and verifying it", () => {
@@ -53,7 +66,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.verifyEmployeeInfo(employeeInfo);
   });
 
-  it("Adding employee via API", () => {
+  it("Adding a new employee via API", () => {
     PIMPage.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber;
       PIMPage.createUserViaAPI(employeeInfo, empNumber);
@@ -66,33 +79,20 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.verifyEmployeeInfo(employeeInfo);
   });
 
-  it.only("Adding employee upload attachment and verify it", () => {
-    AdminPage.goToAdminPage();
-    AdminPage.clickNationality();
-    AdminPage.clickAddBtn();
-    AdminPage.addNationality(employeeInfo.newNationality);
-    employeeInfo.nationality = employeeInfo.newNationality;
-    ElementHandler.clickSave();
-    cy.wait(5000);
-
-    AdminPage.getNationality().then((res) => {
-      const added = res.body.data.find(
-        (n) => n.name === employeeInfo.newNationality
-      );
-      addedNationalityId = added.id;
-    });
-
+  it("Adding a new employee, upload attachment and verify it", () => {
     PIMPage.goToPIMPage();
     PIMPage.clickAddBtn();
     PIMPage.fillEmployeeInfo(employeeInfo);
 
-    const createLoadPersonalDetails = CommonHelper.generateRandomString(
+    const createLoadPersonalDetailsPage = CommonHelper.generateRandomString(
       7,
-      "loadPersonalDetails"
+      "loadPersonalDetailsPage"
     );
-    APIsHelper.interceptGetEmployeeDetailsRequest(createLoadPersonalDetails);
+    APIsHelper.interceptGetEmployeeDetailsRequest(
+      createLoadPersonalDetailsPage
+    );
     ElementHandler.clickSave();
-    APIsHelper.waitForApiResponse(createLoadPersonalDetails);
+    APIsHelper.waitForApiResponse(createLoadPersonalDetailsPage);
     cy.wait(5000);
 
     PIMPage.fillPersonalDetails(employeeInfo);
@@ -110,15 +110,16 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.downloadUploadedFile();
     PIMPage.verifyUploadedFile();
     PIMPage.verifyEmployeeInfo(employeeInfo);
-    ElementHandler.logout();
   });
 
-  after(() => {
+  afterEach(() => {
+    ElementHandler.logout();
     cy.login();
     AdminPage.goToAdminPage();
     AdminPage.searchOnCreatedUsername(employeeInfo.userName);
     AdminPage.deleteCreatedUsername();
+    AdminPage.goToAdminPage();
     AdminPage.clickNationality();
-    AdminPage.deleteNationality(addedNationalityId);
+    AdminPage.deleteNationality(employeeInfo.nationalityId);
   });
 });

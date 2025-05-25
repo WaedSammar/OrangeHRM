@@ -16,6 +16,7 @@ class AdminPage {
   private static LOCATORS = {
     nationalityTab: ".oxd-topbar-body-nav-tab-item",
     searchBtn: ".oxd-button.oxd-button--secondary",
+    trashIcon: ".oxd-icon.bi-trash"
   };
 
   /**
@@ -68,7 +69,7 @@ class AdminPage {
    * delete created user
    */
   static deleteCreatedUsername() {
-    cy.get(".oxd-icon.bi-trash").click();
+    cy.get(this.LOCATORS.trashIcon).click();
     ElementHandler.clickButton(" Yes, Delete ");
   }
 
