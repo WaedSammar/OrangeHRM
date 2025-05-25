@@ -53,7 +53,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     ElementHandler.clickSave();
     cy.wait(5000);
     APIsHelper.waitForApiResponse(createLoadPersonalDetails);
-    
+
     PIMPage.fillPersonalDetails(employeeInfo);
     ElementHandler.clickSave();
     PIMPage.fillAdditionalEmployeeDetails(employeeInfo);
@@ -118,6 +118,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     cy.login();
     AdminPage.goToAdminPage();
     AdminPage.searchOnCreatedUsername(employeeInfo.userName);
+    cy.wait(5000);
     AdminPage.deleteCreatedUsername();
     AdminPage.goToAdminPage();
     AdminPage.clickNationality();
