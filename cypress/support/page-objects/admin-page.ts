@@ -4,6 +4,7 @@ import { HTTP_METHODS, PAGES } from "../helpers/constants";
 
 enum LABELS {
   NAME = "Name",
+  USERNAME = "Username",
 }
 
 const URLs = {
@@ -14,6 +15,7 @@ const URLs = {
 class AdminPage {
   private static LOCATORS = {
     nationalityTab: ".oxd-topbar-body-nav-tab-item",
+    searchBtn: ".oxd-button.oxd-button--secondary",
   };
 
   /**
@@ -51,6 +53,23 @@ class AdminPage {
    */
   static getNationality() {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.GET, URLs.getNationality);
+  }
+
+  /**
+   * search about created username
+   * @param {string} username
+   */
+  static searchOnCreatedUsername(username: string) {
+    ElementHandler.findInputByLabel(LABELS.USERNAME).type(username);
+    ElementHandler.clickButton("Search");
+  }
+
+  /**
+   * delete created user
+   */
+  static deleteCreatedUsername() {
+    cy.get(".oxd-icon.bi-trash").click();
+    ElementHandler.clickButton(" Yes, Delete ");
   }
 
   /**

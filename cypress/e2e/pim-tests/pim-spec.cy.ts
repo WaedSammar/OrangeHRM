@@ -73,7 +73,6 @@ describe("Employee management - Add and Save Test Cases", () => {
     AdminPage.addNationality(employeeInfo.newNationality);
     employeeInfo.nationality = employeeInfo.newNationality;
     ElementHandler.clickSave();
-
     cy.wait(5000);
 
     AdminPage.getNationality().then((res) => {
@@ -115,11 +114,11 @@ describe("Employee management - Add and Save Test Cases", () => {
   });
 
   after(() => {
-    if (addedNationalityId) {
-      cy.login();
-      AdminPage.goToAdminPage();
-      AdminPage.clickNationality();
-      AdminPage.deleteNationality(addedNationalityId);
-    }
+    cy.login();
+    AdminPage.goToAdminPage();
+    AdminPage.searchOnCreatedUsername(employeeInfo.userName);
+    AdminPage.deleteCreatedUsername();
+    AdminPage.clickNationality();
+    AdminPage.deleteNationality(addedNationalityId);
   });
 });
