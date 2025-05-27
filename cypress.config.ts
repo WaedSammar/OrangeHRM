@@ -8,10 +8,14 @@ export default defineConfig({
       on("task", {
         parseXlsxToJson({ filePath }) {
           const workbook = xlsx.readFile(filePath);
-          const sheetName = workbook.SheetNames[0];
-          const sheet = workbook.Sheets[sheetName];
-          const json = xlsx.utils.sheet_to_json(sheet, { defval: "" });
-          return json;
+          const result = {};
+
+          workbook.SheetNames.forEach((sheetName) => {
+            const sheet = workbook.Sheets[sheetName];
+            const json = xlsx.utils.sheet_to_json(sheet, { defval: "" });
+            result[sheetName] = json;
+          });
+          return result;
         },
       });
     },

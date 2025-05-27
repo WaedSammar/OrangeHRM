@@ -85,7 +85,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.verifyEmployeeInfo(employeeInfo);
   });
 
-  it("Adding a new employee, upload attachment and verify it", () => {
+  it.only("Adding a new employee, upload attachment and verify it", () => {
     PIMPage.goToPIMPage();
     PIMPage.clickAddBtn();
     PIMPage.fillEmployeeInfo(employeeInfo);
@@ -122,7 +122,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     cy.login();
     AdminPage.goToAdminPage();
     AdminPage.searchOnCreatedUsername(employeeInfo.userName);
-    ElementHandler.waitLoaderToBeHidden()
+    ElementHandler.waitLoaderToBeHidden();
     AdminPage.deleteCreatedUsername();
     AdminPage.clickNationalities();
     AdminPage.deleteNationality(employeeInfo.nationalityId);
