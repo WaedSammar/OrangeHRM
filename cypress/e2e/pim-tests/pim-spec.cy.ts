@@ -25,12 +25,18 @@ describe("Employee management - Add and Save Test Cases", () => {
     cy.login();
 
     AdminPage.goToAdminPage();
-    AdminPage.clickNationality();
+    AdminPage.clickNationalities();
     AdminPage.clickAddBtn();
     AdminPage.addNationality(employeeInfo.newNationality);
     employeeInfo.nationality = employeeInfo.newNationality;
+
+    const createLoadNationality = CommonHelper.generateRandomString(
+      9,
+      "loadNationality"
+    );
+    APIsHelper.interceptNationality(createLoadNationality);
     ElementHandler.clickSave();
-    cy.wait(5000);
+    APIsHelper.waitForApiResponse(createLoadNationality);
 
     AdminPage.getNationality().then((res) => {
       const added = res.body.data.find(
@@ -51,7 +57,6 @@ describe("Employee management - Add and Save Test Cases", () => {
     );
     APIsHelper.interceptGetEmployeeDetailsRequest(createLoadPersonalDetails);
     ElementHandler.clickSave();
-    cy.wait(5000);
     APIsHelper.waitForApiResponse(createLoadPersonalDetails);
 
     PIMPage.fillPersonalDetails(employeeInfo);
@@ -94,7 +99,6 @@ describe("Employee management - Add and Save Test Cases", () => {
     );
     ElementHandler.clickSave();
     APIsHelper.waitForApiResponse(createLoadPersonalDetailsPage);
-    cy.wait(5000);
 
     PIMPage.fillPersonalDetails(employeeInfo);
     ElementHandler.clickSave();
@@ -118,10 +122,9 @@ describe("Employee management - Add and Save Test Cases", () => {
     cy.login();
     AdminPage.goToAdminPage();
     AdminPage.searchOnCreatedUsername(employeeInfo.userName);
-    cy.wait(5000);
+    ElementHandler.waitLoaderToBeHidden()
     AdminPage.deleteCreatedUsername();
-    AdminPage.goToAdminPage();
-    AdminPage.clickNationality();
+    AdminPage.clickNationalities();
     AdminPage.deleteNationality(employeeInfo.nationalityId);
   });
 });

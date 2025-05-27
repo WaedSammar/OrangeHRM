@@ -7,16 +7,23 @@ enum LABELS {
   USERNAME = "Username",
 }
 
+enum BUTTONS {
+  NATIONALITIES = "Nationalities",
+  ADD = "Add",
+  SEARCH = "Search",
+  DELETE = " Yes, Delete ",
+}
+
 const URLs = {
-  getNationality: `/web/index.php/api/v2/admin/nationalities?limit=1000`,
-  deleteNationality: `/web/index.php/api/v2/admin/nationalities`,
+  nationality: `/web/index.php/api/v2/admin/nationalities`,
+  limit: `?limit=500`,
 };
 
 class AdminPage {
   private static LOCATORS = {
     nationalityTab: ".oxd-topbar-body-nav-tab-item",
     searchBtn: ".oxd-button.oxd-button--secondary",
-    trashIcon: ".oxd-icon.bi-trash"
+    trashIcon: ".oxd-icon.bi-trash",
   };
 
   /**
@@ -29,15 +36,17 @@ class AdminPage {
   /**
    * click on nationalities tab
    */
-  static clickNationality() {
-    cy.get(this.LOCATORS.nationalityTab).contains("Nationalities").click();
+  static clickNationalities() {
+    cy.get(this.LOCATORS.nationalityTab)
+      .contains(BUTTONS.NATIONALITIES)
+      .click();
   }
 
   /**
    * click add button
    */
   static clickAddBtn() {
-    ElementHandler.clickButton("Add");
+    ElementHandler.clickButton(BUTTONS.ADD);
   }
 
   /**
@@ -53,7 +62,10 @@ class AdminPage {
    * @returns
    */
   static getNationality() {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.GET, URLs.getNationality);
+    return CommonHelper.sendAPIRequest(
+      HTTP_METHODS.GET,
+      `${URLs.nationality}${URLs.limit}`
+    );
   }
 
   /**
@@ -62,7 +74,7 @@ class AdminPage {
    */
   static searchOnCreatedUsername(username: string) {
     ElementHandler.findInputByLabel(LABELS.USERNAME).type(username);
-    ElementHandler.clickButton("Search");
+    ElementHandler.clickButton(BUTTONS.SEARCH);
   }
 
   /**
@@ -70,7 +82,7 @@ class AdminPage {
    */
   static deleteCreatedUsername() {
     cy.get(this.LOCATORS.trashIcon).click();
-    ElementHandler.clickButton(" Yes, Delete ");
+    ElementHandler.clickButton(BUTTONS.DELETE);
   }
 
   /**
@@ -80,7 +92,7 @@ class AdminPage {
   static deleteNationality(id: number) {
     CommonHelper.sendAPIRequest(
       HTTP_METHODS.DELETE,
-      URLs.deleteNationality,
+      URLs.nationality,
       {
         ids: [String(id)],
       },

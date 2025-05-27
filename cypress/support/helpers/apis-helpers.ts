@@ -7,6 +7,7 @@ const URLs = {
   feed: `${baseURL}/web/index.php/api/v2/buzz/feed**`,
   employees: `/api/v2/pim/employees`,
   personalDetails: `/pim/employees/**/personal-details`,
+  nationality: `/web/index.php/api/v2/admin/nationalities`,
 };
 
 class APIsHelper {
@@ -32,6 +33,10 @@ class APIsHelper {
 
   static interceptEmployeePersonalDetails(aliasName: string) {
     CommonHelper.interceptRequests(URLs.employees, HTTP_METHODS.GET, aliasName);
+  }
+
+  static interceptNationality(aliasName: string) {
+    CommonHelper.interceptRequests(URLs.nationality, HTTP_METHODS.GET, aliasName);
   }
 
   static waitForApiResponse(
