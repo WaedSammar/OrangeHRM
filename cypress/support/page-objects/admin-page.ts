@@ -100,7 +100,6 @@ class AdminPage {
         "Content-Type": "application/json",
       }
     );
-    cy.reload();
   }
 }
 export { AdminPage };

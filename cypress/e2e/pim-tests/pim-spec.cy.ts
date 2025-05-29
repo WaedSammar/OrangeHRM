@@ -85,7 +85,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.verifyEmployeeInfo(employeeInfo);
   });
 
-  it.only("Adding a new employee, upload attachment and verify it", () => {
+  it("Adding a new employee, upload attachment and verify it", () => {
     PIMPage.goToPIMPage();
     PIMPage.clickAddBtn();
     PIMPage.fillEmployeeInfo(employeeInfo);
