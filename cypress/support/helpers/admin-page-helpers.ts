@@ -30,5 +30,26 @@ class AdminPageHelpers {
       }
     );
   }
+
+  static deleteUserByUsername(username: string) {
+    return CommonHelper.sendAPIRequest(
+      HTTP_METHODS.GET,
+      COMMON_URLs.users
+    ).then((response) => {
+
+      const users = response.body.data;
+      const userToDelete = users.find((user) => user.userName === username);
+      const userId = userToDelete.id;
+
+      return CommonHelper.sendAPIRequest(
+        HTTP_METHODS.DELETE,
+        COMMON_URLs.users,
+        { ids: [userId.toString()] },
+        {
+          "Content-Type": "application/json",
+        }
+      );
+    });
+  }
 }
 export { AdminPageHelpers };
