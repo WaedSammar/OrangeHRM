@@ -1,4 +1,4 @@
-import { ElementHandler } from "../element-handler";
+import { COMMON_LOCATORS, ElementHandler } from "../element-handler";
 import { APIsHelper } from "../helpers/apis-helpers";
 import CommonHelper from "../helpers/common-helper";
 import { HTML_TAGS, PAGES } from "../helpers/constants";
@@ -45,7 +45,6 @@ class PIMPage {
     closeBtn: ".oxd-date-input-link.--close",
     chosenGender: `${HTML_TAGS.input}[type="radio"]:checked`,
     uploadFile: `${HTML_TAGS.input}[type="file"]`,
-    downloadIcon: ".oxd-icon.bi-download",
   };
 
   /**
@@ -133,9 +132,9 @@ class PIMPage {
 
   /**
    * save button
-   * @param index 
+   * @param index
    */
-  static clickSave(index: number = 0,buttonText: string = "Save") {
+  static clickSave(index: number = 0, buttonText: string = "Save") {
     ElementHandler.clickSave(index, buttonText);
   }
 
@@ -361,7 +360,7 @@ class PIMPage {
    * download file to compare
    */
   static downloadUploadedFile(index: number = 0) {
-    cy.get(this.LOCATORS.downloadIcon).eq(index).click();
+    cy.get(COMMON_LOCATORS.downloadIcon).eq(index).click();
   }
 
   /**

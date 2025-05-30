@@ -1,3 +1,4 @@
+import { COMMON_URLs } from "../element-handler";
 import { GENDER } from "../page-objects/pim-page";
 import { IEmployeeInfo } from "../types/employee.types";
 import CommonHelper from "./common-helper";
@@ -5,7 +6,6 @@ import { HTTP_METHODS } from "./constants";
 
 const URLs = {
   employees: `/web/index.php/api/v2/pim/employees`,
-  createUser: `/web/index.php/api/v2/admin/users`,
   personalDetails: `personal-details`,
   customField: `custom-fields`,
 };
@@ -41,7 +41,7 @@ class PIMPageHelper {
    * @param {number} empNumber
    */
   static createUserViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.createUser, {
+    CommonHelper.sendAPIRequest(HTTP_METHODS.POST, COMMON_URLs.users, {
       username: employeeInfo.userName,
       password: employeeInfo.password,
       status: employeeInfo.status,

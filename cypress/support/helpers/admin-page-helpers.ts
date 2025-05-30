@@ -1,10 +1,9 @@
+import { COMMON_URLs } from "../element-handler";
 import CommonHelper from "./common-helper";
 import { HTTP_METHODS } from "./constants";
 
 const URLs = {
-  nationality: `/web/index.php/api/v2/admin/nationalities`,
   limit: `?limit=500`,
-  users: `/web/index.php/api/v2/admin/users`,
 };
 
 class AdminPageHelpers {
@@ -15,7 +14,7 @@ class AdminPageHelpers {
   static getNationality() {
     return CommonHelper.sendAPIRequest(
       HTTP_METHODS.GET,
-      `${URLs.nationality}${URLs.limit}`
+      `${COMMON_URLs.nationalities}${URLs.limit}`
     );
   }
 
@@ -26,7 +25,7 @@ class AdminPageHelpers {
   static deleteNationality(id: number) {
     CommonHelper.sendAPIRequest(
       HTTP_METHODS.DELETE,
-      URLs.nationality,
+      COMMON_URLs.nationalities,
       {
         ids: [String(id)],
       },

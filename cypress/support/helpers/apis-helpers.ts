@@ -1,3 +1,4 @@
+import { COMMON_URLs } from "../element-handler";
 import CommonHelper from "./common-helper";
 import { HTTP_METHODS, HTTP_STATUS_CODE } from "./constants";
 
@@ -7,7 +8,6 @@ const URLs = {
   feed: `${baseURL}/web/index.php/api/v2/buzz/feed**`,
   employees: `/api/v2/pim/employees`,
   personalDetails: `/pim/employees/**/personal-details`,
-  nationality: `/web/index.php/api/v2/admin/nationalities`,
 };
 
 class APIsHelper {
@@ -36,7 +36,7 @@ class APIsHelper {
   }
 
   static interceptNationality(aliasName: string) {
-    CommonHelper.interceptRequests(URLs.nationality, HTTP_METHODS.GET, aliasName);
+    CommonHelper.interceptRequests(COMMON_URLs.nationalities, HTTP_METHODS.GET, aliasName);
   }
 
   static waitForApiResponse(

@@ -1,4 +1,4 @@
-import { ElementHandler } from "../element-handler";
+import { COMMON_LOCATORS, ElementHandler } from "../element-handler";
 import { PAGES } from "../helpers/constants";
 
 enum LABELS {
@@ -17,7 +17,6 @@ class AdminPage {
   private static LOCATORS = {
     nationalityTab: ".oxd-topbar-body-nav-tab-item",
     searchBtn: ".oxd-button.oxd-button--secondary",
-    trashIcon: ".oxd-icon.bi-trash",
   };
 
   /**
@@ -64,7 +63,7 @@ class AdminPage {
    * delete created user
    */
   static deleteCreatedUsername() {
-    cy.get(this.LOCATORS.trashIcon).click();
+    cy.get(COMMON_LOCATORS.trashIcon).click();
     ElementHandler.clickButton(BUTTONS.DELETE);
   }
 
