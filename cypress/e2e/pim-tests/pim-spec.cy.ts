@@ -77,7 +77,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.verifyEmployeeInfo(employeeInfo);
   });
 
-  it.only("Adding a new employee via API", () => {
+  it("Adding a new employee via API", () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber;
       PIMPageHelper.createUserViaAPI(employeeInfo, empNumber);

@@ -423,15 +423,11 @@ class PIMPage {
    */
   static verifyUploadedFile() {
     cy.readFile(FILES.DOWNLOADED_FILE, { timeout: 10000 }).should("exist");
-    cy.task("parseXlsxToJson", { filePath: FILES.ORIGINAL_FILE }).then(
-      (originalData) => {
-        cy.task("parseXlsxToJson", { filePath: FILES.DOWNLOADED_FILE }).then(
-          (downloadedData) => {
-            expect(downloadedData).to.deep.equal(originalData);
-          }
-        );
-      }
-    );
+    cy.parseXlsxToJson(FILES.ORIGINAL_FILE).then((originalData) => {
+      cy.parseXlsxToJson(FILES.DOWNLOADED_FILE).then((downloadedData) => {
+        expect(downloadedData).to.deep.equal(originalData);
+      });
+    });
   }
 }
 export { PIMPage };
