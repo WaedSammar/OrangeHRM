@@ -17,6 +17,7 @@ enum BUTTONS {
 const URLs = {
   nationality: `/web/index.php/api/v2/admin/nationalities`,
   limit: `?limit=500`,
+  users: `/web/index.php/api/v2/admin/users`,
 };
 
 class AdminPage {

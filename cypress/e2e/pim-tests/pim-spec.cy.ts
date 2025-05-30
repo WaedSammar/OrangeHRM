@@ -12,38 +12,41 @@ describe("Employee management - Add and Save Test Cases", () => {
   before(() => {
     cy.fixture("employee-page-mock").then((addEmployeeData) => {
       employeeMockData = addEmployeeData;
+
+      const randomNum = CommonHelper.generateRandomNumber();
+      employeeInfo = {
+        ...employeeMockData,
+        employeeId: `${employeeMockData.employeeId}${randomNum}`,
+        userName: `${employeeMockData.userName}${randomNum}`,
+      };
+
+      cy.login();
+      AdminPage.goToAdminPage();
+      AdminPage.clickNationalities();
+      AdminPage.clickAddBtn();
+      AdminPage.addNationality(employeeInfo.newNationality);
+      employeeInfo.nationality = employeeInfo.newNationality;
+
+      const createLoadNationality = CommonHelper.generateRandomString(
+        9,
+        "loadNationality"
+      );
+      APIsHelper.interceptNationality(createLoadNationality);
+      ElementHandler.clickSave();
+      APIsHelper.waitForApiResponse(createLoadNationality);
+
+      AdminPage.getNationality().then((res) => {
+        const added = res.body.data.find(
+          ({ name }) => name === employeeInfo.newNationality
+        );
+        employeeInfo.nationalityId = added.id;
+      });
     });
+    ElementHandler.logout();
   });
 
   beforeEach(() => {
-    const randomNum = CommonHelper.generateRandomNumber();
-    employeeInfo = {
-      ...employeeMockData,
-      employeeId: `${employeeMockData.employeeId}${randomNum}`,
-      userName: `${employeeMockData.userName}${randomNum}`,
-    };
     cy.login();
-
-    AdminPage.goToAdminPage();
-    AdminPage.clickNationalities();
-    AdminPage.clickAddBtn();
-    AdminPage.addNationality(employeeInfo.newNationality);
-    employeeInfo.nationality = employeeInfo.newNationality;
-
-    const createLoadNationality = CommonHelper.generateRandomString(
-      9,
-      "loadNationality"
-    );
-    APIsHelper.interceptNationality(createLoadNationality);
-    ElementHandler.clickSave();
-    APIsHelper.waitForApiResponse(createLoadNationality);
-
-    AdminPage.getNationality().then((res) => {
-      const added = res.body.data.find(
-        (n) => n.name === employeeInfo.newNationality
-      );
-      employeeInfo.nationalityId = added.id;
-    });
   });
 
   it("Adding a new employee, saving information and verifying it", () => {
@@ -124,6 +127,9 @@ describe("Employee management - Add and Save Test Cases", () => {
     AdminPage.searchOnCreatedUsername(employeeInfo.userName);
     ElementHandler.waitLoaderToBeHidden();
     AdminPage.deleteCreatedUsername();
+  });
+
+  after(() => {
     AdminPage.clickNationalities();
     AdminPage.deleteNationality(employeeInfo.nationalityId);
   });
