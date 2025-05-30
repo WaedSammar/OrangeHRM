@@ -1,6 +1,8 @@
 import { ElementHandler } from "../../support/element-handler";
+import { AdminPageHelpers } from "../../support/helpers/admin-page-helpers";
 import { APIsHelper } from "../../support/helpers/apis-helpers";
 import CommonHelper from "../../support/helpers/common-helper";
+import { PIMPageHelper } from "../../support/helpers/pim-page-helper";
 import { AdminPage } from "../../support/page-objects/admin-page";
 import { MyInfo } from "../../support/page-objects/my-info-page";
 import { PIMPage } from "../../support/page-objects/pim-page";
@@ -35,7 +37,7 @@ describe("Employee management - Add and Save Test Cases", () => {
       ElementHandler.clickSave();
       APIsHelper.waitForApiResponse(createLoadNationality);
 
-      AdminPage.getNationality().then((res) => {
+      AdminPageHelpers.getNationality().then((res) => {
         const added = res.body.data.find(
           ({ name }) => name === employeeInfo.newNationality
         );
@@ -75,12 +77,12 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.verifyEmployeeInfo(employeeInfo);
   });
 
-  it("Adding a new employee via API", () => {
-    PIMPage.createEmployeeViaAPI(employeeInfo).then((response) => {
+  it.only("Adding a new employee via API", () => {
+    PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber;
-      PIMPage.createUserViaAPI(employeeInfo, empNumber);
-      PIMPage.updateEmployeeDetailsViaAPI(employeeInfo, empNumber);
-      PIMPage.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber);
+      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber);
+      PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber);
+      PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber);
     });
     ElementHandler.logout();
     cy.login(employeeInfo.userName, employeeInfo.password);
@@ -131,6 +133,6 @@ describe("Employee management - Add and Save Test Cases", () => {
 
   after(() => {
     AdminPage.clickNationalities();
-    AdminPage.deleteNationality(employeeInfo.nationalityId);
+    AdminPageHelpers.deleteNationality(employeeInfo.nationalityId);
   });
 });

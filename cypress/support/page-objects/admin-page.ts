@@ -1,6 +1,5 @@
 import { ElementHandler } from "../element-handler";
-import CommonHelper from "../helpers/common-helper";
-import { HTTP_METHODS, PAGES } from "../helpers/constants";
+import { PAGES } from "../helpers/constants";
 
 enum LABELS {
   NAME = "Name",
@@ -13,12 +12,6 @@ enum BUTTONS {
   SEARCH = "Search",
   DELETE = " Yes, Delete ",
 }
-
-const URLs = {
-  nationality: `/web/index.php/api/v2/admin/nationalities`,
-  limit: `?limit=500`,
-  users: `/web/index.php/api/v2/admin/users`,
-};
 
 class AdminPage {
   private static LOCATORS = {
@@ -59,17 +52,6 @@ class AdminPage {
   }
 
   /**
-   * get nationality made prev
-   * @returns
-   */
-  static getNationality() {
-    return CommonHelper.sendAPIRequest(
-      HTTP_METHODS.GET,
-      `${URLs.nationality}${URLs.limit}`
-    );
-  }
-
-  /**
    * search about created username
    * @param {string} username
    */
@@ -84,23 +66,6 @@ class AdminPage {
   static deleteCreatedUsername() {
     cy.get(this.LOCATORS.trashIcon).click();
     ElementHandler.clickButton(BUTTONS.DELETE);
-  }
-
-  /**
-   * delete created nationality
-   * @param {number} id
-   */
-  static deleteNationality(id: number) {
-    CommonHelper.sendAPIRequest(
-      HTTP_METHODS.DELETE,
-      URLs.nationality,
-      {
-        ids: [String(id)],
-      },
-      {
-        "Content-Type": "application/json",
-      }
-    );
   }
 }
 export { AdminPage };
