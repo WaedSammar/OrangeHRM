@@ -41,14 +41,13 @@ class CommonHelper {
     body?: string | object,
     header?: Record<string, string>
   ) {
-    const hasBody = body !== undefined;
     return cy
       .request({
         method,
         url,
-        ...(hasBody && { body }),
+        ...(body && { body }),
         headers: {
-          ...(hasBody ? { "Content-Type": "application/json" } : {}),
+          ...(body ? { "Content-Type": "application/json" } : {}),
           ...(header || {}),
         },
       })

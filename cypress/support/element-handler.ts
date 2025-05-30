@@ -1,4 +1,4 @@
-import { HTML_TAGS } from "./helpers/constants";
+import { HTML_TAGS, TIMEOUT } from "./helpers/constants";
 
 const COMMON_LOCATORS = {
   menuBtn: "span.oxd-main-menu-item--name",
@@ -9,6 +9,11 @@ const COMMON_LOCATORS = {
   downloadIcon: ".oxd-icon.bi-download",
   trashIcon: ".oxd-icon.bi-trash",
 };
+
+export enum VALUES {
+  fiveHundred = 500,
+  thousand = 1000,
+}
 
 const COMMON_URLs = {
   nationalities: `/web/index.php/api/v2/admin/nationalities`,
@@ -27,9 +32,9 @@ class ElementHandler {
    * wait for the loader to be hidden
    */
   static waitLoaderToBeHidden() {
-    cy.get(HTML_TAGS.body, { timeout: 10000 }).within(($body) => {
+    cy.get(HTML_TAGS.body, { timeout: TIMEOUT.tenSec }).within(($body) => {
       if (!$body.find(COMMON_LOCATORS.loaderIcon).length) {
-        cy.get(COMMON_LOCATORS.loaderIcon, { timeout: 10000 }).should(
+        cy.get(COMMON_LOCATORS.loaderIcon, { timeout: TIMEOUT.tenSec }).should(
           "not.exist"
         );
       }

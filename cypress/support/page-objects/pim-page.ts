@@ -1,13 +1,13 @@
 import { COMMON_LOCATORS, ElementHandler } from "../element-handler";
 import { APIsHelper } from "../helpers/apis-helpers";
 import CommonHelper from "../helpers/common-helper";
-import { HTML_TAGS, PAGES } from "../helpers/constants";
+import {
+  CYPRESS_FOLDERS,
+  HTML_TAGS,
+  PAGES,
+  TIMEOUT,
+} from "../helpers/constants";
 import { IEmployeeInfo } from "../types/employee.types";
-
-enum FILES {
-  ORIGINAL_FILE = "cypress/fixtures/sheet.xlsx",
-  DOWNLOADED_FILE = "cypress/downloads/sheet.xlsx",
-}
 
 enum LABELS {
   EMPLOYEE_ID = "Employee Id",
@@ -349,11 +349,14 @@ class PIMPage {
   /**
    * upload file
    */
-  static uploadAttachment() {
+  static uploadAttachment(file: string = "sheet.xlsx") {
     this.clickAddBtn();
-    cy.get(this.LOCATORS.uploadFile).selectFile(FILES.ORIGINAL_FILE, {
-      force: true,
-    });
+    cy.get(this.LOCATORS.uploadFile).selectFile(
+      `${CYPRESS_FOLDERS.FIXTURES}/${file}`,
+      {
+        force: true,
+      }
+    );
   }
 
   /**
@@ -428,13 +431,19 @@ class PIMPage {
   /**
    * verify that uploaded file has the same content of downloaded one
    */
-  static verifyUploadedFile() {
-    cy.readFile(FILES.DOWNLOADED_FILE, { timeout: 10000 }).should("exist");
-    cy.parseXlsxToJson(FILES.ORIGINAL_FILE).then((originalData) => {
-      cy.parseXlsxToJson(FILES.DOWNLOADED_FILE).then((downloadedData) => {
-        expect(downloadedData).to.deep.equal(originalData);
-      });
-    });
+  static verifyUploadedFile(file: string = "sheet.xlsx") {
+    cy.readFile(`${CYPRESS_FOLDERS.DOWNLOADS}/${file}`, {
+      timeout: TIMEOUT.tenSec,
+    }).should("exist");
+    cy.parseXlsxToJson(`${CYPRESS_FOLDERS.FIXTURES}/${file}`).then(
+      (originalData) => {
+        cy.parseXlsxToJson(`${CYPRESS_FOLDERS.DOWNLOADS}/${file}`).then(
+          (downloadedData) => {
+            expect(downloadedData).to.deep.equal(originalData);
+          }
+        );
+      }
+    );
   }
 }
 export { PIMPage };

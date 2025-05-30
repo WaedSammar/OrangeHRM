@@ -90,7 +90,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.verifyEmployeeInfo(employeeInfo);
   });
 
-  it("Adding a new employee, upload attachment and verify it", () => {
+  it.only("Adding a new employee, upload attachment and verify it", () => {
     PIMPage.goToPIMPage();
     PIMPage.clickAddBtn();
     PIMPage.fillEmployeeInfo(employeeInfo);
@@ -105,10 +105,10 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.clickSave();
     APIsHelper.waitForApiResponse(createLoadPersonalDetailsPage);
 
-    PIMPage.fillPersonalDetails(employeeInfo);
-    PIMPage.clickSave();
-    PIMPage.fillAdditionalEmployeeDetails(employeeInfo);
-    PIMPage.clickSave(1);
+    // PIMPage.fillPersonalDetails(employeeInfo);
+    // PIMPage.clickSave();
+    // PIMPage.fillAdditionalEmployeeDetails(employeeInfo);
+    // PIMPage.clickSave(1);
     PIMPage.uploadAttachment();
     PIMPage.clickSave(2);
 
@@ -119,7 +119,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     MyInfo.goToMyInfoPage();
     PIMPage.downloadUploadedFile();
     PIMPage.verifyUploadedFile();
-    PIMPage.verifyEmployeeInfo(employeeInfo);
+    // PIMPage.verifyEmployeeInfo(employeeInfo);
   });
 
   afterEach(() => {

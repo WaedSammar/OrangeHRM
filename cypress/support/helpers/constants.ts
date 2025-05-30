@@ -38,3 +38,13 @@ export enum HTTP_STATUS_CODE {
   created = 201,
   error = 500,
 }
+
+export enum CYPRESS_FOLDERS {
+  FIXTURES = `cypress/fixtures`,
+  DOWNLOADS = `cypress/downloads`,
+}
+
+export enum TIMEOUT {
+  tenSec = 10000,
+  twentySec = 20000,
+}

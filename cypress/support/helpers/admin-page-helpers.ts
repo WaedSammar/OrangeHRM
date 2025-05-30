@@ -1,20 +1,16 @@
-import { COMMON_URLs } from "../element-handler";
+import { COMMON_URLs, VALUES } from "../element-handler";
 import CommonHelper from "./common-helper";
 import { HTTP_METHODS } from "./constants";
-
-const URLs = {
-  limit: `?limit=500`,
-};
 
 class AdminPageHelpers {
   /**
    * get nationality made prev
    * @returns
    */
-  static getNationality() {
+  static getNationality(limit: number = VALUES.fiveHundred) {
     return CommonHelper.sendAPIRequest(
       HTTP_METHODS.GET,
-      `${COMMON_URLs.nationalities}${URLs.limit}`
+      `${COMMON_URLs.nationalities}?limit=${limit}`
     );
   }
 
