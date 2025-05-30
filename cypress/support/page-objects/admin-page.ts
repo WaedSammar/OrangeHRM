@@ -67,5 +67,13 @@ class AdminPage {
     cy.get(this.LOCATORS.trashIcon).click();
     ElementHandler.clickButton(BUTTONS.DELETE);
   }
+
+  /**
+   * save button
+   * @param index
+   */
+  static clickSave(index: number = 0, buttonText: string = "Save") {
+    ElementHandler.clickSave(index, buttonText);
+  }
 }
 export { AdminPage };

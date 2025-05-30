@@ -34,7 +34,7 @@ describe("Employee management - Add and Save Test Cases", () => {
         "loadNationality"
       );
       APIsHelper.interceptNationality(createLoadNationality);
-      ElementHandler.clickSave();
+      AdminPage.clickSave();
       APIsHelper.waitForApiResponse(createLoadNationality);
 
       AdminPageHelpers.getNationality().then((res) => {
@@ -61,13 +61,13 @@ describe("Employee management - Add and Save Test Cases", () => {
       "loadPersonalDetails"
     );
     APIsHelper.interceptGetEmployeeDetailsRequest(createLoadPersonalDetails);
-    ElementHandler.clickSave();
+    PIMPage.clickSave();
     APIsHelper.waitForApiResponse(createLoadPersonalDetails);
 
     PIMPage.fillPersonalDetails(employeeInfo);
-    ElementHandler.clickSave();
+    PIMPage.clickSave();
     PIMPage.fillAdditionalEmployeeDetails(employeeInfo);
-    ElementHandler.clickSave(1);
+    PIMPage.clickSave(1);
 
     ElementHandler.logout();
 
@@ -102,15 +102,15 @@ describe("Employee management - Add and Save Test Cases", () => {
     APIsHelper.interceptGetEmployeeDetailsRequest(
       createLoadPersonalDetailsPage
     );
-    ElementHandler.clickSave();
+    PIMPage.clickSave();
     APIsHelper.waitForApiResponse(createLoadPersonalDetailsPage);
 
     PIMPage.fillPersonalDetails(employeeInfo);
-    ElementHandler.clickSave();
+    PIMPage.clickSave();
     PIMPage.fillAdditionalEmployeeDetails(employeeInfo);
-    ElementHandler.clickSave(1);
+    PIMPage.clickSave(1);
     PIMPage.uploadAttachment();
-    ElementHandler.clickSave(2);
+    PIMPage.clickSave(2);
 
     ElementHandler.logout();
 

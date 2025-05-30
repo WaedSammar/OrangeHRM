@@ -132,6 +132,14 @@ class PIMPage {
   }
 
   /**
+   * save button
+   * @param index 
+   */
+  static clickSave(index: number = 0,buttonText: string = "Save") {
+    ElementHandler.clickSave(index, buttonText);
+  }
+
+  /**
    * ensure status is enable
    */
   static verifyStatusIsEnabled() {
@@ -352,8 +360,8 @@ class PIMPage {
   /**
    * download file to compare
    */
-  static downloadUploadedFile() {
-    cy.get(this.LOCATORS.downloadIcon).click();
+  static downloadUploadedFile(index: number = 0) {
+    cy.get(this.LOCATORS.downloadIcon).eq(index).click();
   }
 
   /**

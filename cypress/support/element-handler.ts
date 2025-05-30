@@ -87,8 +87,8 @@ class ElementHandler {
    * save information user entered
    * @param index
    */
-  static clickSave(index: number = 0) {
-    cy.get(LOCATORS.submitBtn).eq(index).click().contains("Save");
+  static clickSave(index: number = 0, buttonText: string) {
+    cy.get(LOCATORS.submitBtn).eq(index).click().contains(buttonText);
   }
 
   /**
