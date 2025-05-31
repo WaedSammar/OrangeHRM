@@ -9,25 +9,20 @@ import { PIMPage } from "../../support/page-objects/pim-page";
 import { IEmployeeInfo } from "../../support/types/employee.types";
 
 describe("Employee management - Add and Save Test Cases", () => {
-  let employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo;
+  let employeeMockData: IEmployeeInfo,
+    employeeInfo: IEmployeeInfo,
+    nationalityId: number;
 
   before(() => {
     cy.fixture("employee-page-mock").then((addEmployeeData) => {
       employeeMockData = addEmployeeData;
 
-      const randomNum = CommonHelper.generateRandomNumber();
-      employeeInfo = {
-        ...employeeMockData,
-        employeeId: `${employeeMockData.employeeId}${randomNum}`,
-        userName: `${employeeMockData.userName}${randomNum}`,
-      };
-
       cy.login();
+
       AdminPage.goToAdminPage();
       AdminPage.clickNationalities();
       AdminPage.clickAddBtn();
-      AdminPage.addNationality(employeeInfo.newNationality);
-      employeeInfo.nationality = employeeInfo.newNationality;
+      AdminPage.addNationality(employeeMockData.newNationality);
 
       const createLoadNationality = CommonHelper.generateRandomString(
         9,
@@ -39,16 +34,26 @@ describe("Employee management - Add and Save Test Cases", () => {
 
       AdminPageHelpers.getNationality().then((res) => {
         const added = res.body.data.find(
-          ({ name }) => name === employeeInfo.newNationality
+          (n) => n.name === employeeMockData.newNationality
         );
-        employeeInfo.nationalityId = added.id;
+        nationalityId = added.id;
       });
+
+      ElementHandler.logout();
     });
-    ElementHandler.logout();
   });
 
   beforeEach(() => {
     cy.login();
+
+    const randomNum = CommonHelper.generateRandomNumber();
+    employeeInfo = {
+      ...employeeMockData,
+      employeeId: `${employeeMockData.employeeId}${randomNum}`,
+      userName: `${employeeMockData.userName}${randomNum}`,
+      nationality: employeeMockData.newNationality,
+      nationalityId: nationalityId,
+    };
   });
 
   it("Adding a new employee, saving information and verifying it", () => {
@@ -131,6 +136,6 @@ describe("Employee management - Add and Save Test Cases", () => {
 
   after(() => {
     AdminPage.clickNationalities();
-    AdminPageHelpers.deleteNationality(employeeInfo.nationalityId);
+    AdminPageHelpers.deleteNationality(nationalityId);
   });
 });
