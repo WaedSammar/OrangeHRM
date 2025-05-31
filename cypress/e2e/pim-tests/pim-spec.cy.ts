@@ -34,7 +34,7 @@ describe("Employee management - Add and Save Test Cases", () => {
 
       AdminPageHelpers.getNationality().then((res) => {
         const added = res.body.data.find(
-          (n) => n.name === employeeMockData.newNationality
+          ({ name }) => name === employeeMockData.newNationality
         );
         nationalityId = added.id;
       });
