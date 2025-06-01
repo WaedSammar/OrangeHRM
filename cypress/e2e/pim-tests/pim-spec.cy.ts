@@ -18,7 +18,6 @@ describe("Employee management - Add and Save Test Cases", () => {
       employeeMockData = addEmployeeData;
 
       cy.login();
-
       AdminPage.goToAdminPage();
       AdminPage.clickNationalities();
       AdminPage.clickAddBtn();
@@ -38,7 +37,6 @@ describe("Employee management - Add and Save Test Cases", () => {
         );
         nationalityId = added.id;
       });
-
       ElementHandler.logout();
     });
   });
@@ -75,9 +73,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.clickSave(1);
 
     ElementHandler.logout();
-
     cy.login(employeeInfo.userName, employeeInfo.password);
-
     MyInfo.goToMyInfoPage();
     PIMPage.verifyEmployeeInfo(employeeInfo);
   });
@@ -118,9 +114,7 @@ describe("Employee management - Add and Save Test Cases", () => {
     PIMPage.clickSave(2);
 
     ElementHandler.logout();
-
     cy.login(employeeInfo.userName, employeeInfo.password);
-
     MyInfo.goToMyInfoPage();
     PIMPage.downloadUploadedFile();
     PIMPage.verifyUploadedFile();

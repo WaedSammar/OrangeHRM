@@ -36,9 +36,8 @@ class AdminPageHelpers {
       HTTP_METHODS.GET,
       COMMON_URLs.users
     ).then((response) => {
-
       const users = response.body.data;
-      const userToDelete = users.find((user) => user.userName === username);
+      const userToDelete = users.find(({ userName }) => userName === username);
       const userId = userToDelete.id;
 
       return CommonHelper.sendAPIRequest(
