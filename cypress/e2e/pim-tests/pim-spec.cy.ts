@@ -106,6 +106,65 @@ describe('Employee management - Add and Save Test Cases', () => {
     PIMPage.verifyEmployeeInfo(employeeInfo)
   })
 
+    it.only("Adding a new employee via UI and verify from table with pagination", () => {
+    PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((res) => {
+      const empNumber = res.body.data.empNumber;
+      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber);
+      PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber);
+      PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber);
+    });
+
+    PIMPage.goToPIMPage();
+    cy.request("/web/index.php/api/v2/pim/employees").then((res) => {
+      expect(res.status).to.eq(200);
+
+      const employee = res.body.data.find(
+        (emp) =>
+          emp.firstName === employeeInfo.firstName &&
+          emp.middleName === employeeInfo.middleName &&
+          emp.lastName === employeeInfo.lastName &&
+          emp.employeeId === employeeInfo.employeeId
+      );
+      expect(employee).to.not.be.undefined;
+      const employeeId = employee.employeeId;
+
+      const findEmployeeInTable = () => {
+        cy.get("body").then(($body) => {
+          const exists = $body
+            .find(".oxd-table-cell")
+            .toArray()
+            .some((el) => el.innerText.includes(employeeId));
+
+          if (exists) {
+            cy.contains(".oxd-table-cell", employeeId)
+              .should("be.visible")
+              .parents(".oxd-table-row")
+              .within(() => {
+                cy.get(".oxd-table-cell")
+                  .eq(2)
+                  .should(
+                    "contain.text",
+                    `${employeeInfo.firstName} ${employeeInfo.middleName}`
+                  );
+                cy.get(".oxd-table-cell")
+                  .eq(3)
+                  .should("contain.text", employeeInfo.lastName);
+              });
+          } else {
+            cy.get(".oxd-pagination-page-item--previous-next").then(($next) => {
+              if (!$next.attr("disabled")) {
+                cy.wrap($next).click();
+                cy.wait(1000);
+                findEmployeeInTable();
+              }
+            });
+          }
+        });
+      };
+      findEmployeeInTable();
+    });
+  });
+
   afterEach(() => {
     ElementHandler.logout()
     cy.login()
