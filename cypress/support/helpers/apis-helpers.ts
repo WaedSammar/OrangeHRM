@@ -35,8 +35,12 @@ class APIsHelper {
     CommonHelper.interceptRequests(URLs.employees, HTTP_METHODS.GET, aliasName);
   }
 
-  static interceptNationality(aliasName: string) {
-    CommonHelper.interceptRequests(COMMON_URLs.nationalities, HTTP_METHODS.GET, aliasName);
+  static interceptNationalities(aliasName: string) {
+    CommonHelper.interceptRequests(
+      COMMON_URLs.nationalities,
+      HTTP_METHODS.GET,
+      aliasName
+    );
   }
 
   static waitForApiResponse(

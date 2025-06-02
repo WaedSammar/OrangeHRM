@@ -48,3 +48,8 @@ export enum TIMEOUT {
   tenSec = 10000,
   twentySec = 20000,
 }
+
+export enum SIZE_LIMIT {
+  fiveHundred = 500,
+  thousand = 1000,
+}

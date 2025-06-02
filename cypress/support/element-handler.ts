@@ -10,11 +10,6 @@ const COMMON_LOCATORS = {
   trashIcon: ".oxd-icon.bi-trash",
 };
 
-export enum VALUES {
-  fiveHundred = 500,
-  thousand = 1000,
-}
-
 const COMMON_URLs = {
   nationalities: `/web/index.php/api/v2/admin/nationalities`,
   users: `/web/index.php/api/v2/admin/users`,
@@ -32,12 +27,16 @@ class ElementHandler {
    * wait for the loader to be hidden
    */
   static waitLoaderToBeHidden() {
-    cy.get(HTML_TAGS.body, { timeout: TIMEOUT.tenSec }).within(($body) => {
-      if (!$body.find(COMMON_LOCATORS.loaderIcon).length) {
-        cy.get(COMMON_LOCATORS.loaderIcon, { timeout: TIMEOUT.tenSec }).should(
-          "not.exist"
-        );
-      }
+    return new Cypress.Promise((resolve) => {
+      cy.get(HTML_TAGS.body, { timeout: TIMEOUT.tenSec }).within(($body) => {
+        if (!$body.find(COMMON_LOCATORS.loaderIcon).length) {
+          cy.get(COMMON_LOCATORS.loaderIcon, { timeout: TIMEOUT.tenSec })
+            .should("not.exist")
+            .then(() => resolve());
+        } else {
+          resolve();
+        }
+      });
     });
   }
 

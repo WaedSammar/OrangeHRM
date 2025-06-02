@@ -1,5 +1,5 @@
 import { ElementHandler } from "../../support/element-handler";
-import { AdminPageHelpers } from "../../support/helpers/admin-page-helpers";
+import { AdminPageHelper } from "../../support/helpers/admin-page-helper";
 import { APIsHelper } from "../../support/helpers/apis-helpers";
 import CommonHelper from "../../support/helpers/common-helper";
 import { PIMPageHelper } from "../../support/helpers/pim-page-helper";
@@ -27,11 +27,11 @@ describe("Employee management - Add and Save Test Cases", () => {
         9,
         "loadNationality"
       );
-      APIsHelper.interceptNationality(createLoadNationality);
+      APIsHelper.interceptNationalities(createLoadNationality);
       AdminPage.clickSave();
       APIsHelper.waitForApiResponse(createLoadNationality);
 
-      AdminPageHelpers.getNationality().then((res) => {
+      AdminPageHelper.getNationality().then((res) => {
         const added = res.body.data.find(
           ({ name }) => name === employeeMockData.newNationality
         );
@@ -50,7 +50,7 @@ describe("Employee management - Add and Save Test Cases", () => {
       employeeId: `${employeeMockData.employeeId}${randomNum}`,
       userName: `${employeeMockData.userName}${randomNum}`,
       nationality: employeeMockData.newNationality,
-      nationalityId: nationalityId,
+      nationalityId,
     };
   });
 
@@ -125,11 +125,11 @@ describe("Employee management - Add and Save Test Cases", () => {
     ElementHandler.logout();
     cy.login();
     AdminPage.goToAdminPage();
-    AdminPageHelpers.deleteUserByUsername(employeeInfo.userName);
+    AdminPageHelper.deleteUserByUsername(employeeInfo.userName);
   });
 
   after(() => {
     AdminPage.clickNationalities();
-    AdminPageHelpers.deleteNationality(nationalityId);
+    AdminPageHelper.deleteNationalities([nationalityId]);
   });
 });

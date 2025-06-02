@@ -1,13 +1,13 @@
-import { COMMON_URLs, VALUES } from "../element-handler";
+import { COMMON_URLs } from "../element-handler";
 import CommonHelper from "./common-helper";
-import { HTTP_METHODS } from "./constants";
+import { HTTP_METHODS, SIZE_LIMIT } from "./constants";
 
-class AdminPageHelpers {
+class AdminPageHelper {
   /**
    * get nationality made prev
    * @returns
    */
-  static getNationality(limit: number = VALUES.fiveHundred) {
+  static getNationality(limit: number = SIZE_LIMIT.fiveHundred) {
     return CommonHelper.sendAPIRequest(
       HTTP_METHODS.GET,
       `${COMMON_URLs.nationalities}?limit=${limit}`
@@ -16,14 +16,14 @@ class AdminPageHelpers {
 
   /**
    * delete created nationality
-   * @param {number} id
+   * @param {number[]} ids
    */
-  static deleteNationality(id: number) {
+  static deleteNationalities(ids: number[]) {
     CommonHelper.sendAPIRequest(
       HTTP_METHODS.DELETE,
       COMMON_URLs.nationalities,
       {
-        ids: [String(id)],
+        ids: [String(ids)],
       },
       {
         "Content-Type": "application/json",
@@ -40,6 +40,7 @@ class AdminPageHelpers {
       const userToDelete = users.find(({ userName }) => userName === username);
       const userId = userToDelete.id;
 
+      console.log(userToDelete.id)
       return CommonHelper.sendAPIRequest(
         HTTP_METHODS.DELETE,
         COMMON_URLs.users,
@@ -51,4 +52,4 @@ class AdminPageHelpers {
     });
   }
 }
-export { AdminPageHelpers };
+export { AdminPageHelper };
