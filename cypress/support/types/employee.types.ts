@@ -11,10 +11,12 @@ export interface IEmployeeInfo {
   licenseNum: string;
   expDate: string;
   nationality: string;
+  nationalityId: number;
   maritalState: string;
   dateOfBirth: string;
   gender: GENDER;
   bloodType: string;
   testField: string;
   status: true;
+  newNationality: string;
 }

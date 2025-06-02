@@ -1,10 +1,18 @@
-import { HTML_TAGS } from "./helpers/constants";
+import { HTML_TAGS, TIMEOUT } from "./helpers/constants";
 
-const LOCATORS = {
+const COMMON_LOCATORS = {
   menuBtn: "span.oxd-main-menu-item--name",
   menuItems: "span.oxd-main-menu-item--name",
   dropDownList: ".oxd-userdropdown-name",
   loaderIcon: ".oxd-loading-spinner",
+  submitBtn: `${HTML_TAGS.button}[type='submit']`,
+  downloadIcon: ".oxd-icon.bi-download",
+  trashIcon: ".oxd-icon.bi-trash",
+};
+
+const COMMON_URLs = {
+  nationalities: `/web/index.php/api/v2/admin/nationalities`,
+  users: `/web/index.php/api/v2/admin/users`,
 };
 
 enum DROP_DOWN {
@@ -19,10 +27,16 @@ class ElementHandler {
    * wait for the loader to be hidden
    */
   static waitLoaderToBeHidden() {
-    cy.get(HTML_TAGS.body, { timeout: 10000 }).within(($body) => {
-      if (!$body.find(LOCATORS.loaderIcon).length) {
-        cy.get(LOCATORS.loaderIcon, { timeout: 10000 }).should("not.exist");
-      }
+    return new Cypress.Promise((resolve) => {
+      cy.get(HTML_TAGS.body, { timeout: TIMEOUT.tenSec }).within(($body) => {
+        if (!$body.find(COMMON_LOCATORS.loaderIcon).length) {
+          cy.get(COMMON_LOCATORS.loaderIcon, { timeout: TIMEOUT.tenSec })
+            .should("not.exist")
+            .then(() => resolve());
+        } else {
+          resolve();
+        }
+      });
     });
   }
 
@@ -31,7 +45,7 @@ class ElementHandler {
    * @param {string} label - label name
    */
   static clickMenuItem(label: string) {
-    cy.get(LOCATORS.menuItems).contains(label).click();
+    cy.get(COMMON_LOCATORS.menuItems).contains(label).click();
   }
 
   /**
@@ -83,11 +97,19 @@ class ElementHandler {
   }
 
   /**
+   * save information user entered
+   * @param index
+   */
+  static clickSave(index: number = 0, buttonText: string) {
+    cy.get(COMMON_LOCATORS.submitBtn).eq(index).click().contains(buttonText);
+  }
+
+  /**
    * logout from current user
    */
   static logout() {
-    cy.get(LOCATORS.dropDownList).click();
+    cy.get(COMMON_LOCATORS.dropDownList).click();
     cy.contains(DROP_DOWN.LOGOUT).click();
   }
 }
-export { ElementHandler };
+export { ElementHandler, COMMON_LOCATORS, COMMON_URLs };

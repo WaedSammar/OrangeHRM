@@ -1,15 +1,13 @@
-import { ElementHandler } from "../element-handler";
+import { COMMON_LOCATORS, ElementHandler } from "../element-handler";
 import { APIsHelper } from "../helpers/apis-helpers";
 import CommonHelper from "../helpers/common-helper";
-import { HTML_TAGS, HTTP_METHODS, PAGES } from "../helpers/constants";
+import {
+  CYPRESS_FOLDERS,
+  HTML_TAGS,
+  PAGES,
+  TIMEOUT,
+} from "../helpers/constants";
 import { IEmployeeInfo } from "../types/employee.types";
-
-const URLs = {
-  employees: `/web/index.php/api/v2/pim/employees`,
-  createUser: `/web/index.php/api/v2/admin/users`,
-  personalDetails: `personal-details`,
-  customField: `custom-fields`,
-};
 
 enum LABELS {
   EMPLOYEE_ID = "Employee Id",
@@ -31,16 +29,6 @@ export enum GENDER {
   FEMALE = "Female",
 }
 
-const GenderMap: Record<GENDER, number> = {
-  [GENDER.MALE]: 1,
-  [GENDER.FEMALE]: 2,
-};
-
-enum UserRole {
-  ADMIN = 1,
-  ESS = 2,
-}
-
 class PIMPage {
   private static LOCATORS = {
     firstName: ".orangehrm-firstname",
@@ -56,6 +44,7 @@ class PIMPage {
     selectGender: `${HTML_TAGS.input}[type="radio"][value="1"]`,
     closeBtn: ".oxd-date-input-link.--close",
     chosenGender: `${HTML_TAGS.input}[type="radio"]:checked`,
+    uploadFile: `${HTML_TAGS.input}[type="file"]`,
   };
 
   /**
@@ -142,6 +131,14 @@ class PIMPage {
   }
 
   /**
+   * save button
+   * @param index
+   */
+  static clickSave(index: number = 0, buttonText: string = "Save") {
+    ElementHandler.clickSave(index, buttonText);
+  }
+
+  /**
    * ensure status is enable
    */
   static verifyStatusIsEnabled() {
@@ -219,14 +216,6 @@ class PIMPage {
    */
   static selectGender(gender: GENDER) {
     cy.contains(HTML_TAGS.label, gender).click({ force: true });
-  }
-
-  /**
-   * save information user entered
-   * @param index - save button index
-   */
-  static clickSave(index: number = 0) {
-    cy.get(this.LOCATORS.submitBtn).eq(index).click().contains("Save");
   }
 
   /**
@@ -358,73 +347,23 @@ class PIMPage {
   }
 
   /**
-   * create employee basic via API
-   * @param {IEmployeeInfo} employeeInfo
-   * @returns - API response
+   * upload file
    */
-  static createEmployeeViaAPI(employeeInfo: IEmployeeInfo) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.employees, {
-      firstName: employeeInfo.firstName,
-      middleName: employeeInfo.middleName,
-      lastName: employeeInfo.lastName,
-      employeeId: employeeInfo.employeeId,
-    });
+  static uploadAttachment(file: string = "sheet.xlsx") {
+    this.clickAddBtn();
+    cy.get(this.LOCATORS.uploadFile).selectFile(
+      `${CYPRESS_FOLDERS.FIXTURES}/${file}`,
+      {
+        force: true,
+      }
+    );
   }
 
   /**
-   * add username and password for the employee
-   * @param {IEmployeeInfo} employeeInfo
-   * @param {number} empNumber
+   * download file to compare
    */
-  static createUserViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.createUser, {
-      username: employeeInfo.userName,
-      password: employeeInfo.password,
-      status: employeeInfo.status,
-      userRoleId: UserRole.ESS,
-      empNumber,
-    });
-  }
-
-  /**
-   * update employee personal details
-   * @param {IEmployeeInfo} employeeInfo
-   * @param {number} empNumber
-   */
-  static updateEmployeeDetailsViaAPI(
-    employeeInfo: IEmployeeInfo,
-    empNumber: number
-  ) {
-    const url = `${URLs.employees}/${empNumber}/${URLs.personalDetails}`;
-    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, {
-      firstName: employeeInfo.firstName,
-      middleName: employeeInfo.middleName,
-      lastName: employeeInfo.lastName,
-      employeeId: employeeInfo.employeeId,
-      otherId: employeeInfo.otherId,
-      drivingLicenseNo: employeeInfo.licenseNum,
-      drivingLicenseExpiredDate: employeeInfo.expDate,
-      birthday: employeeInfo.dateOfBirth,
-      gender: GenderMap[employeeInfo.gender],
-      maritalStatus: employeeInfo.maritalState,
-      nationalityId: 27,
-    });
-  }
-
-  /**
-   * update employee custom field
-   * @param {IEmployeeInfo} employeeInfo
-   * @param {number} empNumber
-   */
-  static updateEmployeeCustomFieldsViaAPI(
-    employeeInfo: IEmployeeInfo,
-    empNumber: number
-  ) {
-    const url = `${URLs.employees}/${empNumber}/${URLs.customField}`;
-    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, {
-      custom1: employeeInfo.bloodType,
-      custom2: employeeInfo.testField,
-    });
+  static downloadUploadedFile(index: number = 0) {
+    cy.get(COMMON_LOCATORS.downloadIcon).eq(index).click();
   }
 
   /**
@@ -488,6 +427,23 @@ class PIMPage {
     this.getBloodType().should("eq", employeeInfo.bloodType);
     this.getTestField().should("eq", employeeInfo.testField);
   }
-}
 
+  /**
+   * verify that uploaded file has the same content of downloaded one
+   */
+  static verifyUploadedFile(file: string = "sheet.xlsx") {
+    cy.readFile(`${CYPRESS_FOLDERS.DOWNLOADS}/${file}`, {
+      timeout: TIMEOUT.tenSec,
+    }).should("exist");
+    cy.parseXlsxToJson(`${CYPRESS_FOLDERS.FIXTURES}/${file}`).then(
+      (originalData) => {
+        cy.parseXlsxToJson(`${CYPRESS_FOLDERS.DOWNLOADS}/${file}`).then(
+          (downloadedData) => {
+            expect(downloadedData).to.deep.equal(originalData);
+          }
+        );
+      }
+    );
+  }
+}
 export { PIMPage };

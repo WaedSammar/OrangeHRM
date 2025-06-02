@@ -1,3 +1,4 @@
+import { COMMON_URLs } from "../element-handler";
 import CommonHelper from "./common-helper";
 import { HTTP_METHODS, HTTP_STATUS_CODE } from "./constants";
 
@@ -32,6 +33,14 @@ class APIsHelper {
 
   static interceptEmployeePersonalDetails(aliasName: string) {
     CommonHelper.interceptRequests(URLs.employees, HTTP_METHODS.GET, aliasName);
+  }
+
+  static interceptNationalities(aliasName: string) {
+    CommonHelper.interceptRequests(
+      COMMON_URLs.nationalities,
+      HTTP_METHODS.GET,
+      aliasName
+    );
   }
 
   static waitForApiResponse(

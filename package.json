@@ -12,5 +12,8 @@
   "devDependencies": {
     "cypress": "^14.3.0",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
   }
 }
