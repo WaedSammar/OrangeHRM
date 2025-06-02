@@ -39,7 +39,9 @@ class PIMPage {
     selectGender: `${HTML_TAGS.input}[type="radio"][value="1"]`,
     closeBtn: '.oxd-date-input-link.--close',
     chosenGender: `${HTML_TAGS.input}[type="radio"]:checked`,
-    uploadFile: `${HTML_TAGS.input}[type="file"]`
+    uploadFile: `${HTML_TAGS.input}[type="file"]`,
+    tableCell: '.oxd-table-cell',
+    tableRow: '.oxd-table-row'
   }
 
   /**
@@ -422,6 +424,24 @@ class PIMPage {
         expect(downloadedData).to.deep.equal(originalData)
       })
     })
+  }
+
+  /**
+   * verify employee info in table 
+   * @param {IEmployeeInfo} employeeInfo 
+   * @param {IEmployeeInfo} foundEmployee 
+   */
+  static verifyEmployeeInTable(employeeInfo: IEmployeeInfo, foundEmployee: IEmployeeInfo) {
+    expect(foundEmployee).to.not.be.null
+    const employeeId = foundEmployee.employeeId
+
+    cy.contains(this.LOCATORS.tableCell, employeeId)
+      .should('be.visible')
+      .parents(this.LOCATORS.tableRow)
+      .within(() => {
+        cy.get(this.LOCATORS.tableCell).eq(2).should('contain.text', `${employeeInfo.firstName} ${employeeInfo.middleName}`)
+        cy.get(this.LOCATORS.tableCell).eq(3).should('contain.text', employeeInfo.lastName)
+      })
   }
 }
 export { PIMPage }

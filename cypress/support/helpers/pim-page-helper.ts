@@ -84,5 +84,45 @@ class PIMPageHelper {
       custom2: employeeInfo.testField
     })
   }
+
+  /**
+   * search on employee at the lists
+   * @param {IEmployeeInfo} employeeInfo
+   * @returns
+   */
+  static searchEmployeeInPaginatedList(employeeInfo: IEmployeeInfo) {
+    const limit = 50
+    let foundEmployee = null
+
+    const searchEmployee = () => {
+      for (let offset = 0; offset < 500; offset += limit) {
+        cy.request({
+          method: 'GET',
+          url: `${URLs.employees}?limit=${limit}&offset=${offset}`
+        }).then((res) => {
+          expect(res.status).to.eq(200)
+          const match = res.body.data.find(
+            (emp) =>
+              emp.firstName === employeeInfo.firstName &&
+              emp.middleName === employeeInfo.middleName &&
+              emp.lastName === employeeInfo.lastName &&
+              emp.employeeId === employeeInfo.employeeId
+          )
+          if (match) {
+            foundEmployee = match
+            return false
+          }
+        })
+      }
+    }
+    return cy
+      .wrap(null)
+      .then(() => {
+        searchEmployee()
+      })
+      .then(() => {
+        return foundEmployee
+      })
+  }
 }
 export { PIMPageHelper }
