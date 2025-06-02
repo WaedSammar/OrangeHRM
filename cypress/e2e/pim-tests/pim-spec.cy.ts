@@ -15,22 +15,22 @@ describe('Employee management - Add and Save Test Cases', () => {
     cy.fixture('employee-page-mock').then((addEmployeeData) => {
       employeeMockData = addEmployeeData
 
-      cy.login()
-      AdminPage.goToAdminPage()
-      AdminPage.clickNationalities()
-      AdminPage.clickAddBtn()
-      AdminPage.addNationality(employeeMockData.newNationality)
+      // cy.login()
+      // AdminPage.goToAdminPage()
+      // AdminPage.clickNationalities()
+      // AdminPage.clickAddBtn()
+      // AdminPage.addNationality(employeeMockData.newNationality)
 
-      const createLoadNationality = CommonHelper.generateRandomString(9, 'loadNationality')
-      APIsHelper.interceptNationalities(createLoadNationality)
-      AdminPage.clickSave()
-      APIsHelper.waitForApiResponse(createLoadNationality)
+      // const createLoadNationality = CommonHelper.generateRandomString(9, 'loadNationality')
+      // APIsHelper.interceptNationalities(createLoadNationality)
+      // AdminPage.clickSave()
+      // APIsHelper.waitForApiResponse(createLoadNationality)
 
-      AdminPageHelper.getNationality().then((res) => {
-        const added = res.body.data.find(({ name }) => name === employeeMockData.newNationality)
-        nationalityId = added.id
-      })
-      ElementHandler.logout()
+      // AdminPageHelper.getNationality().then((res) => {
+      //   const added = res.body.data.find(({ name }) => name === employeeMockData.newNationality)
+      //   nationalityId = added.id
+      // })
+      // ElementHandler.logout()
     })
   })
 
@@ -105,75 +105,69 @@ describe('Employee management - Add and Save Test Cases', () => {
     PIMPage.verifyUploadedFile()
     PIMPage.verifyEmployeeInfo(employeeInfo)
   })
-
-    it.only("Adding a new employee via UI and verify from table with pagination", () => {
+  it.only('Adding a new employee via UI and verify from table with pagination', () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((res) => {
-      const empNumber = res.body.data.empNumber;
-      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber);
-      PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber);
-      PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber);
-    });
+      const empNumber = res.body.data.empNumber
+      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber)
+      PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
+      PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber)
 
-    PIMPage.goToPIMPage();
-    cy.request("/web/index.php/api/v2/pim/employees").then((res) => {
-      expect(res.status).to.eq(200);
+      const limit = 50
+      let foundEmployee = null
 
-      const employee = res.body.data.find(
-        (emp) =>
-          emp.firstName === employeeInfo.firstName &&
-          emp.middleName === employeeInfo.middleName &&
-          emp.lastName === employeeInfo.lastName &&
-          emp.employeeId === employeeInfo.employeeId
-      );
-      expect(employee).to.not.be.undefined;
-      const employeeId = employee.employeeId;
+      const searchEmployee = () => {
+        for (let offset = 0; offset < 500; offset += limit) {
+          cy.request({
+            method: 'GET',
+            url: `/web/index.php/api/v2/pim/employees?limit=${limit}&offset=${offset}`
+          }).then((res) => {
+            expect(res.status).to.eq(200)
+            const match = res.body.data.find(
+              (emp) =>
+                emp.firstName === employeeInfo.firstName &&
+                emp.middleName === employeeInfo.middleName &&
+                emp.lastName === employeeInfo.lastName &&
+                emp.employeeId === employeeInfo.employeeId
+            )
+            if (match) {
+              foundEmployee = match
+              return false
+            }
+          })
+        }
+      }
 
-      const findEmployeeInTable = () => {
-        cy.get("body").then(($body) => {
-          const exists = $body
-            .find(".oxd-table-cell")
-            .toArray()
-            .some((el) => el.innerText.includes(employeeId));
+      cy.wrap(null)
+        .then(() => {
+          searchEmployee()
+        })
+        .then(() => {
+          expect(foundEmployee).to.not.be.null
+          const employeeId = foundEmployee.employeeId
 
-          if (exists) {
-            cy.contains(".oxd-table-cell", employeeId)
-              .should("be.visible")
-              .parents(".oxd-table-row")
-              .within(() => {
-                cy.get(".oxd-table-cell")
-                  .eq(2)
-                  .should(
-                    "contain.text",
-                    `${employeeInfo.firstName} ${employeeInfo.middleName}`
-                  );
-                cy.get(".oxd-table-cell")
-                  .eq(3)
-                  .should("contain.text", employeeInfo.lastName);
-              });
-          } else {
-            cy.get(".oxd-pagination-page-item--previous-next").then(($next) => {
-              if (!$next.attr("disabled")) {
-                cy.wrap($next).click();
-                cy.wait(1000);
-                findEmployeeInTable();
-              }
-            });
-          }
-        });
-      };
-      findEmployeeInTable();
-    });
-  });
+          PIMPage.goToPIMPage()
+          cy.contains('.oxd-table-cell', employeeId)
+            .should('be.visible')
+            .parents('.oxd-table-row')
+            .within(() => {
+              cy.get('.oxd-table-cell')
+                .eq(2)
+                .should('contain.text', `${employeeInfo.firstName} ${employeeInfo.middleName}`)
+              cy.get('.oxd-table-cell').eq(3).should('contain.text', employeeInfo.lastName)
+            })
+        })
+    })
+  })
 
   afterEach(() => {
-    ElementHandler.logout()
-    cy.login()
-    AdminPage.goToAdminPage()
-    AdminPageHelper.deleteUserByUsername(employeeInfo.userName)
+    // ElementHandler.logout()
+    // cy.login()
+    // AdminPage.goToAdminPage()
+    // AdminPageHelper.deleteUserByUsername(employeeInfo.userName)
   })
 
   after(() => {
-    AdminPage.clickNationalities()
-    AdminPageHelper.deleteNationalities([nationalityId])
+    // AdminPage.clickNationalities()
+    // AdminPageHelper.deleteNationalities([nationalityId])
   })
 })
