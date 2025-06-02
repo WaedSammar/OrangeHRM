@@ -1,9 +1,6 @@
 node_modules
 package-lock.json
-
-cypress/screenshots/*
-cypress/videos/*
-cypress/downloads/*
+package.json
 
 allure-results/*
 allure-report/*
