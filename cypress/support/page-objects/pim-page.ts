@@ -1,70 +1,62 @@
-import { COMMON_LOCATORS, ElementHandler } from "../element-handler";
-import { APIsHelper } from "../helpers/apis-helpers";
-import CommonHelper from "../helpers/common-helper";
-import {
-  CYPRESS_FOLDERS,
-  HTML_TAGS,
-  PAGES,
-  TIMEOUT,
-} from "../helpers/constants";
-import { IEmployeeInfo } from "../types/employee.types";
+import { COMMON_LOCATORS, ElementHandler } from '../element-handler'
+import { APIsHelper } from '../helpers/apis-helpers'
+import CommonHelper from '../helpers/common-helper'
+import { CYPRESS_FOLDERS, HTML_TAGS, PAGES, TIMEOUT } from '../helpers/constants'
+import { IEmployeeInfo } from '../types/employee.types'
 
 enum LABELS {
-  EMPLOYEE_ID = "Employee Id",
-  USERNAME = "Username",
-  PASSWORD = "Password",
-  CONFIRM_PASSWORD = "Confirm Password",
-  OTHER_ID = "Other Id",
+  EMPLOYEE_ID = 'Employee Id',
+  USERNAME = 'Username',
+  PASSWORD = 'Password',
+  CONFIRM_PASSWORD = 'Confirm Password',
+  OTHER_ID = 'Other Id',
   LICENSE_NUM = "Driver's License Number",
-  LICENSE_EXP = "License Expiry Date",
-  NATIONALITY = "Nationality",
-  MARITAL_STATUS = "Marital Status",
-  DATE_OF_BIRTH = "Date of Birth",
-  BLOOD_TYPE = "Blood Type",
-  TEST_FIELD = "Test_Field",
+  LICENSE_EXP = 'License Expiry Date',
+  NATIONALITY = 'Nationality',
+  MARITAL_STATUS = 'Marital Status',
+  DATE_OF_BIRTH = 'Date of Birth',
+  BLOOD_TYPE = 'Blood Type',
+  TEST_FIELD = 'Test_Field'
 }
 
 export enum GENDER {
-  MALE = "Male",
-  FEMALE = "Female",
+  MALE = 'Male',
+  FEMALE = 'Female'
 }
 
 class PIMPage {
   private static LOCATORS = {
-    firstName: ".orangehrm-firstname",
-    middleName: ".orangehrm-middlename",
-    lastName: ".orangehrm-lastname",
+    firstName: '.orangehrm-firstname',
+    middleName: '.orangehrm-middlename',
+    lastName: '.orangehrm-lastname',
     createLoginCheckbox: `${HTML_TAGS.input}[type='checkbox']`,
-    inputGroup: ".oxd-input-group",
+    inputGroup: '.oxd-input-group',
     submitBtn: `${HTML_TAGS.button}[type='submit']`,
     dateInput: `${HTML_TAGS.input}[placeholder='yyyy-dd-mm']`,
-    validationMsg: ".oxd-input-group__message",
-    selectField: ".oxd-select-text",
-    dropdownOption: ".oxd-select-dropdown",
+    validationMsg: '.oxd-input-group__message',
+    selectField: '.oxd-select-text',
+    dropdownOption: '.oxd-select-dropdown',
     selectGender: `${HTML_TAGS.input}[type="radio"][value="1"]`,
-    closeBtn: ".oxd-date-input-link.--close",
+    closeBtn: '.oxd-date-input-link.--close',
     chosenGender: `${HTML_TAGS.input}[type="radio"]:checked`,
-    uploadFile: `${HTML_TAGS.input}[type="file"]`,
-  };
+    uploadFile: `${HTML_TAGS.input}[type="file"]`
+  }
 
   /**
    * go to PIM Page
    */
   static goToPIMPage() {
-    const loadGetEmployeesList = CommonHelper.generateRandomString(
-      7,
-      "loadPIM_"
-    );
-    APIsHelper.interceptGetEmployeesRequest(loadGetEmployeesList);
-    ElementHandler.clickMenuItem(PAGES.PIM);
-    APIsHelper.waitForApiResponse(loadGetEmployeesList);
+    const loadGetEmployeesList = CommonHelper.generateRandomString(7, 'loadPIM_')
+    APIsHelper.interceptGetEmployeesRequest(loadGetEmployeesList)
+    ElementHandler.clickMenuItem(PAGES.PIM)
+    APIsHelper.waitForApiResponse(loadGetEmployeesList)
   }
 
   /**
    * go to add employee
    */
   static clickAddBtn() {
-    ElementHandler.clickButton("Add");
+    ElementHandler.clickButton('Add')
   }
 
   /**
@@ -72,7 +64,7 @@ class PIMPage {
    * @param {string} firstName - first name
    */
   static fillFirstName(firstName: string) {
-    ElementHandler.typeIntoField(this.LOCATORS.firstName, firstName);
+    ElementHandler.typeIntoField(this.LOCATORS.firstName, firstName)
   }
 
   /**
@@ -80,7 +72,7 @@ class PIMPage {
    * @param {string} middleName - middle name
    */
   static fillMiddleName(middleName: string) {
-    ElementHandler.typeIntoField(this.LOCATORS.middleName, middleName);
+    ElementHandler.typeIntoField(this.LOCATORS.middleName, middleName)
   }
 
   /**
@@ -88,7 +80,7 @@ class PIMPage {
    * @param {string} lastName - last name
    */
   static fillLastName(lastName: string) {
-    ElementHandler.typeIntoField(this.LOCATORS.lastName, lastName);
+    ElementHandler.typeIntoField(this.LOCATORS.lastName, lastName)
   }
 
   /**
@@ -96,14 +88,14 @@ class PIMPage {
    * @param {string} employeeId - employee id
    */
   static fillEmployeeId(employeeId: string) {
-    ElementHandler.clearAndFill(LABELS.EMPLOYEE_ID, employeeId);
+    ElementHandler.clearAndFill(LABELS.EMPLOYEE_ID, employeeId)
   }
 
   /**
    * make login option active
    */
   static ensureLoginButtonActive() {
-    cy.get(this.LOCATORS.createLoginCheckbox).check({ force: true });
+    cy.get(this.LOCATORS.createLoginCheckbox).check({ force: true })
   }
 
   /**
@@ -111,7 +103,7 @@ class PIMPage {
    * @param {string} username - enter username
    */
   static fillUsername(username: string) {
-    ElementHandler.clearAndFill(LABELS.USERNAME, username);
+    ElementHandler.clearAndFill(LABELS.USERNAME, username)
   }
 
   /**
@@ -119,7 +111,7 @@ class PIMPage {
    * @param {string} password - fill user password
    */
   static fillPassword(password: string) {
-    ElementHandler.clearAndFill(LABELS.PASSWORD, password);
+    ElementHandler.clearAndFill(LABELS.PASSWORD, password)
   }
 
   /**
@@ -127,22 +119,22 @@ class PIMPage {
    * @param {string} password - user password again
    */
   static fillConfirmPassword(password: string) {
-    ElementHandler.clearAndFill(LABELS.CONFIRM_PASSWORD, password);
+    ElementHandler.clearAndFill(LABELS.CONFIRM_PASSWORD, password)
   }
 
   /**
    * save button
    * @param index
    */
-  static clickSave(index: number = 0, buttonText: string = "Save") {
-    ElementHandler.clickSave(index, buttonText);
+  static clickSave(index: number = 0, buttonText: string = 'Save') {
+    ElementHandler.clickSave(index, buttonText)
   }
 
   /**
    * ensure status is enable
    */
   static verifyStatusIsEnabled() {
-    cy.get(this.LOCATORS.submitBtn).should("be.enabled");
+    cy.get(this.LOCATORS.submitBtn).should('be.enabled')
   }
 
   /**
@@ -150,7 +142,7 @@ class PIMPage {
    * @param {string} id - other employee id
    */
   static fillOtherId(id: string) {
-    ElementHandler.clearAndFill(LABELS.OTHER_ID, id);
+    ElementHandler.clearAndFill(LABELS.OTHER_ID, id)
   }
 
   /**
@@ -158,7 +150,7 @@ class PIMPage {
    * @param {string} license - driver license num
    */
   static fillLicenseNum(license: string) {
-    ElementHandler.findInputByLabel(LABELS.LICENSE_NUM).type(license);
+    ElementHandler.findInputByLabel(LABELS.LICENSE_NUM).type(license)
   }
 
   /**
@@ -167,18 +159,14 @@ class PIMPage {
    * @param {number} index - index for input field (e.g., 0 = license expiry, 1 = birthday)
    */
   static selectDate(date: string, index: number = 0) {
-    cy.get(this.LOCATORS.dateInput)
-      .eq(index)
-      .should("be.visible")
-      .clear()
-      .type(date);
+    cy.get(this.LOCATORS.dateInput).eq(index).should('be.visible').clear().type(date)
   }
 
   /**
    * remove focus to remove calender
    */
   static closeCalender() {
-    cy.get(this.LOCATORS.closeBtn).should("be.visible").click();
+    cy.get(this.LOCATORS.closeBtn).should('be.visible').click()
   }
 
   /**
@@ -187,11 +175,8 @@ class PIMPage {
    * @param {string} option - option to select
    */
   static selectDropdownByLabel(label: string, option: string) {
-    cy.contains(HTML_TAGS.label, label)
-      .parents(this.LOCATORS.inputGroup)
-      .find(this.LOCATORS.selectField)
-      .click();
-    cy.get(this.LOCATORS.dropdownOption).contains(option).click();
+    cy.contains(HTML_TAGS.label, label).parents(this.LOCATORS.inputGroup).find(this.LOCATORS.selectField).click()
+    cy.get(this.LOCATORS.dropdownOption).contains(option).click()
   }
 
   /**
@@ -199,7 +184,7 @@ class PIMPage {
    * @param text - chosen nationality
    */
   static selectNationality(text: string) {
-    this.selectDropdownByLabel(LABELS.NATIONALITY, text);
+    this.selectDropdownByLabel(LABELS.NATIONALITY, text)
   }
 
   /**
@@ -207,7 +192,7 @@ class PIMPage {
    * @param text - employee marital state
    */
   static selectMaritalStatus(text: string) {
-    this.selectDropdownByLabel(LABELS.MARITAL_STATUS, text);
+    this.selectDropdownByLabel(LABELS.MARITAL_STATUS, text)
   }
 
   /**
@@ -215,7 +200,7 @@ class PIMPage {
    * @param gender - employee gender
    */
   static selectGender(gender: GENDER) {
-    cy.contains(HTML_TAGS.label, gender).click({ force: true });
+    cy.contains(HTML_TAGS.label, gender).click({ force: true })
   }
 
   /**
@@ -223,7 +208,7 @@ class PIMPage {
    * @param text - blood type
    */
   static selectBloodType(text: string) {
-    this.selectDropdownByLabel(LABELS.BLOOD_TYPE, text);
+    this.selectDropdownByLabel(LABELS.BLOOD_TYPE, text)
   }
 
   /**
@@ -231,14 +216,14 @@ class PIMPage {
    * @param text - value of test field
    */
   static fillTestField(text: string) {
-    ElementHandler.findInputByLabel(LABELS.TEST_FIELD).type(text);
+    ElementHandler.findInputByLabel(LABELS.TEST_FIELD).type(text)
   }
 
   /**
    * verify first name
    */
   static getFirstName() {
-    return ElementHandler.getFieldValue(this.LOCATORS.firstName);
+    return ElementHandler.getFieldValue(this.LOCATORS.firstName)
   }
 
   /**
@@ -246,7 +231,7 @@ class PIMPage {
    * @returns
    */
   static getMiddleName() {
-    return ElementHandler.getFieldValue(this.LOCATORS.middleName);
+    return ElementHandler.getFieldValue(this.LOCATORS.middleName)
   }
 
   /**
@@ -254,7 +239,7 @@ class PIMPage {
    * @returns
    */
   static getLastName() {
-    return ElementHandler.getFieldValue(this.LOCATORS.lastName);
+    return ElementHandler.getFieldValue(this.LOCATORS.lastName)
   }
 
   /**
@@ -262,7 +247,7 @@ class PIMPage {
    * @returns
    */
   static getEmployeeId() {
-    return ElementHandler.findInputByLabel(LABELS.EMPLOYEE_ID).invoke("val");
+    return ElementHandler.findInputByLabel(LABELS.EMPLOYEE_ID).invoke('val')
   }
 
   /**
@@ -270,14 +255,14 @@ class PIMPage {
    * @returns
    */
   static getOtherId() {
-    return ElementHandler.findInputByLabel(LABELS.OTHER_ID).invoke("val");
+    return ElementHandler.findInputByLabel(LABELS.OTHER_ID).invoke('val')
   }
 
   /**
    * verify Driver's License Number
    */
   static getLicenseNum() {
-    return ElementHandler.findInputByLabel(LABELS.LICENSE_NUM).invoke("val");
+    return ElementHandler.findInputByLabel(LABELS.LICENSE_NUM).invoke('val')
   }
 
   /**
@@ -285,7 +270,7 @@ class PIMPage {
    * @returns
    */
   static getLicenseExp() {
-    return ElementHandler.findInputByLabel(LABELS.LICENSE_EXP).invoke("val");
+    return ElementHandler.findInputByLabel(LABELS.LICENSE_EXP).invoke('val')
   }
 
   /**
@@ -297,7 +282,7 @@ class PIMPage {
       .contains(HTML_TAGS.label, LABELS.NATIONALITY)
       .parents(this.LOCATORS.inputGroup)
       .find(this.LOCATORS.selectField)
-      .invoke(HTML_TAGS.text);
+      .invoke(HTML_TAGS.text)
   }
 
   /**
@@ -308,14 +293,14 @@ class PIMPage {
       .contains(HTML_TAGS.label, LABELS.MARITAL_STATUS)
       .parents(this.LOCATORS.inputGroup)
       .find(this.LOCATORS.selectField)
-      .invoke(HTML_TAGS.text);
+      .invoke(HTML_TAGS.text)
   }
 
   /**
    * verify employee Birthday
    */
   static getBirthday() {
-    return ElementHandler.findInputByLabel(LABELS.DATE_OF_BIRTH).invoke("val");
+    return ElementHandler.findInputByLabel(LABELS.DATE_OF_BIRTH).invoke('val')
   }
 
   /**
@@ -323,7 +308,7 @@ class PIMPage {
    * @returns
    */
   static getGender() {
-    return cy.get(this.LOCATORS.chosenGender).invoke("val");
+    return cy.get(this.LOCATORS.chosenGender).invoke('val')
   }
 
   /**
@@ -335,7 +320,7 @@ class PIMPage {
       .contains(HTML_TAGS.label, LABELS.BLOOD_TYPE)
       .parents(this.LOCATORS.inputGroup)
       .find(this.LOCATORS.selectField)
-      .invoke(HTML_TAGS.text);
+      .invoke(HTML_TAGS.text)
   }
 
   /**
@@ -343,27 +328,24 @@ class PIMPage {
    * @returns
    */
   static getTestField() {
-    return ElementHandler.findInputByLabel(LABELS.TEST_FIELD).invoke("val");
+    return ElementHandler.findInputByLabel(LABELS.TEST_FIELD).invoke('val')
   }
 
   /**
    * upload file
    */
-  static uploadAttachment(file: string = "sheet.xlsx") {
-    this.clickAddBtn();
-    cy.get(this.LOCATORS.uploadFile).selectFile(
-      `${CYPRESS_FOLDERS.FIXTURES}/${file}`,
-      {
-        force: true,
-      }
-    );
+  static uploadAttachment(file: string = 'sheet.xlsx') {
+    this.clickAddBtn()
+    cy.get(this.LOCATORS.uploadFile).selectFile(`${CYPRESS_FOLDERS.FIXTURES}/${file}`, {
+      force: true
+    })
   }
 
   /**
    * download file to compare
    */
   static downloadUploadedFile(index: number = 0) {
-    cy.get(COMMON_LOCATORS.downloadIcon).eq(index).click();
+    cy.get(COMMON_LOCATORS.downloadIcon).eq(index).click()
   }
 
   /**
@@ -371,16 +353,16 @@ class PIMPage {
    * @param employeeInfo
    */
   static fillEmployeeInfo(employeeInfo: IEmployeeInfo) {
-    this.fillFirstName(employeeInfo.firstName);
-    this.fillMiddleName(employeeInfo.middleName);
-    this.fillLastName(employeeInfo.lastName);
-    this.fillEmployeeId(employeeInfo.employeeId);
+    this.fillFirstName(employeeInfo.firstName)
+    this.fillMiddleName(employeeInfo.middleName)
+    this.fillLastName(employeeInfo.lastName)
+    this.fillEmployeeId(employeeInfo.employeeId)
 
-    this.ensureLoginButtonActive();
-    this.fillUsername(employeeInfo.userName);
-    this.fillPassword(employeeInfo.password);
-    this.fillConfirmPassword(employeeInfo.password);
-    this.verifyStatusIsEnabled();
+    this.ensureLoginButtonActive()
+    this.fillUsername(employeeInfo.userName)
+    this.fillPassword(employeeInfo.password)
+    this.fillConfirmPassword(employeeInfo.password)
+    this.verifyStatusIsEnabled()
   }
 
   /**
@@ -388,14 +370,14 @@ class PIMPage {
    * @param employeeInfo
    */
   static fillPersonalDetails(employeeInfo: IEmployeeInfo) {
-    PIMPage.fillOtherId(employeeInfo.otherId);
-    PIMPage.fillLicenseNum(employeeInfo.licenseNum);
-    PIMPage.selectDate(employeeInfo.expDate);
-    PIMPage.closeCalender();
-    PIMPage.selectNationality(employeeInfo.nationality);
-    PIMPage.selectMaritalStatus(employeeInfo.maritalState);
-    PIMPage.selectDate(employeeInfo.dateOfBirth, 1);
-    PIMPage.selectGender(employeeInfo.gender);
+    PIMPage.fillOtherId(employeeInfo.otherId)
+    PIMPage.fillLicenseNum(employeeInfo.licenseNum)
+    PIMPage.selectDate(employeeInfo.expDate)
+    PIMPage.closeCalender()
+    PIMPage.selectNationality(employeeInfo.nationality)
+    PIMPage.selectMaritalStatus(employeeInfo.maritalState)
+    PIMPage.selectDate(employeeInfo.dateOfBirth, 1)
+    PIMPage.selectGender(employeeInfo.gender)
   }
 
   /**
@@ -403,8 +385,8 @@ class PIMPage {
    * @param employeeInfo
    */
   static fillAdditionalEmployeeDetails(employeeInfo: IEmployeeInfo) {
-    PIMPage.selectBloodType(employeeInfo.bloodType);
-    PIMPage.fillTestField(employeeInfo.testField);
+    PIMPage.selectBloodType(employeeInfo.bloodType)
+    PIMPage.fillTestField(employeeInfo.testField)
   }
 
   /**
@@ -412,38 +394,34 @@ class PIMPage {
    * @param employeeInfo
    */
   static verifyEmployeeInfo(employeeInfo: IEmployeeInfo) {
-    this.getFirstName().should("eq", employeeInfo.firstName);
-    this.getMiddleName().should("eq", employeeInfo.middleName);
-    this.getLastName().should("eq", employeeInfo.lastName);
-    this.getEmployeeId().should("eq", employeeInfo.employeeId);
-    this.getOtherId().should("eq", employeeInfo.otherId);
-    this.getLicenseNum().should("eq", employeeInfo.licenseNum);
-    this.getLicenseExp().should("eq", employeeInfo.expDate);
-    this.getBirthday().should("eq", employeeInfo.dateOfBirth);
-    this.getNationality().should("eq", employeeInfo.nationality);
-    this.getMaritalStatus().should("eq", employeeInfo.maritalState);
-    const expectedGenderValue = employeeInfo.gender === GENDER.MALE ? "1" : "2";
-    this.getGender().should("eq", expectedGenderValue);
-    this.getBloodType().should("eq", employeeInfo.bloodType);
-    this.getTestField().should("eq", employeeInfo.testField);
+    this.getFirstName().should('eq', employeeInfo.firstName)
+    this.getMiddleName().should('eq', employeeInfo.middleName)
+    this.getLastName().should('eq', employeeInfo.lastName)
+    this.getEmployeeId().should('eq', employeeInfo.employeeId)
+    this.getOtherId().should('eq', employeeInfo.otherId)
+    this.getLicenseNum().should('eq', employeeInfo.licenseNum)
+    this.getLicenseExp().should('eq', employeeInfo.expDate)
+    this.getBirthday().should('eq', employeeInfo.dateOfBirth)
+    this.getNationality().should('eq', employeeInfo.nationality)
+    this.getMaritalStatus().should('eq', employeeInfo.maritalState)
+    const expectedGenderValue = employeeInfo.gender === GENDER.MALE ? '1' : '2'
+    this.getGender().should('eq', expectedGenderValue)
+    this.getBloodType().should('eq', employeeInfo.bloodType)
+    this.getTestField().should('eq', employeeInfo.testField)
   }
 
   /**
    * verify that uploaded file has the same content of downloaded one
    */
-  static verifyUploadedFile(file: string = "sheet.xlsx") {
+  static verifyUploadedFile(file: string = 'sheet.xlsx') {
     cy.readFile(`${CYPRESS_FOLDERS.DOWNLOADS}/${file}`, {
-      timeout: TIMEOUT.tenSec,
-    }).should("exist");
-    cy.parseXlsxToJson(`${CYPRESS_FOLDERS.FIXTURES}/${file}`).then(
-      (originalData) => {
-        cy.parseXlsxToJson(`${CYPRESS_FOLDERS.DOWNLOADS}/${file}`).then(
-          (downloadedData) => {
-            expect(downloadedData).to.deep.equal(originalData);
-          }
-        );
-      }
-    );
+      timeout: TIMEOUT.tenSec
+    }).should('exist')
+    cy.parseXlsxToJson(`${CYPRESS_FOLDERS.FIXTURES}/${file}`).then((originalData) => {
+      cy.parseXlsxToJson(`${CYPRESS_FOLDERS.DOWNLOADS}/${file}`).then((downloadedData) => {
+        expect(downloadedData).to.deep.equal(originalData)
+      })
+    })
   }
 }
-export { PIMPage };
+export { PIMPage }

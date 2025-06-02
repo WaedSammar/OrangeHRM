@@ -1,25 +1,25 @@
-import { HTML_TAGS, TIMEOUT } from "./helpers/constants";
+import { HTML_TAGS, TIMEOUT } from './helpers/constants'
 
 const COMMON_LOCATORS = {
-  menuBtn: "span.oxd-main-menu-item--name",
-  menuItems: "span.oxd-main-menu-item--name",
-  dropDownList: ".oxd-userdropdown-name",
-  loaderIcon: ".oxd-loading-spinner",
+  menuBtn: 'span.oxd-main-menu-item--name',
+  menuItems: 'span.oxd-main-menu-item--name',
+  dropDownList: '.oxd-userdropdown-name',
+  loaderIcon: '.oxd-loading-spinner',
   submitBtn: `${HTML_TAGS.button}[type='submit']`,
-  downloadIcon: ".oxd-icon.bi-download",
-  trashIcon: ".oxd-icon.bi-trash",
-};
+  downloadIcon: '.oxd-icon.bi-download',
+  trashIcon: '.oxd-icon.bi-trash'
+}
 
 const COMMON_URLs = {
   nationalities: `/web/index.php/api/v2/admin/nationalities`,
-  users: `/web/index.php/api/v2/admin/users`,
-};
+  users: `/web/index.php/api/v2/admin/users`
+}
 
 enum DROP_DOWN {
-  ABOUT = "About",
-  SUPPORT = "Support",
-  CHANGE_PASSWORD = "Change Password",
-  LOGOUT = "Logout",
+  ABOUT = 'About',
+  SUPPORT = 'Support',
+  CHANGE_PASSWORD = 'Change Password',
+  LOGOUT = 'Logout'
 }
 
 class ElementHandler {
@@ -31,13 +31,13 @@ class ElementHandler {
       cy.get(HTML_TAGS.body, { timeout: TIMEOUT.tenSec }).within(($body) => {
         if (!$body.find(COMMON_LOCATORS.loaderIcon).length) {
           cy.get(COMMON_LOCATORS.loaderIcon, { timeout: TIMEOUT.tenSec })
-            .should("not.exist")
-            .then(() => resolve());
+            .should('not.exist')
+            .then(() => resolve())
         } else {
-          resolve();
+          resolve()
         }
-      });
-    });
+      })
+    })
   }
 
   /**
@@ -45,7 +45,7 @@ class ElementHandler {
    * @param {string} label - label name
    */
   static clickMenuItem(label: string) {
-    cy.get(COMMON_LOCATORS.menuItems).contains(label).click();
+    cy.get(COMMON_LOCATORS.menuItems).contains(label).click()
   }
 
   /**
@@ -53,7 +53,7 @@ class ElementHandler {
    * @param {string} label - name of button needed
    */
   static clickButton(label: string) {
-    cy.get(HTML_TAGS.button).contains(label).click();
+    cy.get(HTML_TAGS.button).contains(label).click()
   }
 
   /**
@@ -62,11 +62,7 @@ class ElementHandler {
    * @returns - label user want
    */
   static findInputByLabel(labelText: string) {
-    return cy
-      .contains(HTML_TAGS.label, labelText)
-      .parent()
-      .next()
-      .find(HTML_TAGS.input);
+    return cy.contains(HTML_TAGS.label, labelText).parent().next().find(HTML_TAGS.input)
   }
 
   /**
@@ -75,7 +71,7 @@ class ElementHandler {
    * @param {string} text
    */
   static clearAndFill(label: string, text: string) {
-    this.findInputByLabel(label).clear().type(text);
+    this.findInputByLabel(label).clear().type(text)
   }
 
   /**
@@ -84,7 +80,7 @@ class ElementHandler {
    * @param {string} value
    */
   static typeIntoField(selector: string, value: string) {
-    cy.get(selector).type(value);
+    cy.get(selector).type(value)
   }
 
   /**
@@ -93,7 +89,7 @@ class ElementHandler {
    * @returns
    */
   static getFieldValue(className: string) {
-    return cy.get(className).invoke("val");
+    return cy.get(className).invoke('val')
   }
 
   /**
@@ -101,15 +97,15 @@ class ElementHandler {
    * @param index
    */
   static clickSave(index: number = 0, buttonText: string) {
-    cy.get(COMMON_LOCATORS.submitBtn).eq(index).click().contains(buttonText);
+    cy.get(COMMON_LOCATORS.submitBtn).eq(index).click().contains(buttonText)
   }
 
   /**
    * logout from current user
    */
   static logout() {
-    cy.get(COMMON_LOCATORS.dropDownList).click();
-    cy.contains(DROP_DOWN.LOGOUT).click();
+    cy.get(COMMON_LOCATORS.dropDownList).click()
+    cy.contains(DROP_DOWN.LOGOUT).click()
   }
 }
-export { ElementHandler, COMMON_LOCATORS, COMMON_URLs };
+export { ElementHandler, COMMON_LOCATORS, COMMON_URLs }

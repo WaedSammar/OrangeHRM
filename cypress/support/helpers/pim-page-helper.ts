@@ -1,24 +1,24 @@
-import { COMMON_URLs } from "../element-handler";
-import { GENDER } from "../page-objects/pim-page";
-import { IEmployeeInfo } from "../types/employee.types";
-import CommonHelper from "./common-helper";
-import { HTTP_METHODS } from "./constants";
+import { COMMON_URLs } from '../element-handler'
+import { GENDER } from '../page-objects/pim-page'
+import { IEmployeeInfo } from '../types/employee.types'
+import CommonHelper from './common-helper'
+import { HTTP_METHODS } from './constants'
 
 const URLs = {
   employees: `/web/index.php/api/v2/pim/employees`,
   personalDetails: `personal-details`,
-  customField: `custom-fields`,
-};
+  customField: `custom-fields`
+}
 
 enum UserRole {
   ADMIN = 1,
-  ESS = 2,
+  ESS = 2
 }
 
 const GenderMap: Record<GENDER, number> = {
   [GENDER.MALE]: 1,
-  [GENDER.FEMALE]: 2,
-};
+  [GENDER.FEMALE]: 2
+}
 
 class PIMPageHelper {
   /**
@@ -31,8 +31,8 @@ class PIMPageHelper {
       firstName: employeeInfo.firstName,
       middleName: employeeInfo.middleName,
       lastName: employeeInfo.lastName,
-      employeeId: employeeInfo.employeeId,
-    });
+      employeeId: employeeInfo.employeeId
+    })
   }
 
   /**
@@ -46,8 +46,8 @@ class PIMPageHelper {
       password: employeeInfo.password,
       status: employeeInfo.status,
       userRoleId: UserRole.ESS,
-      empNumber,
-    });
+      empNumber
+    })
   }
 
   /**
@@ -55,11 +55,8 @@ class PIMPageHelper {
    * @param {IEmployeeInfo} employeeInfo
    * @param {number} empNumber
    */
-  static updateEmployeeDetailsViaAPI(
-    employeeInfo: IEmployeeInfo,
-    empNumber: number
-  ) {
-    const url = `${URLs.employees}/${empNumber}/${URLs.personalDetails}`;
+  static updateEmployeeDetailsViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
+    const url = `${URLs.employees}/${empNumber}/${URLs.personalDetails}`
     CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, {
       firstName: employeeInfo.firstName,
       middleName: employeeInfo.middleName,
@@ -71,8 +68,8 @@ class PIMPageHelper {
       birthday: employeeInfo.dateOfBirth,
       gender: GenderMap[employeeInfo.gender],
       maritalStatus: employeeInfo.maritalState,
-      nationalityId: employeeInfo.nationalityId,
-    });
+      nationalityId: employeeInfo.nationalityId
+    })
   }
 
   /**
@@ -80,15 +77,12 @@ class PIMPageHelper {
    * @param {IEmployeeInfo} employeeInfo
    * @param {number} empNumber
    */
-  static updateEmployeeCustomFieldsViaAPI(
-    employeeInfo: IEmployeeInfo,
-    empNumber: number
-  ) {
-    const url = `${URLs.employees}/${empNumber}/${URLs.customField}`;
+  static updateEmployeeCustomFieldsViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
+    const url = `${URLs.employees}/${empNumber}/${URLs.customField}`
     CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, {
       custom1: employeeInfo.bloodType,
-      custom2: employeeInfo.testField,
-    });
+      custom2: employeeInfo.testField
+    })
   }
 }
-export { PIMPageHelper };
+export { PIMPageHelper }

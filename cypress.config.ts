@@ -1,6 +1,6 @@
 import { defineConfig } from 'cypress'
-import * as xlsx from 'xlsx';
-import { promises as fs } from 'fs';
+import * as xlsx from 'xlsx'
+import { promises as fs } from 'fs'
 
 export default defineConfig({
   projectId: 'zwebt5',
@@ -11,5 +11,5 @@ export default defineConfig({
     video: false
   },
   viewportWidth: 1728,
-  viewportHeight: 1117,
-});
+  viewportHeight: 1117
+})
