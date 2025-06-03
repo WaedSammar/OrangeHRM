@@ -97,7 +97,7 @@ class PIMPageHelper {
     const searchEmployee = () => {
       for (let offset = 0; offset < 500; offset += limit) {
         cy.request({
-          method: 'GET',
+          method: HTTP_METHODS.GET,
           url: `${URLs.employees}?limit=${limit}&offset=${offset}`
         }).then((res) => {
           expect(res.status).to.eq(200)
