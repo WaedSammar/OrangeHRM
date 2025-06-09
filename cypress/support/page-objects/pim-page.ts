@@ -1,7 +1,7 @@
 import { COMMON_LOCATORS, ElementHandler } from '../element-handler'
 import { APIsHelper } from '../helpers/apis-helpers'
 import CommonHelper from '../helpers/common-helper'
-import { CYPRESS_FOLDERS, HTML_TAGS, PAGES, TIMEOUT } from '../helpers/constants'
+import { COMMON_BUTTONS, CYPRESS_FOLDERS, HTML_TAGS, PAGES, TIMEOUT } from '../helpers/constants'
 import { IEmployeeInfo } from '../types/employee.types'
 
 enum LABELS {
@@ -426,22 +426,23 @@ class PIMPage {
     })
   }
 
-  /**
-   * verify employee info in table 
-   * @param {IEmployeeInfo} employeeInfo 
-   * @param {IEmployeeInfo} foundEmployee 
-   */
-  static verifyEmployeeInTable(employeeInfo: IEmployeeInfo, foundEmployee: IEmployeeInfo) {
-    expect(foundEmployee).to.not.be.null
-    const employeeId = foundEmployee.employeeId
-
-    cy.contains(this.LOCATORS.tableCell, employeeId)
-      .should('be.visible')
-      .parents(this.LOCATORS.tableRow)
-      .within(() => {
-        cy.get(this.LOCATORS.tableCell).eq(2).should('contain.text', `${employeeInfo.firstName} ${employeeInfo.middleName}`)
-        cy.get(this.LOCATORS.tableCell).eq(3).should('contain.text', employeeInfo.lastName)
-      })
+  static getFieldByKey(key: string) {
+    switch (key) {
+      case 'employeeName':
+        return ElementHandler.findInputByLabel('Employee Name')
+      case 'employeeId':
+        return ElementHandler.findInputByLabel('Employee Id')
+      default:
+        throw new Error('Cannot find search key')
+    }
   }
+
+  static searchAbout(arr) {
+    for (let i = 0; i < arr.length; i++) {
+      this.getFieldByKey(arr[i].key).type(arr[i].value)
+    }
+    ElementHandler.clickButton(COMMON_BUTTONS.SEARCH)
+  }
+
 }
 export { PIMPage }

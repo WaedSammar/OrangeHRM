@@ -77,7 +77,6 @@ describe('Buzz News Feed Test Cases', () => {
     APIsHelper.interceptPostRequest(createPostAliasName)
     BuzzPage.submitPost()
     APIsHelper.getInterceptionApiResponse(createPostAliasName).then((response: ICreatePostResponse) => {
-      console.log(response)
       BuzzPage.verifyDateAndTime(response.data.createdAt)
     })
   })

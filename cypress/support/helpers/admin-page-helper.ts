@@ -16,11 +16,12 @@ class AdminPageHelper {
    * @param {number[]} ids
    */
   static deleteNationalities(ids: number[]) {
+    console.log(ids)
     CommonHelper.sendAPIRequest(
       HTTP_METHODS.DELETE,
       COMMON_URLs.nationalities,
       {
-        ids: [String(ids)]
+        ids
       },
       {
         'Content-Type': 'application/json'
@@ -34,7 +35,6 @@ class AdminPageHelper {
       const userToDelete = users.find(({ userName }) => userName === username)
       const userId = userToDelete.id
 
-      console.log(userToDelete.id)
       return CommonHelper.sendAPIRequest(
         HTTP_METHODS.DELETE,
         COMMON_URLs.users,
