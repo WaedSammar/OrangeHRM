@@ -15,22 +15,22 @@ describe('Employee management - Add and Save Test Cases', () => {
     cy.fixture('employee-page-mock').then((addEmployeeData) => {
       employeeMockData = addEmployeeData
 
-      // cy.login()
-      // AdminPage.goToAdminPage()
-      // AdminPage.clickNationalities()
-      // AdminPage.clickAddBtn()
-      // AdminPage.addNationality(employeeMockData.newNationality)
+      cy.login()
+      AdminPage.goToAdminPage()
+      AdminPage.clickNationalities()
+      AdminPage.clickAddBtn()
+      AdminPage.addNationality(employeeMockData.newNationality)
 
-      // const createLoadNationality = CommonHelper.generateRandomString(9, 'loadNationality')
-      // APIsHelper.interceptNationalities(createLoadNationality)
-      // AdminPage.clickSave()
-      // APIsHelper.waitForApiResponse(createLoadNationality)
+      const createLoadNationality = CommonHelper.generateRandomString(9, 'loadNationality')
+      APIsHelper.interceptNationalities(createLoadNationality)
+      AdminPage.clickSave()
+      APIsHelper.waitForApiResponse(createLoadNationality)
 
-      // AdminPageHelper.getNationality().then((res) => {
-      //   const added = res.body.data.find(({ name }) => name === employeeMockData.newNationality)
-      //   nationalityId = added.id
-      // })
-      // ElementHandler.logout()
+      AdminPageHelper.getNationality().then((res) => {
+        const added = res.body.data.find(({ name }) => name === employeeMockData.newNationality)
+        nationalityId = added.id
+      })
+      ElementHandler.logout()
     })
   })
 
@@ -106,7 +106,7 @@ describe('Employee management - Add and Save Test Cases', () => {
     PIMPage.verifyEmployeeInfo(employeeInfo)
   })
 
-  it.only('Verify added employee appears in the table', () => {
+  it('Verify added employee appears in the table', () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((res) => {
       const empNumber = res.body.data.empNumber
       PIMPageHelper.createUserViaAPI(employeeInfo, empNumber)
@@ -123,14 +123,14 @@ describe('Employee management - Add and Save Test Cases', () => {
   })
 
   afterEach(() => {
-    // ElementHandler.logout()
-    // cy.login()
-    // AdminPage.goToAdminPage()
-    // AdminPageHelper.deleteUserByUsername(employeeInfo.userName)
+    ElementHandler.logout()
+    cy.login()
+    AdminPage.goToAdminPage()
+    AdminPageHelper.deleteUserByUsername(employeeInfo.userName)
   })
 
   after(() => {
-    // AdminPage.clickNationalities()
-    // AdminPageHelper.deleteNationalities([nationalityId])
+    AdminPage.clickNationalities()
+    AdminPageHelper.deleteNationalities([nationalityId])
   })
 })

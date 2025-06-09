@@ -428,8 +428,8 @@ class PIMPage {
 
   /**
    * get field by the given key
-   * @param {string} key 
-   * @returns 
+   * @param {string} key
+   * @returns
    */
   static getFieldByKey(key: string) {
     switch (key) {
@@ -444,7 +444,7 @@ class PIMPage {
 
   /**
    * search on table by the given values
-   * @param arr 
+   * @param arr
    */
   static searchAbout(arr: ISearchArray[]) {
     for (let i = 0; i < arr.length; i++) {
@@ -455,7 +455,7 @@ class PIMPage {
 
   /**
    * verify information for the result of search
-   * @param employeeInfo 
+   * @param employeeInfo
    */
   static verifyDataInTable(employeeInfo: IEmployeeInfo) {
     cy.get(this.LOCATORS.tableBody)
