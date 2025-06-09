@@ -3,6 +3,7 @@ import { APIsHelper } from '../helpers/apis-helpers'
 import CommonHelper from '../helpers/common-helper'
 import { COMMON_BUTTONS, CYPRESS_FOLDERS, HTML_TAGS, PAGES, TIMEOUT } from '../helpers/constants'
 import { IEmployeeInfo } from '../types/employee.types'
+import { ISearchArray } from '../types/searchArray.types'
 
 enum LABELS {
   EMPLOYEE_ID = 'Employee Id',
@@ -425,6 +426,11 @@ class PIMPage {
     })
   }
 
+  /**
+   * get field by the given key
+   * @param {string} key 
+   * @returns 
+   */
   static getFieldByKey(key: string) {
     switch (key) {
       case 'employeeName':
@@ -436,13 +442,21 @@ class PIMPage {
     }
   }
 
-  static searchAbout(arr) {
+  /**
+   * search on table by the given values
+   * @param arr 
+   */
+  static searchAbout(arr: ISearchArray[]) {
     for (let i = 0; i < arr.length; i++) {
       this.getFieldByKey(arr[i].key).type(arr[i].value)
     }
     ElementHandler.clickButton(COMMON_BUTTONS.SEARCH)
   }
 
+  /**
+   * verify information for the result of search
+   * @param employeeInfo 
+   */
   static verifyDataInTable(employeeInfo: IEmployeeInfo) {
     cy.get(this.LOCATORS.tableBody)
       .should('have.length', 1)
