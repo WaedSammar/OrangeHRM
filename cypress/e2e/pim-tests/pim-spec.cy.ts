@@ -118,6 +118,7 @@ describe('Employee management - Add and Save Test Cases', () => {
         { key: 'employeeId', value: employeeInfo.employeeId },
         { key: 'employeeName', value: `${employeeInfo.firstName} ${employeeInfo.middleName}` }
       ])
+      PIMPage.verifyDataInTable(employeeInfo)
     })
   })
 

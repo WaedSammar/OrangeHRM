@@ -40,8 +40,7 @@ class PIMPage {
     closeBtn: '.oxd-date-input-link.--close',
     chosenGender: `${HTML_TAGS.input}[type="radio"]:checked`,
     uploadFile: `${HTML_TAGS.input}[type="file"]`,
-    tableCell: '.oxd-table-cell',
-    tableRow: '.oxd-table-row'
+    tableBody: '.oxd-table-body'
   }
 
   /**
@@ -444,5 +443,14 @@ class PIMPage {
     ElementHandler.clickButton(COMMON_BUTTONS.SEARCH)
   }
 
+  static verifyDataInTable(employeeInfo: IEmployeeInfo) {
+    cy.get(this.LOCATORS.tableBody)
+      .should('have.length', 1)
+      .within(() => {
+        cy.contains(employeeInfo.employeeId).should('exist')
+        cy.contains(`${employeeInfo.firstName} ${employeeInfo.middleName}`).should('exist')
+        cy.contains(employeeInfo.lastName).should('exist')
+      })
+  }
 }
 export { PIMPage }
