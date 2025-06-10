@@ -16,7 +16,6 @@ class AdminPageHelper {
    * @param {number[]} ids
    */
   static deleteNationalities(ids: number[]) {
-    console.log(ids)
     CommonHelper.sendAPIRequest(
       HTTP_METHODS.DELETE,
       COMMON_URLs.nationalities,

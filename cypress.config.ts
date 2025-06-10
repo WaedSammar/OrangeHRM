@@ -1,11 +1,13 @@
 import { defineConfig } from 'cypress'
 import * as xlsx from 'xlsx'
 import { promises as fs } from 'fs'
+import allureWriter from '@shelex/cypress-allure-plugin/writer'
 
 export default defineConfig({
   projectId: 'zwebt5',
   e2e: {
     async setupNodeEvents(on, config) {
+      allureWriter(on, config)
       on('task', {
         async parseXlsxToJson({ filePath }) {
           await fs.access(filePath, fs.constants.R_OK)
@@ -22,6 +24,7 @@ export default defineConfig({
           return result
         }
       })
+      return config
     },
     baseUrl: 'https://opensource-demo.orangehrmlive.com',
     specPattern: 'cypress/e2e/**/*-spec.cy.ts',

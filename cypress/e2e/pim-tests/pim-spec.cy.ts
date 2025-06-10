@@ -55,6 +55,7 @@ describe('Employee management - Add and Save Test Cases', () => {
     const createLoadPersonalDetails = CommonHelper.generateRandomString(7, 'loadPersonalDetails')
     APIsHelper.interceptGetEmployeeDetailsRequest(createLoadPersonalDetails)
     PIMPage.clickSave()
+    ElementHandler.waitLoaderToBeHidden()
     APIsHelper.waitForApiResponse(createLoadPersonalDetails)
 
     PIMPage.fillPersonalDetails(employeeInfo)

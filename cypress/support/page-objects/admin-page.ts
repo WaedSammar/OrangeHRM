@@ -47,15 +47,6 @@ class AdminPage {
   }
 
   /**
-   * search about created username
-   * @param {string} username
-   */
-  static OnCreatedUsername(username: string) {
-    ElementHandler.findInputByLabel(LABELS.USERNAME).type(username)
-    ElementHandler.clickButton(COMMON_BUTTONS.SEARCH)
-  }
-
-  /**
    * delete created user
    */
   static deleteCreatedUsername() {
