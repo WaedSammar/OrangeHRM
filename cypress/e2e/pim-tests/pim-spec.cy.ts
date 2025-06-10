@@ -130,7 +130,6 @@ describe('Employee management - Add and Save Test Cases', () => {
   })
 
   after(() => {
-    AdminPage.clickNationalities()
     AdminPageHelper.deleteNationalities([nationalityId])
   })
 })

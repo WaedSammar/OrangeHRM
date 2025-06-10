@@ -427,19 +427,22 @@ class PIMPage {
   }
 
   /**
+   * maps key to UI label name
+   */
+  static keyToLabelMap = {
+    employeeName: 'Employee Name',
+    employeeId: 'Employee Id'
+  }
+
+  /**
    * get field by the given key
    * @param {string} key
    * @returns
    */
   static getFieldByKey(key: string) {
-    switch (key) {
-      case 'employeeName':
-        return ElementHandler.findInputByLabel('Employee Name')
-      case 'employeeId':
-        return ElementHandler.findInputByLabel('Employee Id')
-      default:
-        throw new Error('Cannot find search key')
-    }
+    const label = this.keyToLabelMap[key]
+    if (!label) throw new Error('Cannot find search key')
+    return ElementHandler.findInputByLabel(label)
   }
 
   /**
