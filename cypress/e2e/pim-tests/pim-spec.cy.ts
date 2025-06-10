@@ -17,15 +17,7 @@ describe('Employee management - Add and Save Test Cases', () => {
 
       cy.login()
       AdminPage.goToAdminPage()
-      AdminPage.clickNationalities()
-      AdminPage.clickAddBtn()
-      AdminPage.addNationality(employeeMockData.newNationality)
-
-      const createLoadNationality = CommonHelper.generateRandomString(9, 'loadNationality')
-      APIsHelper.interceptNationalities(createLoadNationality)
-      AdminPage.clickSave()
-      APIsHelper.waitForApiResponse(createLoadNationality)
-
+      AdminPageHelper.addNationality(employeeMockData.newNationality)
       AdminPageHelper.getNationality().then((res) => {
         const added = res.body.data.find(({ name }) => name === employeeMockData.newNationality)
         nationalityId = added.id
@@ -55,7 +47,6 @@ describe('Employee management - Add and Save Test Cases', () => {
     const createLoadPersonalDetails = CommonHelper.generateRandomString(7, 'loadPersonalDetails')
     APIsHelper.interceptGetEmployeeDetailsRequest(createLoadPersonalDetails)
     PIMPage.clickSave()
-    ElementHandler.waitLoaderToBeHidden()
     APIsHelper.waitForApiResponse(createLoadPersonalDetails)
 
     PIMPage.fillPersonalDetails(employeeInfo)

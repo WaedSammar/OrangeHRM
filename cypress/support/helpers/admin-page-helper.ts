@@ -12,6 +12,17 @@ class AdminPageHelper {
   }
 
   /**
+   * adding nationality via API
+   * @param {string} nationality 
+   * @returns 
+   */
+  static addNationality(nationality: string) {
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, COMMON_URLs.nationalities, {
+      name: nationality
+    })
+  }
+
+  /**
    * delete created nationality
    * @param {number[]} ids
    */
@@ -28,6 +39,11 @@ class AdminPageHelper {
     )
   }
 
+  /**
+   * delete user using username
+   * @param {string} username 
+   * @returns 
+   */
   static deleteUserByUsername(username: string) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.GET, COMMON_URLs.users).then((response) => {
       const users = response.body.data
