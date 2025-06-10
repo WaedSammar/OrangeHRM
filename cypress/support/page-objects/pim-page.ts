@@ -1,8 +1,9 @@
 import { COMMON_LOCATORS, ElementHandler } from '../element-handler'
 import { APIsHelper } from '../helpers/apis-helpers'
 import CommonHelper from '../helpers/common-helper'
-import { CYPRESS_FOLDERS, HTML_TAGS, PAGES, TIMEOUT } from '../helpers/constants'
+import { COMMON_BUTTONS, CYPRESS_FOLDERS, HTML_TAGS, PAGES, TIMEOUT } from '../helpers/constants'
 import { IEmployeeInfo } from '../types/employee.types'
+import { ISearchArray } from '../types/searchArray.types'
 
 enum LABELS {
   EMPLOYEE_ID = 'Employee Id',
@@ -39,7 +40,8 @@ class PIMPage {
     selectGender: `${HTML_TAGS.input}[type="radio"][value="1"]`,
     closeBtn: '.oxd-date-input-link.--close',
     chosenGender: `${HTML_TAGS.input}[type="radio"]:checked`,
-    uploadFile: `${HTML_TAGS.input}[type="file"]`
+    uploadFile: `${HTML_TAGS.input}[type="file"]`,
+    tableBody: '.oxd-table-body'
   }
 
   /**
@@ -422,6 +424,50 @@ class PIMPage {
         expect(downloadedData).to.deep.equal(originalData)
       })
     })
+  }
+
+  /**
+   * maps key to UI label name
+   */
+  static keyToLabelMap = {
+    employeeName: 'Employee Name',
+    employeeId: 'Employee Id'
+  }
+
+  /**
+   * get field by the given key
+   * @param {string} key
+   * @returns
+   */
+  static getFieldByKey(key: string) {
+    const label = this.keyToLabelMap[key]
+    if (!label) throw new Error('Cannot find search key')
+    return ElementHandler.findInputByLabel(label)
+  }
+
+  /**
+   * search on table by the given values
+   * @param arr
+   */
+  static searchAbout(arr: ISearchArray[]) {
+    for (let i = 0; i < arr.length; i++) {
+      this.getFieldByKey(arr[i].key).type(arr[i].value)
+    }
+    ElementHandler.clickButton(COMMON_BUTTONS.SEARCH)
+  }
+
+  /**
+   * verify information for the result of search
+   * @param employeeInfo
+   */
+  static verifyDataInTable(employeeInfo: IEmployeeInfo) {
+    cy.get(this.LOCATORS.tableBody)
+      .should('have.length', 1)
+      .within(() => {
+        cy.contains(employeeInfo.employeeId).should('exist')
+        cy.contains(`${employeeInfo.firstName} ${employeeInfo.middleName}`).should('exist')
+        cy.contains(employeeInfo.lastName).should('exist')
+      })
   }
 }
 export { PIMPage }

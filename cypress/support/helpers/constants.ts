@@ -53,3 +53,8 @@ export enum SIZE_LIMIT {
   fiveHundred = 500,
   thousand = 1000
 }
+
+export enum COMMON_BUTTONS {
+  ADD = 'Add',
+  SEARCH = 'Search'
+}

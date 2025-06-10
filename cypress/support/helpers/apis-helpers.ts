@@ -31,10 +31,6 @@ class APIsHelper {
     CommonHelper.interceptRequests(URLs.employees, HTTP_METHODS.GET, aliasName)
   }
 
-  static interceptNationalities(aliasName: string) {
-    CommonHelper.interceptRequests(COMMON_URLs.nationalities, HTTP_METHODS.GET, aliasName)
-  }
-
   static waitForApiResponse(aliasName: string, expectedStatus: number = HTTP_STATUS_CODE.success) {
     cy.wait(`@${aliasName}`).then((interception) => {
       expect(interception.response.statusCode).to.equal(expectedStatus)

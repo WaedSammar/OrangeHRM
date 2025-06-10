@@ -17,15 +17,7 @@ describe('Employee management - Add and Save Test Cases', () => {
 
       cy.login()
       AdminPage.goToAdminPage()
-      AdminPage.clickNationalities()
-      AdminPage.clickAddBtn()
-      AdminPage.addNationality(employeeMockData.newNationality)
-
-      const createLoadNationality = CommonHelper.generateRandomString(9, 'loadNationality')
-      APIsHelper.interceptNationalities(createLoadNationality)
-      AdminPage.clickSave()
-      APIsHelper.waitForApiResponse(createLoadNationality)
-
+      AdminPageHelper.addNationality(employeeMockData.newNationality)
       AdminPageHelper.getNationality().then((res) => {
         const added = res.body.data.find(({ name }) => name === employeeMockData.newNationality)
         nationalityId = added.id
@@ -106,6 +98,22 @@ describe('Employee management - Add and Save Test Cases', () => {
     PIMPage.verifyEmployeeInfo(employeeInfo)
   })
 
+  it('Verify added employee appears in the table', () => {
+    PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((res) => {
+      const empNumber = res.body.data.empNumber
+      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber)
+      PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
+      PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber)
+
+      PIMPage.goToPIMPage()
+      PIMPage.searchAbout([
+        { key: 'employeeId', value: employeeInfo.employeeId },
+        { key: 'employeeName', value: `${employeeInfo.firstName} ${employeeInfo.middleName}` }
+      ])
+      PIMPage.verifyDataInTable(employeeInfo)
+    })
+  })
+
   afterEach(() => {
     ElementHandler.logout()
     cy.login()
@@ -114,7 +122,6 @@ describe('Employee management - Add and Save Test Cases', () => {
   })
 
   after(() => {
-    AdminPage.clickNationalities()
     AdminPageHelper.deleteNationalities([nationalityId])
   })
 })
