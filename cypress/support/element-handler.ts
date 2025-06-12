@@ -1,4 +1,5 @@
 import { HTML_TAGS, TIMEOUT } from './helpers/constants'
+import { TableRowData } from './types/tableRowData.types'
 
 const COMMON_LOCATORS = {
   menuBtn: 'span.oxd-main-menu-item--name',
@@ -23,6 +24,13 @@ enum DROP_DOWN {
 }
 
 class ElementHandler {
+  private static LOCATORS = {
+    table: '[role="table"]',
+    columnHeader: '[role="columnheader"]',
+    cell: '[role="cell"]',
+    tableCard: '.oxd-table-card'
+  }
+
   /**
    * wait for the loader to be hidden
    */
@@ -106,6 +114,77 @@ class ElementHandler {
   static logout() {
     cy.get(COMMON_LOCATORS.dropDownList).click()
     cy.contains(DROP_DOWN.LOGOUT).click()
+  }
+
+  /**
+   * get the index for column by header name
+   * @param {string} headerName
+   * @returns
+   */
+  static getHeaderIndex(headerName: string) {
+    return new Cypress.Promise<number>((resolve) => {
+      cy.get(this.LOCATORS.table)
+        .find(this.LOCATORS.columnHeader)
+        .contains(headerName)
+        .invoke('index')
+        .then((index) => {
+          resolve(index)
+        })
+    })
+  }
+
+  /**
+   * make validation for the user
+   * @param data
+   */
+  static validateTableRow(data: TableRowData) {
+    const headers = Object.keys(data)
+    const matchesPerColumn: { [key: string]: number[] } = {}
+
+    headers.forEach((key) => {
+      matchesPerColumn[key] = []
+
+      // get the index for the column
+      this.getHeaderIndex(key).then((headerIndex) => {
+        cy.get(this.LOCATORS.table)
+          .find(this.LOCATORS.tableCard)
+          .each(($row, rowIndex) => {
+            cy.wrap($row)
+              .find(this.LOCATORS.cell)
+              .eq(headerIndex)
+              .invoke('text')
+              .then((text) => {
+                // save row index if it betmatch the expected value
+                if (text === data[key]) {
+                  matchesPerColumn[key].push(rowIndex)
+                }
+              })
+          })
+      })
+    })
+
+    cy.then(() => {
+      const matchingIndices = matchesPerColumn[headers[0]].filter((index) => {
+        return headers.every((key) => matchesPerColumn[key].includes(index))
+      })
+      if (matchingIndices.length === 0) throw new Error('No matching rows found')
+      if (matchingIndices.length > 1) throw new Error('Multiple matching rows found')
+
+      const matchIndex = matchingIndices[0]
+
+      cy.get(this.LOCATORS.table) // get the row that match by index
+        .find(this.LOCATORS.tableCard)
+        .eq(matchIndex)
+        .find(this.LOCATORS.cell)
+        .then(($cells) => {
+          //verify each cell betmatch the expected value
+          headers.forEach((key) => {
+            this.getHeaderIndex(key).then((headerIndex) => {
+              cy.wrap($cells).eq(headerIndex).should('have.text', data[key])
+            })
+          })
+        })
+    })
   }
 }
 export { ElementHandler, COMMON_LOCATORS, COMMON_URLs }

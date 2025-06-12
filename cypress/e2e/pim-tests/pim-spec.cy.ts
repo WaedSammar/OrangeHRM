@@ -2,10 +2,11 @@ import { ElementHandler } from '../../support/element-handler'
 import { AdminPageHelper } from '../../support/helpers/admin-page-helper'
 import { APIsHelper } from '../../support/helpers/apis-helpers'
 import CommonHelper from '../../support/helpers/common-helper'
+import { SEPARATORS } from '../../support/helpers/constants'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { AdminPage } from '../../support/page-objects/admin-page'
 import { MyInfo } from '../../support/page-objects/my-info-page'
-import { PIMPage } from '../../support/page-objects/pim-page'
+import { PIM_TABLE_HEADERS, PIMPage } from '../../support/page-objects/pim-page'
 import { IEmployeeInfo } from '../../support/types/employee.types'
 
 describe('Employee management - Add and Save Test Cases', () => {
@@ -104,14 +105,16 @@ describe('Employee management - Add and Save Test Cases', () => {
       PIMPageHelper.createUserViaAPI(employeeInfo, empNumber)
       PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
       PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber)
-
-      PIMPage.goToPIMPage()
-      PIMPage.searchAbout([
-        { key: 'employeeId', value: employeeInfo.employeeId },
-        { key: 'employeeName', value: `${employeeInfo.firstName} ${employeeInfo.middleName}` }
-      ])
-      PIMPage.verifyDataInTable(employeeInfo)
     })
+
+    PIMPage.goToPIMPage()
+    const data = {
+      [PIM_TABLE_HEADERS.ID]: employeeInfo.employeeId,
+      [PIM_TABLE_HEADERS.FIRST_AND_MIDDLE_NAME]: `${employeeInfo.firstName} ${employeeInfo.middleName}`,
+      [PIM_TABLE_HEADERS.LAST_NAME]: employeeInfo.lastName,
+      [PIM_TABLE_HEADERS.JOB_TITLE]: SEPARATORS.EMPTY
+    }
+    ElementHandler.validateTableRow(data)
   })
 
   afterEach(() => {
