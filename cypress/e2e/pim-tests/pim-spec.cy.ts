@@ -1,4 +1,4 @@
-import { ElementHandler, PIM_TABLE_HEADERS } from '../../support/element-handler'
+import { ElementHandler } from '../../support/element-handler'
 import { AdminPageHelper } from '../../support/helpers/admin-page-helper'
 import { APIsHelper } from '../../support/helpers/apis-helpers'
 import CommonHelper from '../../support/helpers/common-helper'
@@ -6,7 +6,7 @@ import { SEPARATORS } from '../../support/helpers/constants'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { AdminPage } from '../../support/page-objects/admin-page'
 import { MyInfo } from '../../support/page-objects/my-info-page'
-import { PIMPage } from '../../support/page-objects/pim-page'
+import { PIM_TABLE_HEADERS, PIMPage } from '../../support/page-objects/pim-page'
 import { IEmployeeInfo } from '../../support/types/employee.types'
 
 describe('Employee management - Add and Save Test Cases', () => {

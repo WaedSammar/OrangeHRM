@@ -23,13 +23,6 @@ enum DROP_DOWN {
   LOGOUT = 'Logout'
 }
 
-export enum PIM_TABLE_HEADERS {
-  ID = 'Id',
-  FIRST_AND_MIDDLE_NAME = 'First (& Middle) Name',
-  LAST_NAME = 'Last Name',
-  JOB_TITLE = 'Job Title'
-}
-
 class ElementHandler {
   private static LOCATORS = {
     table: '[role="table"]',
