@@ -111,6 +111,37 @@ before() → beforeEach() → it() → afterEach() → after()
 - Cypress automatically converts values to `Number` or `Boolean` wherever possible.
 - In JavaScript, `typeof NaN` is `"number"`, so Cypress will log it as a number.
 
----
-
 **_The information in this document is based on [Cypress Quiz](https://cypressquiz.com/?fbclid=IwY2xjawJ6AHRleHRuA2FlbQIxMQABHvVGwMbHbbKVvG0nMCUWVUpEJ3DabIleBr_FEVwJqZM2XEh8X2yxjopSK3h-_aem_OuGGzLmso6GoTIxLNlHpCQ)_**
+
+---
+### View Allure Report:
+
+To generate and open the Allure report after running Cypress tests:
+
+1. **Run Cypress with Allure enabled:**
+
+```bash
+npx cypress run --env allure=true
+```
+2. **Generate the Allure report:**
+```bash
+npx allure generate allure-results --clean -o allure-report
+```
+3. **Open the Allure report in your browser:**
+```bash
+npx allure open allure-report
+```
+---
+### Run Tests on Cypress Cloud
+
+To run tests and record them in Cypress Cloud:
+
+1. **Run all tests and record the results:**
+
+```bash
+npx cypress run --record --key daec6a0c-9a9f-45d6-9374-f1db63d84659
+```
+2- **Run a specific spec file and record it:**
+```bash
+npx cypress run --spec "cypress/e2e/folder-name/spec-name.cy.ts" --record --key daec6a0c-9a9f-45d6-9374-f1db63d84659
+```
