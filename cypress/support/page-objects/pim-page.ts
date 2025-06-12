@@ -3,7 +3,7 @@ import { APIsHelper } from '../helpers/apis-helpers'
 import CommonHelper from '../helpers/common-helper'
 import { COMMON_BUTTONS, CYPRESS_FOLDERS, HTML_TAGS, PAGES, TIMEOUT } from '../helpers/constants'
 import { IEmployeeInfo } from '../types/employee.types'
-import { ISearchArray } from '../types/searchArray.types'
+import { ISearchArray } from '../types/tableRowData.types'
 
 enum LABELS {
   EMPLOYEE_ID = 'Employee Id',
