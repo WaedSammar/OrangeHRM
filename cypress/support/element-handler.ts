@@ -123,6 +123,11 @@ class ElementHandler {
     cy.contains(DROP_DOWN.LOGOUT).click()
   }
 
+  /**
+   * get the index for column by header name
+   * @param {string} headerName
+   * @returns
+   */
   static getHeaderIndex(headerName: string) {
     return new Cypress.Promise<number>((resolve) => {
       cy.get(this.LOCATORS.table)
@@ -135,6 +140,10 @@ class ElementHandler {
     })
   }
 
+  /**
+   * make validation for the user
+   * @param data
+   */
   static validateTableRow(data: TableRowData) {
     const headers = Object.keys(data)
     const matchesPerColumn: { [key: string]: number[] } = {}
@@ -142,6 +151,7 @@ class ElementHandler {
     headers.forEach((key) => {
       matchesPerColumn[key] = []
 
+      // get the index for the column
       this.getHeaderIndex(key).then((headerIndex) => {
         cy.get(this.LOCATORS.table)
           .find(this.LOCATORS.tableCard)
@@ -151,6 +161,7 @@ class ElementHandler {
               .eq(headerIndex)
               .invoke('text')
               .then((text) => {
+                // save row index if it betmatch the expected value
                 if (text === data[key]) {
                   matchesPerColumn[key].push(rowIndex)
                 }
@@ -168,11 +179,12 @@ class ElementHandler {
 
       const matchIndex = matchingIndices[0]
 
-      cy.get(this.LOCATORS.table)
+      cy.get(this.LOCATORS.table) // get the row that match by index
         .find(this.LOCATORS.tableCard)
         .eq(matchIndex)
         .find(this.LOCATORS.cell)
         .then(($cells) => {
+          //verify each cell betmatch the expected value
           headers.forEach((key) => {
             this.getHeaderIndex(key).then((headerIndex) => {
               cy.wrap($cells).eq(headerIndex).should('have.text', data[key])

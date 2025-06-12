@@ -99,7 +99,7 @@ describe('Employee management - Add and Save Test Cases', () => {
     PIMPage.verifyEmployeeInfo(employeeInfo)
   })
 
-  it.only('Verify added employee appears in the table', () => {
+  it('Verify added employee appears in the table', () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((res) => {
       const empNumber = res.body.data.empNumber
       PIMPageHelper.createUserViaAPI(employeeInfo, empNumber)
