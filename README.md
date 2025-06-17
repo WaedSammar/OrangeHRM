@@ -145,3 +145,9 @@ npx cypress run --record --key daec6a0c-9a9f-45d6-9374-f1db63d84659
 ```bash
 npx cypress run --spec "cypress/e2e/folder-name/spec-name.cy.ts" --record --key daec6a0c-9a9f-45d6-9374-f1db63d84659
 ```
+---
+
+### To Pause execution for debugger
+``` js
+setTimeout(() => { debugger; }, 3000); 
+```
