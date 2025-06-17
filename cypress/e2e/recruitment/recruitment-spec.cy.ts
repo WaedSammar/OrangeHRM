@@ -1,4 +1,3 @@
-import { ElementHandler } from '../../support/element-handler'
 import { RecruitmentPage } from '../../support/page-objects/recruitment-page'
 import { IInterviewFormData } from '../../support/types/interviewFormData'
 
