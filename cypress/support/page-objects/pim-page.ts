@@ -164,17 +164,10 @@ class PIMPage {
   /**
    * select date from calender
    * @param {string} date - chosen date
-   * @param {number} index - index for input field (e.g., 0 = license expiry, 1 = birthday)
+   * @param {number} index - index for input field
    */
   static selectDate(date: string, index: number = 0) {
-    cy.get(this.LOCATORS.dateInput).eq(index).should('be.visible').clear().type(date)
-  }
-
-  /**
-   * remove focus to remove calender
-   */
-  static closeCalender() {
-    cy.get(this.LOCATORS.closeBtn).should('be.visible').click()
+    ElementHandler.selectDate(date, index)
   }
 
   /**
@@ -371,7 +364,6 @@ class PIMPage {
     PIMPage.fillOtherId(employeeInfo.otherId)
     PIMPage.fillLicenseNum(employeeInfo.licenseNum)
     PIMPage.selectDate(employeeInfo.expDate)
-    PIMPage.closeCalender()
     PIMPage.selectNationality(employeeInfo.nationality)
     PIMPage.selectMaritalStatus(employeeInfo.maritalState)
     PIMPage.selectDate(employeeInfo.dateOfBirth, 1)

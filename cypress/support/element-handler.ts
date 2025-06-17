@@ -31,7 +31,9 @@ class ElementHandler {
     columnHeader: '[role="columnheader"]',
     inputGroup: '.oxd-input-group',
     selectField: '.oxd-select-text',
-    dropdownOption: '.oxd-select-dropdown'
+    dropdownOption: '.oxd-select-dropdown',
+    dateInput: `${HTML_TAGS.input}[placeholder='yyyy-dd-mm']`,
+    closeBtn: '.oxd-date-input-link.--close'
   }
 
   /**
@@ -101,6 +103,16 @@ class ElementHandler {
    */
   static getFieldValue(className: string) {
     return cy.get(className).invoke('val')
+  }
+
+  /**
+   * select date from calender and close it
+   * @param {string} date
+   * @param {number} index
+   */
+  static selectDate(date: string, index: number = 0) {
+    cy.get(this.LOCATORS.dateInput).eq(index).should('be.visible').clear().type(date)
+    cy.get(this.LOCATORS.closeBtn).should('be.visible').click()
   }
 
   /**

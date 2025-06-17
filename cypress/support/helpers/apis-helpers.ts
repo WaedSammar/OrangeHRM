@@ -1,4 +1,3 @@
-import { COMMON_URLs } from '../element-handler'
 import CommonHelper from './common-helper'
 import { HTTP_METHODS, HTTP_STATUS_CODE } from './constants'
 
@@ -7,7 +6,9 @@ const URLs = {
   posts: `${baseURL}/web/index.php/api/v2/buzz/posts`,
   feed: `${baseURL}/web/index.php/api/v2/buzz/feed**`,
   employees: `/api/v2/pim/employees`,
-  personalDetails: `/pim/employees/**/personal-details`
+  personalDetails: `/pim/employees/**/personal-details`,
+  candidate: `${baseURL}/web/index.php/api/v2/recruitment/candidates/**`,
+  interviewerName: `${baseURL}/web/index.php/api/v2/recruitment/interviewers?nameOrId=*`
 }
 
 class APIsHelper {
@@ -29,6 +30,14 @@ class APIsHelper {
 
   static interceptEmployeePersonalDetails(aliasName: string) {
     CommonHelper.interceptRequests(URLs.employees, HTTP_METHODS.GET, aliasName)
+  }
+
+  static interceptCandidates(aliasName: string) {
+    CommonHelper.interceptRequests(URLs.candidate, HTTP_METHODS.GET, aliasName)
+  }
+
+  static interceptInterviewerName(aliasName: string) {
+    CommonHelper.interceptRequests(URLs.interviewerName, HTTP_METHODS.GET, aliasName)
   }
 
   static waitForApiResponse(aliasName: string, expectedStatus: number = HTTP_STATUS_CODE.success) {
