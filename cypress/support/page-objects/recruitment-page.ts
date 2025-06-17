@@ -78,6 +78,12 @@ class RecruitmentPage {
    */
   static fillInterviewData(interviewData: IInterviewFormData) {
     ElementHandler.selectDate(interviewData.interviewDate)
+  }
+
+  /**
+   * fill interview time
+   */
+  static fillInterviewTime() {
     cy.get(this.LOCATORS.timeIcon).click()
   }
 
@@ -96,6 +102,7 @@ class RecruitmentPage {
     this.fillInterviewTitle(interviewData)
     this.fillInterviewerName(interviewData, index)
     this.fillInterviewData(interviewData)
+    this.fillInterviewTime()
     this.clickSave()
   }
 
