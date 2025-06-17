@@ -2,7 +2,8 @@ export enum PAGES {
   BUZZ = 'Buzz',
   PIM = 'PIM',
   MY_INFO = 'My Info',
-  ADMIN = 'Admin'
+  ADMIN = 'Admin',
+  RECRUITMENT = 'Recruitment'
 }
 
 export enum HTTP_METHODS {

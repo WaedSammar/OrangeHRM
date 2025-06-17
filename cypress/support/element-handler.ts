@@ -8,7 +8,10 @@ const COMMON_LOCATORS = {
   loaderIcon: '.oxd-loading-spinner',
   submitBtn: `${HTML_TAGS.button}[type='submit']`,
   downloadIcon: '.oxd-icon.bi-download',
-  trashIcon: '.oxd-icon.bi-trash'
+  trashIcon: '.oxd-icon.bi-trash',
+  table: '[role="table"]',
+  cell: '[role="cell"]',
+  tableCard: '.oxd-table-card'
 }
 
 const COMMON_URLs = {
@@ -25,10 +28,10 @@ enum DROP_DOWN {
 
 class ElementHandler {
   private static LOCATORS = {
-    table: '[role="table"]',
     columnHeader: '[role="columnheader"]',
-    cell: '[role="cell"]',
-    tableCard: '.oxd-table-card'
+    inputGroup: '.oxd-input-group',
+    selectField: '.oxd-select-text',
+    dropdownOption: '.oxd-select-dropdown'
   }
 
   /**
@@ -101,6 +104,16 @@ class ElementHandler {
   }
 
   /**
+   * select option from dropdown
+   * @param {string} label - label for input text
+   * @param {string} option - option to select
+   */
+  static selectDropdownByLabel(label: string, option: string) {
+    cy.contains(HTML_TAGS.label, label).parents(this.LOCATORS.inputGroup).find(this.LOCATORS.selectField).click()
+    cy.get(this.LOCATORS.dropdownOption).contains(option).click()
+  }
+
+  /**
    * save information user entered
    * @param index
    */
@@ -123,7 +136,7 @@ class ElementHandler {
    */
   static getHeaderIndex(headerName: string) {
     return new Cypress.Promise<number>((resolve) => {
-      cy.get(this.LOCATORS.table)
+      cy.get(COMMON_LOCATORS.table)
         .find(this.LOCATORS.columnHeader)
         .contains(headerName)
         .invoke('index')
@@ -146,11 +159,11 @@ class ElementHandler {
 
       // get the index for the column
       this.getHeaderIndex(key).then((headerIndex) => {
-        cy.get(this.LOCATORS.table)
-          .find(this.LOCATORS.tableCard)
+        cy.get(COMMON_LOCATORS.table)
+          .find(COMMON_LOCATORS.tableCard)
           .each(($row, rowIndex) => {
             cy.wrap($row)
-              .find(this.LOCATORS.cell)
+              .find(COMMON_LOCATORS.cell)
               .eq(headerIndex)
               .invoke('text')
               .then((text) => {
@@ -172,10 +185,10 @@ class ElementHandler {
 
       const matchIndex = matchingIndices[0]
 
-      cy.get(this.LOCATORS.table) // get the row that match by index
-        .find(this.LOCATORS.tableCard)
+      cy.get(COMMON_LOCATORS.table) // get the row that match by index
+        .find(COMMON_LOCATORS.tableCard)
         .eq(matchIndex)
-        .find(this.LOCATORS.cell)
+        .find(COMMON_LOCATORS.cell)
         .then(($cells) => {
           //verify each cell betmatch the expected value
           headers.forEach((key) => {

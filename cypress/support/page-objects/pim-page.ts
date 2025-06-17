@@ -178,21 +178,11 @@ class PIMPage {
   }
 
   /**
-   * select option from dropdown
-   * @param {string} label - label for input text
-   * @param {string} option - option to select
-   */
-  static selectDropdownByLabel(label: string, option: string) {
-    cy.contains(HTML_TAGS.label, label).parents(this.LOCATORS.inputGroup).find(this.LOCATORS.selectField).click()
-    cy.get(this.LOCATORS.dropdownOption).contains(option).click()
-  }
-
-  /**
    * select nationality
    * @param text - chosen nationality
    */
   static selectNationality(text: string) {
-    this.selectDropdownByLabel(LABELS.NATIONALITY, text)
+    ElementHandler.selectDropdownByLabel(LABELS.NATIONALITY, text)
   }
 
   /**
@@ -200,7 +190,7 @@ class PIMPage {
    * @param text - employee marital state
    */
   static selectMaritalStatus(text: string) {
-    this.selectDropdownByLabel(LABELS.MARITAL_STATUS, text)
+    ElementHandler.selectDropdownByLabel(LABELS.MARITAL_STATUS, text)
   }
 
   /**
@@ -216,7 +206,7 @@ class PIMPage {
    * @param text - blood type
    */
   static selectBloodType(text: string) {
-    this.selectDropdownByLabel(LABELS.BLOOD_TYPE, text)
+    ElementHandler.selectDropdownByLabel(LABELS.BLOOD_TYPE, text)
   }
 
   /**
