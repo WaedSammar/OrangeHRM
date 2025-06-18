@@ -25,7 +25,7 @@ describe('Recruitment Page Test Cases', () => {
     cy.login()
   })
 
-  it('add vacancy via API', () => {
+  it('Schedule an interview for a newly added shortlisted candidate via API', () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber
 
