@@ -1,5 +1,6 @@
 import CommonHelper from '../../support/helpers/common-helper'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
+import { RecruitmentPageHelper } from '../../support/helpers/recruitment-page-helper'
 import { RecruitmentPage } from '../../support/page-objects/recruitment-page'
 import { IEmployeeInfo } from '../../support/types/employee.types'
 import { IInterviewFormData } from '../../support/types/interviewFormData'
@@ -36,35 +37,12 @@ describe('Recruitment Page Test Cases', () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber
 
-      cy.request({
-        method: 'POST',
-        url: 'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/recruitment/vacancies',
-        body: {
-          name: candidatesMockData.vacancyName,
-          jobTitleId: candidatesMockData.jobTitleId, // QA Lead
-          employeeId: empNumber,
-          status: true,
-          isPublished: true
-        }
-      }).then((vacancyRes) => {
+      RecruitmentPageHelper.addVacancy(candidatesMockData, empNumber).then((vacancyRes) => {
         expect(vacancyRes.status).to.eq(200)
-        console.log(JSON.stringify(vacancyRes.body.data))
-
         const vacancyId = vacancyRes.body.data.id
-        console.log('Vacancy created with ID:', vacancyId)
 
-        cy.request({
-          method: 'POST',
-          url: 'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/recruitment/candidates',
-          body: {
-            firstName: candidatesMockData.candidatesFirstName,
-            lastName: candidatesMockData.candidatesLastName,
-            email: candidatesMockData.candidatesEmail,
-            vacancyId
-          }
-        }).then((candidateRes) => {
+        RecruitmentPageHelper.addCandidate(candidatesMockData,vacancyId).then((candidateRes) => {
           expect(candidateRes.status).to.eq(200)
-          console.log('Candidate added with ID:', candidateRes.body.data.id)
         })
       })
     })
