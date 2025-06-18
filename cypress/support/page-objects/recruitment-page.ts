@@ -9,6 +9,15 @@ enum LABELS {
   INTERVIEWER = 'Interviewer'
 }
 
+enum RECRUITMENT_TABLE_HEADERS {
+  VACANCY = 'Vacancy',
+  CANDIDATE = 'Candidate',
+  HIRING_MANAGER = 'Hiring Manager',
+  DATE_OF_APPLICATION = 'Date of Application',
+  STATUS = 'Status',
+  ACTIONS = 'Actions'
+}
+
 class RecruitmentPage {
   private static LOCATORS = {
     eyeIcon: '.bi-eye-fill',
@@ -113,4 +122,4 @@ class RecruitmentPage {
     cy.get(this.LOCATORS.recruitmentStatus).should('have.text', 'Status: Interview Scheduled')
   }
 }
-export { RecruitmentPage }
+export { RecruitmentPage, RECRUITMENT_TABLE_HEADERS }

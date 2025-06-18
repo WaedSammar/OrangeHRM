@@ -162,7 +162,7 @@ class ElementHandler {
    * make validation for the user
    * @param data
    */
-  static validateTableRow(data: TableRowData) {
+  static validateTableRow(data: TableRowData, onRowFound?: ($row: JQuery<HTMLElement>) => void) {
     const headers = Object.keys(data)
     const matchesPerColumn: { [key: string]: number[] } = {}
 
@@ -200,14 +200,22 @@ class ElementHandler {
       cy.get(COMMON_LOCATORS.table) // get the row that match by index
         .find(COMMON_LOCATORS.tableCard)
         .eq(matchIndex)
-        .find(COMMON_LOCATORS.cell)
-        .then(($cells) => {
-          //verify each cell betmatch the expected value
-          headers.forEach((key) => {
-            this.getHeaderIndex(key).then((headerIndex) => {
-              cy.wrap($cells).eq(headerIndex).should('have.text', data[key])
+        .then(($row) => {
+          if (onRowFound) {
+            onRowFound($row)
+            return
+          }
+
+          cy.wrap($row)
+            .find(COMMON_LOCATORS.cell)
+            .then(($cells) => {
+              //verify each cell betmatch the expected value
+              headers.forEach((key) => {
+                this.getHeaderIndex(key).then((headerIndex) => {
+                  cy.wrap($cells).eq(headerIndex).should('have.text', data[key])
+                })
+              })
             })
-          })
         })
     })
   }
