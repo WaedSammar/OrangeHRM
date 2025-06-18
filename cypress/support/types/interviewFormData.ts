@@ -7,4 +7,5 @@ export interface IInterviewFormData {
   candidatesFirstName: string
   candidatesLastName: string
   candidatesEmail: string
+  candidateStatus: string
 }

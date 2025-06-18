@@ -1,4 +1,3 @@
-import { ElementHandler } from '../../support/element-handler'
 import CommonHelper from '../../support/helpers/common-helper'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { RecruitmentPageHelper } from '../../support/helpers/recruitment-page-helper'
@@ -26,14 +25,6 @@ describe('Recruitment Page Test Cases', () => {
     cy.login()
   })
 
-  it('fill interview form successfully', () => {
-    RecruitmentPage.goToRecruitmentPage()
-    RecruitmentPage.openShortlistedDetails()
-    RecruitmentPage.scheduleInterview()
-    RecruitmentPage.fillInterviewInfo(candidatesMockData)
-    RecruitmentPage.verifyStatus()
-  })
-
   it.only('add vacancy via API', () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber
@@ -44,15 +35,10 @@ describe('Recruitment Page Test Cases', () => {
 
         RecruitmentPageHelper.addCandidate(candidatesMockData, vacancyId).then((candidateRes) => {
           expect(candidateRes.status).to.eq(200)
-
           const candidateId = candidateRes.body.data.id
 
-          cy.request({
-            method: 'PUT',
-            url: `/web/index.php/api/v2/recruitment/candidates/${candidateId}/shortlist`
-          }).then((response) => {
+          RecruitmentPageHelper.updateCandidateStatus(candidateId).then((response) => {
             expect(response.status).to.eq(200)
-            console.log('Shortlist Successful', response.body)
           })
         })
       })
@@ -60,15 +46,11 @@ describe('Recruitment Page Test Cases', () => {
 
     RecruitmentPage.goToRecruitmentPage()
     const data = {
-      [RECRUITMENT_TABLE_HEADERS.STATUS]: 'Shortlisted',
+      [RECRUITMENT_TABLE_HEADERS.STATUS]: candidatesMockData.candidateStatus,
       [RECRUITMENT_TABLE_HEADERS.VACANCY]: candidatesMockData.vacancyName,
       [RECRUITMENT_TABLE_HEADERS.CANDIDATE]: `${candidatesMockData.candidatesFirstName}  ${candidatesMockData.candidatesLastName}`
     }
-    console.log(data)
-    ElementHandler.validateTableRow(data, ($row) => {
-      cy.wrap($row).find('.bi-eye-fill').click()
-    })
-    // RecruitmentPage.openShortlistedDetails()
+    RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
     RecruitmentPage.scheduleInterview()
     RecruitmentPage.fillInterviewInfo(candidatesMockData)
     RecruitmentPage.verifyStatus()

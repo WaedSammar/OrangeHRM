@@ -34,19 +34,12 @@ class RecruitmentPage {
   }
 
   /**
-   * open shortListed candidate details
+   * click Eye Icon For Shortlisted Candidate
+   * @param data 
    */
-  static openShortlistedDetails() {
-    ElementHandler.getHeaderIndex('Status').then((statusIndex) => {
-      cy.get(COMMON_LOCATORS.table)
-        .find(COMMON_LOCATORS.tableCard)
-        .each(($row) => {
-          const statusText = $row.find(COMMON_LOCATORS.cell).eq(statusIndex).text().trim()
-          if (statusText === 'Shortlisted') {
-            cy.wrap($row).find(this.LOCATORS.eyeIcon).click()
-            return false
-          }
-        })
+  static clickEyeIconForShortlistedCandidate(data: { Status: string; Vacancy: string; Candidate: string }) {
+    ElementHandler.validateTableRow(data, ($row) => {
+      cy.wrap($row).find(this.LOCATORS.eyeIcon).click()
     })
   }
 

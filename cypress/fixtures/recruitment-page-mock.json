@@ -6,5 +6,6 @@
   "interviewDate": "2025-02-03",
   "candidatesFirstName": "Automation",
   "candidatesLastName": "QA_Candidate",
-  "candidatesEmail": "automation@example.com"
+  "candidatesEmail": "automation@example.com",
+  "candidateStatus": "Shortlisted"
 }
