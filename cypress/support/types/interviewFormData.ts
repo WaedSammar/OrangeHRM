@@ -1,5 +1,6 @@
 export interface IInterviewFormData {
   vacancyName: string
+  jobTitleName: string
   jobTitleId: number
   interviewTitle: string
   interviewerNameHint: string

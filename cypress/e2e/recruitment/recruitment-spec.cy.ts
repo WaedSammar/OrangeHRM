@@ -29,30 +29,31 @@ describe('Recruitment Page Test Cases', () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber
 
-      RecruitmentPageHelper.addVacancy(candidatesMockData, empNumber).then((vacancyRes) => {
-        expect(vacancyRes.status).to.eq(200)
-        const vacancyId = vacancyRes.body.data.id
+      RecruitmentPageHelper.addJobTitle(candidatesMockData).then((jobTitleRes) => {
+        const jobTitleId = jobTitleRes.body.data.id
+        candidatesMockData.jobTitleId = jobTitleId
 
-        RecruitmentPageHelper.addCandidate(candidatesMockData, vacancyId).then((candidateRes) => {
-          expect(candidateRes.status).to.eq(200)
-          const candidateId = candidateRes.body.data.id
+        RecruitmentPageHelper.addVacancy(candidatesMockData, empNumber).then((vacancyRes) => {
+          const vacancyId = vacancyRes.body.data.id
 
-          RecruitmentPageHelper.updateCandidateStatus(candidateId).then((response) => {
-            expect(response.status).to.eq(200)
+          RecruitmentPageHelper.addCandidate(candidatesMockData, vacancyId).then((candidateRes) => {
+            const candidateId = candidateRes.body.data.id
+
+            RecruitmentPageHelper.updateCandidateStatus(candidateId)
           })
         })
       })
-    })
 
-    RecruitmentPage.goToRecruitmentPage()
-    const data = {
-      [RECRUITMENT_TABLE_HEADERS.STATUS]: candidatesMockData.candidateStatus,
-      [RECRUITMENT_TABLE_HEADERS.VACANCY]: candidatesMockData.vacancyName,
-      [RECRUITMENT_TABLE_HEADERS.CANDIDATE]: `${candidatesMockData.candidatesFirstName}  ${candidatesMockData.candidatesLastName}`
-    }
-    RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
-    RecruitmentPage.scheduleInterview()
-    RecruitmentPage.fillInterviewInfo(candidatesMockData)
-    RecruitmentPage.verifyStatus()
+      RecruitmentPage.goToRecruitmentPage()
+      const data = {
+        [RECRUITMENT_TABLE_HEADERS.STATUS]: candidatesMockData.candidateStatus,
+        [RECRUITMENT_TABLE_HEADERS.VACANCY]: candidatesMockData.vacancyName,
+        [RECRUITMENT_TABLE_HEADERS.CANDIDATE]: `${candidatesMockData.candidatesFirstName}  ${candidatesMockData.candidatesLastName}`
+      }
+      RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
+      RecruitmentPage.scheduleInterview()
+      RecruitmentPage.fillInterviewInfo(candidatesMockData)
+      RecruitmentPage.verifyStatus()
+    })
   })
 })

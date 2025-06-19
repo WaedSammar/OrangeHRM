@@ -5,10 +5,24 @@ import { HTTP_METHODS } from './constants'
 const URLs = {
   vacancy: '/web/index.php/api/v2/recruitment/vacancies',
   candidate: '/web/index.php/api/v2/recruitment/candidates',
-  candidateStatus: `/web/index.php/api/v2/recruitment/candidates`
+  candidateStatus: `/web/index.php/api/v2/recruitment/candidates`,
+  jobTitle: `/web/index.php/api/v2/admin/job-titles`
 }
 
 class RecruitmentPageHelper {
+  /**
+   * adding job title
+   * @param candidatesMockData 
+   * @returns 
+   */
+  static addJobTitle(candidatesMockData: IInterviewFormData) {
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.jobTitle, {
+      title: candidatesMockData.jobTitleName,
+      description: 'Created for QA automation',
+      note: 'Added by me'
+    })
+  }
+
   /**
    * add new vacancy
    * @param candidatesMockData
@@ -42,11 +56,11 @@ class RecruitmentPageHelper {
 
   /**
    * update Candidates status to shortlist
-   * @param candidateId 
-   * @returns 
+   * @param candidateId
+   * @returns
    */
   static updateCandidateStatus(candidateId: number) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, `${URLs.candidateStatus}/${candidateId}/shortlist`)
+    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, `${URLs.candidateStatus}/${candidateId}/shortlist`)
   }
 }
 export { RecruitmentPageHelper }
