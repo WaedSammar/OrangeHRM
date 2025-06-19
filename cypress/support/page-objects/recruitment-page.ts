@@ -2,7 +2,9 @@ import { ElementHandler } from '../element-handler'
 import { APIsHelper } from '../helpers/apis-helpers'
 import CommonHelper from '../helpers/common-helper'
 import { COMMON_BUTTONS, PAGES } from '../helpers/constants'
+import { IEmployeeInfo } from '../types/employee.types'
 import { IRecruitmentFormData } from '../types/recruitmentFormData'
+import { TableRowData } from '../types/tableRowData.types'
 
 enum LABELS {
   INTERVIEW_TITLE = 'Interview Title',
@@ -23,7 +25,7 @@ enum MESSAGES {
 }
 
 enum BUTTONS {
-  SCHEDULE_INTERVIEW = ' Schedule Interview ',
+  SCHEDULE_INTERVIEW = ' Schedule Interview '
 }
 
 class RecruitmentPage {
@@ -43,9 +45,9 @@ class RecruitmentPage {
 
   /**
    * click Eye Icon For Shortlisted Candidate
-   * @param data
+   * @param {TableRowData} data
    */
-  static clickEyeIconForShortlistedCandidate(data: { Status: string; Vacancy: string; Candidate: string }) {
+  static clickEyeIconForShortlistedCandidate(data: TableRowData) {
     ElementHandler.validateTableRow(data, ($row) => {
       cy.wrap($row).find(this.LOCATORS.eyeIcon).click()
     })
@@ -63,7 +65,7 @@ class RecruitmentPage {
 
   /**
    * fill Interview Title
-   * @param interviewData
+   * @param {IRecruitmentFormData} interviewData
    */
   static fillInterviewTitle(interviewData: IRecruitmentFormData) {
     ElementHandler.findInputByLabel(LABELS.INTERVIEW_TITLE).type(interviewData.interviewTitle)
@@ -71,20 +73,21 @@ class RecruitmentPage {
 
   /**
    * fill Interviewer Name
-   * @param interviewData
-   * @param index
+   * @param {IRecruitmentFormData} interviewData
    */
-  static fillInterviewerName(interviewData: IRecruitmentFormData, index: number = 0) {
+  static fillInterviewerName(employeeMockData: IEmployeeInfo) {
     const loadInterviewerName = CommonHelper.generateRandomString(3, 'loadInterviewerName')
     APIsHelper.interceptInterviewerName(loadInterviewerName)
-    ElementHandler.findInputByLabel(LABELS.INTERVIEWER).type(interviewData.interviewerNameHint)
+    ElementHandler.findInputByLabel(LABELS.INTERVIEWER).type(
+      `${employeeMockData.firstName} ${employeeMockData.middleName} ${employeeMockData.lastName}`
+    )
     APIsHelper.waitForApiResponse(loadInterviewerName)
-    cy.get(this.LOCATORS.autoComplete).eq(index).click()
+    cy.get(this.LOCATORS.autoComplete).eq(0).click()
   }
 
   /**
    * fill Interview Data
-   * @param interviewData
+   * @param {IRecruitmentFormData} interviewData
    */
   static fillInterviewData(interviewData: IRecruitmentFormData) {
     ElementHandler.selectDate(interviewData.interviewDate)
@@ -98,8 +101,9 @@ class RecruitmentPage {
   }
 
   /**
-   * save button
-   * @param index
+   * click save button
+   * @param {number} index
+   * @param {COMMON_BUTTONS} buttonText
    */
   static clickSave(index: number = 0, buttonText: string = COMMON_BUTTONS.SAVE) {
     ElementHandler.clickSave(index, buttonText)
@@ -107,10 +111,12 @@ class RecruitmentPage {
 
   /**
    * fill interview form information
+   * @param {IRecruitmentFormData} interviewData
+   * @param {IEmployeeInfo} employeeMockData
    */
-  static fillInterviewInfo(interviewData: IRecruitmentFormData, index: number = 0) {
+  static fillInterviewInfo(interviewData: IRecruitmentFormData, employeeMockData: IEmployeeInfo) {
     this.fillInterviewTitle(interviewData)
-    this.fillInterviewerName(interviewData, index)
+    this.fillInterviewerName(employeeMockData)
     this.fillInterviewData(interviewData)
     this.fillInterviewTime()
     this.clickSave()
