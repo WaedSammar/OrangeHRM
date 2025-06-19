@@ -1,4 +1,3 @@
-import { IEmployeeInfo } from '../types/employee.types'
 import { IRecruitmentFormData } from '../types/recruitmentFormData'
 import CommonHelper from './common-helper'
 import { HTTP_METHODS } from './constants'

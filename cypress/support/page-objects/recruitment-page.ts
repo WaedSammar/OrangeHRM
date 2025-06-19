@@ -73,7 +73,7 @@ class RecruitmentPage {
 
   /**
    * fill Interviewer Name
-   * @param {IRecruitmentFormData} interviewData
+   * @param {IEmployeeInfo} employeeMockData 
    */
   static fillInterviewerName(employeeMockData: IEmployeeInfo) {
     const loadInterviewerName = CommonHelper.generateRandomString(3, 'loadInterviewerName')
