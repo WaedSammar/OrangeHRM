@@ -1,4 +1,4 @@
-import { IInterviewFormData } from '../types/interviewFormData'
+import { IRecruitmentFormData } from '../types/recruitmentFormData'
 import CommonHelper from './common-helper'
 import { HTTP_METHODS } from './constants'
 
@@ -12,10 +12,10 @@ const URLs = {
 class RecruitmentPageHelper {
   /**
    * adding job title
-   * @param recruitmentMockData 
-   * @returns 
+   * @param recruitmentMockData
+   * @returns
    */
-  static addJobTitle(recruitmentMockData: IInterviewFormData) {
+  static addJobTitle(recruitmentMockData: IRecruitmentFormData) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.jobTitle, {
       title: recruitmentMockData.jobTitleName,
       description: 'Created for QA automation',
@@ -29,13 +29,13 @@ class RecruitmentPageHelper {
    * @param empNumber
    * @returns
    */
-  static addVacancy(recruitmentMockData: IInterviewFormData, empNumber: number) {
+  static addVacancy(recruitmentMockData: IRecruitmentFormData, empNumber: number) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.vacancy, {
       name: recruitmentMockData.vacancyName,
-      jobTitleId: recruitmentMockData.jobTitleId, // QA Lead
+      jobTitleId: recruitmentMockData.jobTitleId,
       employeeId: empNumber,
-      status: true,
-      isPublished: true
+      status: recruitmentMockData.vacancyStatus,
+      isPublished: recruitmentMockData.vacancyPublished
     })
   }
 
@@ -45,11 +45,11 @@ class RecruitmentPageHelper {
    * @param vacancyId
    * @returns
    */
-  static addCandidate(recruitmentMockData: IInterviewFormData, vacancyId: number) {
+  static addCandidate(recruitmentMockData: IRecruitmentFormData, vacancyId: number) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.candidate, {
-      firstName: recruitmentMockData.candidatesFirstName,
-      lastName: recruitmentMockData.candidatesLastName,
-      email: recruitmentMockData.candidatesEmail,
+      firstName: recruitmentMockData.candidateFirstName,
+      lastName: recruitmentMockData.candidateLastName,
+      email: recruitmentMockData.candidateEmail,
       vacancyId
     })
   }

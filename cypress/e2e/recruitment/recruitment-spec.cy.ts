@@ -3,10 +3,10 @@ import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { RecruitmentPageHelper } from '../../support/helpers/recruitment-page-helper'
 import { RECRUITMENT_TABLE_HEADERS, RecruitmentPage } from '../../support/page-objects/recruitment-page'
 import { IEmployeeInfo } from '../../support/types/employee.types'
-import { IInterviewFormData } from '../../support/types/interviewFormData'
+import { IRecruitmentFormData } from '../../support/types/recruitmentFormData'
 
 describe('Recruitment Page Test Cases', () => {
-  let recruitmentMockData: IInterviewFormData, employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo
+  let recruitmentMockData: IRecruitmentFormData, employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo
 
   before(() => {
     cy.fixture('recruitment-page-mock').then((candidatesData) => {
@@ -51,7 +51,7 @@ describe('Recruitment Page Test Cases', () => {
     const data = {
       [RECRUITMENT_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
       [RECRUITMENT_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
-      [RECRUITMENT_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidatesFirstName}  ${recruitmentMockData.candidatesLastName}`
+      [RECRUITMENT_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
     }
     RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
     RecruitmentPage.scheduleInterview()

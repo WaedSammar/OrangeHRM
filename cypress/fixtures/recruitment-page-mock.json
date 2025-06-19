@@ -1,12 +1,14 @@
 {
   "vacancyName": "Automation QA",
+  "vacancyStatus": true,
+  "vacancyPublished": true,
   "jobTitleName": "Automation QA",
   "jobTitleId": 1,
   "interviewTitle": "Automation QA Interview",
   "interviewerNameHint": "M",
   "interviewDate": "2025-02-03",
-  "candidatesFirstName": "Automation",
-  "candidatesLastName": "QA_Candidate",
-  "candidatesEmail": "automation@example.com",
+  "candidateFirstName": "Automation",
+  "candidateLastName": "QA_Candidate",
+  "candidateEmail": "automation@example.com",
   "candidateStatus": "Shortlisted"
 }

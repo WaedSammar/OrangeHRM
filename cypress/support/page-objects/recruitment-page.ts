@@ -1,8 +1,8 @@
-import { COMMON_LOCATORS, ElementHandler } from '../element-handler'
+import { ElementHandler } from '../element-handler'
 import { APIsHelper } from '../helpers/apis-helpers'
 import CommonHelper from '../helpers/common-helper'
 import { PAGES } from '../helpers/constants'
-import { IInterviewFormData } from '../types/interviewFormData'
+import { IRecruitmentFormData } from '../types/recruitmentFormData'
 
 enum LABELS {
   INTERVIEW_TITLE = 'Interview Title',
@@ -35,7 +35,7 @@ class RecruitmentPage {
 
   /**
    * click Eye Icon For Shortlisted Candidate
-   * @param data 
+   * @param data
    */
   static clickEyeIconForShortlistedCandidate(data: { Status: string; Vacancy: string; Candidate: string }) {
     ElementHandler.validateTableRow(data, ($row) => {
@@ -57,7 +57,7 @@ class RecruitmentPage {
    * fill Interview Title
    * @param interviewData
    */
-  static fillInterviewTitle(interviewData: IInterviewFormData) {
+  static fillInterviewTitle(interviewData: IRecruitmentFormData) {
     ElementHandler.findInputByLabel(LABELS.INTERVIEW_TITLE).type(interviewData.interviewTitle)
   }
 
@@ -66,7 +66,7 @@ class RecruitmentPage {
    * @param interviewData
    * @param index
    */
-  static fillInterviewerName(interviewData: IInterviewFormData, index: number = 0) {
+  static fillInterviewerName(interviewData: IRecruitmentFormData, index: number = 0) {
     const loadInterviewerName = CommonHelper.generateRandomString(3, 'loadInterviewerName')
     APIsHelper.interceptInterviewerName(loadInterviewerName)
     ElementHandler.findInputByLabel(LABELS.INTERVIEWER).type(interviewData.interviewerNameHint)
@@ -78,7 +78,7 @@ class RecruitmentPage {
    * fill Interview Data
    * @param interviewData
    */
-  static fillInterviewData(interviewData: IInterviewFormData) {
+  static fillInterviewData(interviewData: IRecruitmentFormData) {
     ElementHandler.selectDate(interviewData.interviewDate)
   }
 
@@ -100,7 +100,7 @@ class RecruitmentPage {
   /**
    * fill interview form information
    */
-  static fillInterviewInfo(interviewData: IInterviewFormData, index: number = 0) {
+  static fillInterviewInfo(interviewData: IRecruitmentFormData, index: number = 0) {
     this.fillInterviewTitle(interviewData)
     this.fillInterviewerName(interviewData, index)
     this.fillInterviewData(interviewData)
