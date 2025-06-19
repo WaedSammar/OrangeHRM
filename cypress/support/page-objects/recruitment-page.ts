@@ -1,7 +1,7 @@
 import { ElementHandler } from '../element-handler'
 import { APIsHelper } from '../helpers/apis-helpers'
 import CommonHelper from '../helpers/common-helper'
-import { PAGES } from '../helpers/constants'
+import { COMMON_BUTTONS, PAGES } from '../helpers/constants'
 import { IRecruitmentFormData } from '../types/recruitmentFormData'
 
 enum LABELS {
@@ -16,6 +16,14 @@ enum RECRUITMENT_TABLE_HEADERS {
   DATE_OF_APPLICATION = 'Date of Application',
   STATUS = 'Status',
   ACTIONS = 'Actions'
+}
+
+enum MESSAGES {
+  INTERVIEW_SCHEDULED_STATUS = 'Status: Interview Scheduled'
+}
+
+enum BUTTONS {
+  SCHEDULE_INTERVIEW = ' Schedule Interview ',
 }
 
 class RecruitmentPage {
@@ -49,7 +57,7 @@ class RecruitmentPage {
   static scheduleInterview() {
     const loadGetCandidate = CommonHelper.generateRandomString(2, 'loadCandidate')
     APIsHelper.interceptCandidates(loadGetCandidate)
-    ElementHandler.clickButton(' Schedule Interview ')
+    ElementHandler.clickButton(BUTTONS.SCHEDULE_INTERVIEW)
     APIsHelper.waitForApiResponse(loadGetCandidate)
   }
 
@@ -93,7 +101,7 @@ class RecruitmentPage {
    * save button
    * @param index
    */
-  static clickSave(index: number = 0, buttonText: string = 'Save') {
+  static clickSave(index: number = 0, buttonText: string = COMMON_BUTTONS.SAVE) {
     ElementHandler.clickSave(index, buttonText)
   }
 
@@ -112,7 +120,7 @@ class RecruitmentPage {
    * verify interview status
    */
   static verifyStatus() {
-    cy.get(this.LOCATORS.recruitmentStatus).should('have.text', 'Status: Interview Scheduled')
+    cy.get(this.LOCATORS.recruitmentStatus).should('have.text', MESSAGES.INTERVIEW_SCHEDULED_STATUS)
   }
 }
 export { RecruitmentPage, RECRUITMENT_TABLE_HEADERS }

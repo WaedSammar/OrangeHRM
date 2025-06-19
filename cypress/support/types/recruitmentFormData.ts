@@ -4,6 +4,8 @@ export interface IRecruitmentFormData {
   vacancyPublished: boolean
   jobTitleName: string
   jobTitleId: number
+  jobDescription: string
+  jobNote: string
   interviewTitle: string
   interviewerNameHint: string
   interviewDate: string

@@ -3,10 +3,11 @@ import CommonHelper from './common-helper'
 import { HTTP_METHODS } from './constants'
 
 const URLs = {
-  vacancy: '/web/index.php/api/v2/recruitment/vacancies',
-  candidate: '/web/index.php/api/v2/recruitment/candidates',
+  vacancy: `/web/index.php/api/v2/recruitment/vacancies`,
+  candidate: `/web/index.php/api/v2/recruitment/candidates`,
   candidateStatus: `/web/index.php/api/v2/recruitment/candidates`,
-  jobTitle: `/web/index.php/api/v2/admin/job-titles`
+  jobTitle: `/web/index.php/api/v2/admin/job-titles`,
+  shortlist: `shortlist`
 }
 
 class RecruitmentPageHelper {
@@ -18,8 +19,8 @@ class RecruitmentPageHelper {
   static addJobTitle(recruitmentMockData: IRecruitmentFormData) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.jobTitle, {
       title: recruitmentMockData.jobTitleName,
-      description: 'Created for QA automation',
-      note: 'Added by me'
+      description: recruitmentMockData.jobDescription,
+      note: recruitmentMockData.jobNote
     })
   }
 
@@ -60,7 +61,7 @@ class RecruitmentPageHelper {
    * @returns
    */
   static updateCandidateStatus(candidateId: number) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, `${URLs.candidateStatus}/${candidateId}/shortlist`)
+    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, `${URLs.candidateStatus}/${candidateId}/${URLs.shortlist}`)
   }
 }
 export { RecruitmentPageHelper }

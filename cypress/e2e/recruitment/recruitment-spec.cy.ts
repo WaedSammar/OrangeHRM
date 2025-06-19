@@ -7,6 +7,7 @@ import { IRecruitmentFormData } from '../../support/types/recruitmentFormData'
 
 describe('Recruitment Page Test Cases', () => {
   let recruitmentMockData: IRecruitmentFormData, employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo
+  const randomNum = CommonHelper.generateRandomNumber()
 
   before(() => {
     cy.fixture('recruitment-page-mock').then((candidatesData) => {
@@ -14,7 +15,6 @@ describe('Recruitment Page Test Cases', () => {
     })
     cy.fixture('employee-page-mock').then((addEmployeeData) => {
       employeeMockData = addEmployeeData
-      const randomNum = CommonHelper.generateRandomNumber()
 
       employeeInfo = {
         ...employeeMockData,
@@ -22,6 +22,9 @@ describe('Recruitment Page Test Cases', () => {
         userName: `${employeeMockData.userName}${randomNum}`
       }
     })
+  })
+
+  beforeEach(() => {
     cy.login()
   })
 
@@ -29,7 +32,6 @@ describe('Recruitment Page Test Cases', () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber
 
-      const randomNum = CommonHelper.generateRandomNumber()
       recruitmentMockData.jobTitleName = `${recruitmentMockData.jobTitleName} ${randomNum}`
       RecruitmentPageHelper.addJobTitle(recruitmentMockData).then((jobTitleRes) => {
         const jobTitleId = jobTitleRes.body.data.id

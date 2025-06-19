@@ -57,5 +57,6 @@ export enum SIZE_LIMIT {
 
 export enum COMMON_BUTTONS {
   ADD = 'Add',
-  SEARCH = 'Search'
+  SEARCH = 'Search',
+  SAVE = 'Save'
 }
