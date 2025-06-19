@@ -46,6 +46,7 @@ describe('Recruitment Page Test Cases', () => {
             recruitmentMockData.candidateId = candidateId
 
             RecruitmentPageHelper.updateCandidateStatus(candidateId)
+            RecruitmentPageHelper.checkAllowedActions(candidateId)
           })
         })
       })

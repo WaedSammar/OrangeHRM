@@ -8,7 +8,14 @@ const URLs = {
   candidate: `/web/index.php/api/v2/recruitment/candidates`,
   jobTitle: `/web/index.php/api/v2/admin/job-titles`,
   shortlist: `shortlist`,
-  employee: `/web/index.php/api/v2/pim/employees`
+  employee: `/web/index.php/api/v2/pim/employees`,
+  allowedActions: `actions/allowed`
+}
+
+enum ALLOWED_ACTIONS {
+  SCHEDULE_INTERVIEW = 'Schedule Interview',
+  REJECT = 'Reject',
+  SHORTLISTED = 'Shortlist'
 }
 
 class RecruitmentPageHelper {
@@ -54,6 +61,23 @@ class RecruitmentPageHelper {
       email: recruitmentMockData.candidateEmail,
       vacancyId
     })
+  }
+
+  /**
+   * check allowed actions
+   * @param number candidateId
+   * @returns
+   */
+  static checkAllowedActions(candidateId: number) {
+    CommonHelper.sendAPIRequest(HTTP_METHODS.GET, `${URLs.candidate}/${candidateId}/${URLs.allowedActions}`).then(
+      (res) => {
+        const allowedActions = res.body.data.map((action: { label: string }) => action.label)
+        const expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
+        expectedActions.forEach((expectedLabel) => {
+          expect(allowedActions).to.include(expectedLabel)
+        })
+      }
+    )
   }
 
   /**
