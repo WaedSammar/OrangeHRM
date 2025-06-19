@@ -5,6 +5,7 @@ export interface IEmployeeInfo {
   middleName: string
   lastName: string
   employeeId: string
+  empNumber: number
   userName: string
   password: string
   otherId: string

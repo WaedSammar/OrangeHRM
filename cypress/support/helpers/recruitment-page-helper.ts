@@ -1,3 +1,4 @@
+import { IEmployeeInfo } from '../types/employee.types'
 import { IRecruitmentFormData } from '../types/recruitmentFormData'
 import CommonHelper from './common-helper'
 import { HTTP_METHODS } from './constants'
@@ -6,7 +7,8 @@ const URLs = {
   vacancy: `/web/index.php/api/v2/recruitment/vacancies`,
   candidate: `/web/index.php/api/v2/recruitment/candidates`,
   jobTitle: `/web/index.php/api/v2/admin/job-titles`,
-  shortlist: `shortlist`
+  shortlist: `shortlist`,
+  employee: `/web/index.php/api/v2/pim/employees`
 }
 
 class RecruitmentPageHelper {
@@ -85,11 +87,17 @@ class RecruitmentPageHelper {
 
   /**
    * delete job title
-   * @param {IRecruitmentFormData} recruitmentMockData 
+   * @param {IRecruitmentFormData} recruitmentMockData
    */
   static deleteJobTitle(recruitmentMockData: IRecruitmentFormData) {
     CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.jobTitle, {
       ids: [recruitmentMockData.jobTitleId]
+    })
+  }
+
+  static deleteUser(employeeMockData: IEmployeeInfo) {
+    CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.employee, {
+      ids: [employeeMockData.empNumber]
     })
   }
 }

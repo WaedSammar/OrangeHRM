@@ -1,9 +1,6 @@
-import { AdminPageHelper } from '../../support/helpers/admin-page-helper'
 import CommonHelper from '../../support/helpers/common-helper'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { RecruitmentPageHelper } from '../../support/helpers/recruitment-page-helper'
-import { AdminPage } from '../../support/page-objects/admin-page'
-import { PIMPage } from '../../support/page-objects/pim-page'
 import { RECRUITMENT_TABLE_HEADERS, RecruitmentPage } from '../../support/page-objects/recruitment-page'
 import { IEmployeeInfo } from '../../support/types/employee.types'
 import { IRecruitmentFormData } from '../../support/types/recruitmentFormData'
@@ -34,6 +31,7 @@ describe('Recruitment Page Test Cases', () => {
   it('Schedule an interview for a newly added shortlisted candidate via API', () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber
+      employeeMockData.empNumber = empNumber
 
       RecruitmentPageHelper.addJobTitle(recruitmentMockData).then((jobTitleRes) => {
         const jobTitleId = jobTitleRes.body.data.id
@@ -69,9 +67,6 @@ describe('Recruitment Page Test Cases', () => {
     RecruitmentPageHelper.deleteVacancy(recruitmentMockData)
     RecruitmentPageHelper.deleteCandidate(recruitmentMockData)
     RecruitmentPageHelper.deleteJobTitle(recruitmentMockData)
-    // PIMPage.goToPIMPage()
-    // AdminPageHelper.deleteUserByUsername(employeeMockData.userName)
-
-    
+    RecruitmentPageHelper.deleteUser(employeeMockData)
   })
 })
