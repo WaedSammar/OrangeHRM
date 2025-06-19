@@ -12,12 +12,12 @@ const URLs = {
 class RecruitmentPageHelper {
   /**
    * adding job title
-   * @param candidatesMockData 
+   * @param recruitmentMockData 
    * @returns 
    */
-  static addJobTitle(candidatesMockData: IInterviewFormData) {
+  static addJobTitle(recruitmentMockData: IInterviewFormData) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.jobTitle, {
-      title: candidatesMockData.jobTitleName,
+      title: recruitmentMockData.jobTitleName,
       description: 'Created for QA automation',
       note: 'Added by me'
     })
@@ -25,14 +25,14 @@ class RecruitmentPageHelper {
 
   /**
    * add new vacancy
-   * @param candidatesMockData
+   * @param recruitmentMockData
    * @param empNumber
    * @returns
    */
-  static addVacancy(candidatesMockData: IInterviewFormData, empNumber: number) {
+  static addVacancy(recruitmentMockData: IInterviewFormData, empNumber: number) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.vacancy, {
-      name: candidatesMockData.vacancyName,
-      jobTitleId: candidatesMockData.jobTitleId, // QA Lead
+      name: recruitmentMockData.vacancyName,
+      jobTitleId: recruitmentMockData.jobTitleId, // QA Lead
       employeeId: empNumber,
       status: true,
       isPublished: true
@@ -41,15 +41,15 @@ class RecruitmentPageHelper {
 
   /**
    * add new candidate
-   * @param candidatesMockData
+   * @param recruitmentMockData
    * @param vacancyId
    * @returns
    */
-  static addCandidate(candidatesMockData: IInterviewFormData, vacancyId: number) {
+  static addCandidate(recruitmentMockData: IInterviewFormData, vacancyId: number) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.candidate, {
-      firstName: candidatesMockData.candidatesFirstName,
-      lastName: candidatesMockData.candidatesLastName,
-      email: candidatesMockData.candidatesEmail,
+      firstName: recruitmentMockData.candidatesFirstName,
+      lastName: recruitmentMockData.candidatesLastName,
+      email: recruitmentMockData.candidatesEmail,
       vacancyId
     })
   }
