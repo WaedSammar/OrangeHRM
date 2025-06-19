@@ -68,6 +68,6 @@ describe('Recruitment Page Test Cases', () => {
     RecruitmentPageHelper.deleteVacancy(recruitmentMockData)
     RecruitmentPageHelper.deleteCandidate(recruitmentMockData)
     RecruitmentPageHelper.deleteJobTitle(recruitmentMockData)
-    RecruitmentPageHelper.deleteUser(employeeMockData)
+    PIMPageHelper.deleteUser(employeeMockData)
   })
 })

@@ -118,12 +118,6 @@ class RecruitmentPageHelper {
       ids: [recruitmentMockData.jobTitleId]
     })
   }
-
-  static deleteUser(employeeMockData: IEmployeeInfo) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.employee, {
-      ids: [employeeMockData.empNumber]
-    })
-  }
 }
 
 export { RecruitmentPageHelper }

@@ -84,5 +84,15 @@ class PIMPageHelper {
       custom2: employeeInfo.testField
     })
   }
+
+  /**
+   * delete created user
+   * @param {IEmployeeInfo} employeeMockData 
+   */
+  static deleteUser(employeeMockData: IEmployeeInfo) {
+    CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.employees, {
+      ids: [employeeMockData.empNumber]
+    })
+  }
 }
 export { PIMPageHelper }
