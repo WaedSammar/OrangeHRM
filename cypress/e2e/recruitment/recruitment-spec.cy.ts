@@ -1,11 +1,7 @@
 import CommonHelper from '../../support/helpers/common-helper'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { RecruitmentPageHelper } from '../../support/helpers/recruitment-page-helper'
-import {
-  INTERVIEW_STATUS,
-  RECRUITMENT_TABLE_HEADERS,
-  RecruitmentPage
-} from '../../support/page-objects/recruitment-page'
+import { RECRUITMENT_TABLE_HEADERS, RecruitmentPage } from '../../support/page-objects/recruitment-page'
 import { IEmployeeInfo } from '../../support/types/employee.types'
 import { IRecruitmentFormData } from '../../support/types/recruitmentFormData'
 
