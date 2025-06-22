@@ -26,32 +26,10 @@ describe('Recruitment Page Test Cases', () => {
 
   beforeEach(() => {
     cy.login()
+    return RecruitmentPageHelper.setupRecruitmentTest(employeeInfo, employeeMockData, recruitmentMockData)
   })
 
   it('Schedule an interview for a newly added shortlisted candidate via API', () => {
-    PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
-      const empNumber = response.body.data.empNumber
-      employeeMockData.empNumber = empNumber
-
-      RecruitmentPageHelper.addJobTitle(recruitmentMockData).then((jobTitleRes) => {
-        const jobTitleId = jobTitleRes.body.data.id
-        recruitmentMockData.jobTitleId = jobTitleId
-
-        RecruitmentPageHelper.addVacancy(recruitmentMockData, empNumber).then((vacancyRes) => {
-          const vacancyId = vacancyRes.body.data.id
-          recruitmentMockData.vacancyId = vacancyId
-
-          RecruitmentPageHelper.addCandidate(recruitmentMockData, vacancyId).then((candidateRes) => {
-            const candidateId = candidateRes.body.data.id
-            recruitmentMockData.candidateId = candidateId
-
-            RecruitmentPageHelper.updateCandidateStatus(candidateId)
-            RecruitmentPageHelper.checkAllowedActions(candidateId)
-          })
-        })
-      })
-    })
-
     RecruitmentPage.goToRecruitmentPage()
     const data = {
       [RECRUITMENT_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,

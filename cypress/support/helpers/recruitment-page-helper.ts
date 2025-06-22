@@ -1,6 +1,8 @@
+import { IEmployeeInfo } from '../types/employee.types'
 import { IRecruitmentFormData } from '../types/recruitmentFormData'
 import CommonHelper from './common-helper'
 import { HTTP_METHODS } from './constants'
+import { PIMPageHelper } from './pim-page-helper'
 
 const URLs = {
   vacancy: `/web/index.php/api/v2/recruitment/vacancies`,
@@ -115,6 +117,35 @@ class RecruitmentPageHelper {
   static deleteJobTitle(recruitmentMockData: IRecruitmentFormData) {
     CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.jobTitle, {
       ids: [recruitmentMockData.jobTitleId]
+    })
+  }
+
+  static setupRecruitmentTest(
+    employeeInfo: IEmployeeInfo,
+    employeeMockData: IEmployeeInfo,
+    recruitmentMockData: IRecruitmentFormData
+  ): Cypress.Chainable<any> {
+    return PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
+      const empNumber = response.body.data.empNumber
+      employeeMockData.empNumber = empNumber
+
+      return RecruitmentPageHelper.addJobTitle(recruitmentMockData).then((jobTitleRes) => {
+        const jobTitleId = jobTitleRes.body.data.id
+        recruitmentMockData.jobTitleId = jobTitleId
+
+        return RecruitmentPageHelper.addVacancy(recruitmentMockData, empNumber).then((vacancyRes) => {
+          const vacancyId = vacancyRes.body.data.id
+          recruitmentMockData.vacancyId = vacancyId
+
+          return RecruitmentPageHelper.addCandidate(recruitmentMockData, vacancyId).then((candidateRes) => {
+            const candidateId = candidateRes.body.data.id
+            recruitmentMockData.candidateId = candidateId
+
+            RecruitmentPageHelper.updateCandidateStatus(candidateId)
+            RecruitmentPageHelper.checkAllowedActions(candidateId)
+          })
+        })
+      })
     })
   }
 }
