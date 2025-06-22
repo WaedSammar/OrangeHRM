@@ -28,7 +28,7 @@ describe('Recruitment Page Test Cases', () => {
     return RecruitmentPageHelper.setupRecruitmentTest(employeeInfo, employeeMockData, recruitmentMockData)
   })
 
-  it.only('Schedule an interview for a newly added shortlisted candidate via API', () => {
+  it('Schedule an interview for a newly added shortlisted candidate via API', () => {
     RecruitmentPage.goToRecruitmentPage()
     const data = {
       [RECRUITMENT_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
@@ -41,7 +41,7 @@ describe('Recruitment Page Test Cases', () => {
     RecruitmentPage.verifyStatus()
   })
 
-  it('via API', () => {
+  it.only('via API', () => {
     RecruitmentPage.goToRecruitmentPage()
     const data = {
       [RECRUITMENT_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
@@ -49,23 +49,8 @@ describe('Recruitment Page Test Cases', () => {
       [RECRUITMENT_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
     }
     RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
-    cy.wait(2000)
-    // RecruitmentPage.scheduleInterview()
-    cy.request(
-      'POST',
-      `https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/recruitment/candidates/${recruitmentMockData.candidateId}/shedule-interview`,
-      {
-        interviewName: recruitmentMockData.interviewTitle,
-        interviewerEmpNumbers: [employeeMockData.empNumber],
-        interviewDate: recruitmentMockData.interviewDate,
-        interviewTime: '01:00',
-        note: recruitmentMockData.jobNote
-      }
-    ).then((response) => {
-      expect(response.status).to.eq(200)
-    })
-
-    console.log('WAED')
+    RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeMockData)
+    RecruitmentPageHelper.verifyInterviewStatus(recruitmentMockData)
   })
 
   afterEach(() => {

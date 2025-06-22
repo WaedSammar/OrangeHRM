@@ -10,7 +10,12 @@ const URLs = {
   jobTitle: `/web/index.php/api/v2/admin/job-titles`,
   shortlist: `shortlist`,
   employee: `/web/index.php/api/v2/pim/employees`,
-  allowedActions: `actions/allowed`
+  allowedActions: `actions/allowed`,
+  scheduleInterview: `shedule-interview`
+}
+
+enum STATUS {
+  INTERVIEW_STATUS = 'Interview Scheduled'
 }
 
 enum ALLOWED_ACTIONS {
@@ -154,6 +159,37 @@ class RecruitmentPageHelper {
         })
       })
     })
+  }
+
+  /**
+   * schedule interview via api
+   * @param {IRecruitmentFormData} recruitmentMockData
+   * @param {IEmployeeInfo} employeeMockData
+   */
+  static scheduleInterview(recruitmentMockData: IRecruitmentFormData, employeeMockData: IEmployeeInfo) {
+    CommonHelper.sendAPIRequest(
+      HTTP_METHODS.POST,
+      `${URLs.candidate}/${recruitmentMockData.candidateId}/${URLs.scheduleInterview}`,
+      {
+        interviewName: recruitmentMockData.interviewTitle,
+        interviewerEmpNumbers: [employeeMockData.empNumber],
+        interviewDate: recruitmentMockData.interviewDate,
+        interviewTime: recruitmentMockData.interviewTime,
+        note: recruitmentMockData.jobNote
+      }
+    )
+  }
+
+  /**
+   * verify status of interview
+   * @param {IRecruitmentFormData} recruitmentMockData 
+   */
+  static verifyInterviewStatus(recruitmentMockData: IRecruitmentFormData) {
+    CommonHelper.sendAPIRequest(HTTP_METHODS.GET, `${URLs.candidate}/${recruitmentMockData.candidateId}`).then(
+      (response) => {
+        expect(response.body.data.status.label).to.eq(STATUS.INTERVIEW_STATUS)
+      }
+    )
   }
 }
 

@@ -10,6 +10,7 @@ export interface IRecruitmentFormData {
   interviewTitle: string
   interviewerNameHint: string
   interviewDate: string
+  interviewTime: string
   candidateId: number
   candidateFirstName: string
   candidateLastName: string
