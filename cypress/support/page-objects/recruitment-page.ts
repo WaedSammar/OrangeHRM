@@ -11,6 +11,12 @@ enum LABELS {
   INTERVIEWER = 'Interviewer'
 }
 
+enum INTERVIEW_STATUS {
+  PASSED = 'Mark Interview Passed',
+  FAILED = 'Mark Interview Failed',
+  REJECT = 'Reject'
+}
+
 enum RECRUITMENT_TABLE_HEADERS {
   VACANCY = 'Vacancy',
   CANDIDATE = 'Candidate',
@@ -73,7 +79,7 @@ class RecruitmentPage {
 
   /**
    * fill Interviewer Name
-   * @param {IEmployeeInfo} employeeMockData 
+   * @param {IEmployeeInfo} employeeMockData
    */
   static fillInterviewerName(employeeMockData: IEmployeeInfo) {
     const loadInterviewerName = CommonHelper.generateRandomString(3, 'loadInterviewerName')
@@ -127,6 +133,36 @@ class RecruitmentPage {
    */
   static verifyStatus() {
     cy.get(this.LOCATORS.recruitmentStatus).should('have.text', MESSAGES.INTERVIEW_SCHEDULED_STATUS)
+  }
+
+  /**
+   * mark interview passed
+   */
+  static markInterviewPassed() {
+    this.changeInterviewStatus(INTERVIEW_STATUS.PASSED)
+  }
+
+  /**
+   * mark interview failed
+   */
+  static markInterviewFailed() {
+    this.changeInterviewStatus(INTERVIEW_STATUS.FAILED)
+  }
+
+  /**
+   * reject candidate
+   */
+  static rejectCandidate() {
+    this.changeInterviewStatus(INTERVIEW_STATUS.REJECT)
+  }
+
+  /**
+   * change interview status
+   * @param {string} status
+   */
+  static changeInterviewStatus(status: string) {
+    ElementHandler.clickButton(status)
+    this.clickSave()
   }
 }
 export { RecruitmentPage, RECRUITMENT_TABLE_HEADERS }

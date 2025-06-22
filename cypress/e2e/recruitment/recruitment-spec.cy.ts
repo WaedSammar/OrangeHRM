@@ -1,7 +1,11 @@
 import CommonHelper from '../../support/helpers/common-helper'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { RecruitmentPageHelper } from '../../support/helpers/recruitment-page-helper'
-import { RECRUITMENT_TABLE_HEADERS, RecruitmentPage } from '../../support/page-objects/recruitment-page'
+import {
+  INTERVIEW_STATUS,
+  RECRUITMENT_TABLE_HEADERS,
+  RecruitmentPage
+} from '../../support/page-objects/recruitment-page'
 import { IEmployeeInfo } from '../../support/types/employee.types'
 import { IRecruitmentFormData } from '../../support/types/recruitmentFormData'
 
@@ -28,7 +32,7 @@ describe('Recruitment Page Test Cases', () => {
     return RecruitmentPageHelper.setupRecruitmentTest(employeeInfo, employeeMockData, recruitmentMockData)
   })
 
-  it('Schedule an interview for a newly added shortlisted candidate via API', () => {
+  it('Schedule an interview via UI', () => {
     RecruitmentPage.goToRecruitmentPage()
     const data = {
       [RECRUITMENT_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
@@ -41,7 +45,7 @@ describe('Recruitment Page Test Cases', () => {
     RecruitmentPage.verifyStatus()
   })
 
-  it.only('via API', () => {
+  it('Schedule an interview via API', () => {
     RecruitmentPage.goToRecruitmentPage()
     const data = {
       [RECRUITMENT_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
@@ -51,6 +55,7 @@ describe('Recruitment Page Test Cases', () => {
     RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
     RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeMockData)
     RecruitmentPageHelper.verifyInterviewStatus(recruitmentMockData)
+    RecruitmentPage.markInterviewPassed()
   })
 
   afterEach(() => {
