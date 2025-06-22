@@ -120,6 +120,13 @@ class RecruitmentPageHelper {
     })
   }
 
+  /**
+   * adding employee, job title, vacancy and candidate via API
+   * @param {IEmployeeInfo} employeeInfo
+   * @param {IEmployeeInfo} employeeMockData
+   * @param {IRecruitmentFormData} recruitmentMockData
+   * @returns
+   */
   static setupRecruitmentTest(
     employeeInfo: IEmployeeInfo,
     employeeMockData: IEmployeeInfo,

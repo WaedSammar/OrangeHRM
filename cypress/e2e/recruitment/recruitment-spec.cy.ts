@@ -14,18 +14,17 @@ describe('Recruitment Page Test Cases', () => {
     })
     cy.fixture('employee-page-mock').then((addEmployeeData) => {
       employeeMockData = addEmployeeData
-
-      const randomNum = CommonHelper.generateRandomNumber()
-      employeeInfo = {
-        ...employeeMockData,
-        employeeId: `${employeeMockData.employeeId}${randomNum}`,
-        userName: `${employeeMockData.userName}${randomNum}`
-      }
     })
   })
 
   beforeEach(() => {
     cy.login()
+    const randomNum = CommonHelper.generateRandomNumber()
+    employeeInfo = {
+      ...employeeMockData,
+      employeeId: `${employeeMockData.employeeId}${randomNum}`,
+      userName: `${employeeMockData.userName}${randomNum}`
+    }
     return RecruitmentPageHelper.setupRecruitmentTest(employeeInfo, employeeMockData, recruitmentMockData)
   })
 
@@ -42,7 +41,12 @@ describe('Recruitment Page Test Cases', () => {
     RecruitmentPage.verifyStatus()
   })
 
-  after(() => {
+  it('via API', () => {
+    RecruitmentPage.goToRecruitmentPage()
+    console.log('WAED')
+  })
+
+  afterEach(() => {
     RecruitmentPageHelper.deleteVacancy(recruitmentMockData)
     RecruitmentPageHelper.deleteCandidate(recruitmentMockData)
     RecruitmentPageHelper.deleteJobTitle(recruitmentMockData)
