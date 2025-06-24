@@ -71,14 +71,13 @@ class RecruitmentPageHelper {
 
   /**
    * check allowed actions
-   * @param number candidateId
-   * @returns
+   * @param {ALLOWED_ACTIONS[]} expectedActions 
+   * @param {number} candidateId 
    */
-  static checkAllowedActions(candidateId: number) {
+  static checkAllowedActions(expectedActions: ALLOWED_ACTIONS[], candidateId: number) {
     CommonHelper.sendAPIRequest(HTTP_METHODS.GET, `${URLs.candidate}/${candidateId}/${URLs.allowedActions}`).then(
       (res) => {
         const allowedActions = res.body.data.map((action: { label: string }) => action.label)
-        const expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
         expectedActions.forEach((expectedLabel) => {
           expect(allowedActions).to.include(expectedLabel)
         })
@@ -97,67 +96,31 @@ class RecruitmentPageHelper {
 
   /**
    * delete vacancy
-   * @param {IRecruitmentFormData} recruitmentMockData
+   * @param {number} vacancyId
    */
-  static deleteVacancy(recruitmentMockData: IRecruitmentFormData) {
+  static deleteVacancy(vacancyId: number) {
     CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.vacancy, {
-      ids: [recruitmentMockData.vacancyId]
+      ids: [vacancyId]
     })
   }
 
   /**
    * delete candidate
-   * @param {IRecruitmentFormData} recruitmentMockData
+   * @param {number} candidateId
    */
-  static deleteCandidate(recruitmentMockData: IRecruitmentFormData) {
+  static deleteCandidate(candidateId: number) {
     CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.candidate, {
-      ids: [recruitmentMockData.candidateId]
+      ids: [candidateId]
     })
   }
 
   /**
    * delete job title
-   * @param {IRecruitmentFormData} recruitmentMockData
+   * @param {number} jobTitleId
    */
-  static deleteJobTitle(recruitmentMockData: IRecruitmentFormData) {
+  static deleteJobTitle(jobTitleId: number) {
     CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.jobTitle, {
-      ids: [recruitmentMockData.jobTitleId]
-    })
-  }
-
-  /**
-   * adding employee, job title, vacancy and candidate via API
-   * @param {IEmployeeInfo} employeeInfo
-   * @param {IEmployeeInfo} employeeMockData
-   * @param {IRecruitmentFormData} recruitmentMockData
-   * @returns
-   */
-  static setupRecruitmentTest(
-    employeeInfo: IEmployeeInfo,
-    employeeMockData: IEmployeeInfo,
-    recruitmentMockData: IRecruitmentFormData
-  ): Cypress.Chainable<any> {
-    return PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
-      const empNumber = response.body.data.empNumber
-      employeeMockData.empNumber = empNumber
-
-      return RecruitmentPageHelper.addJobTitle(recruitmentMockData).then((jobTitleRes) => {
-        const jobTitleId = jobTitleRes.body.data.id
-        recruitmentMockData.jobTitleId = jobTitleId
-
-        return RecruitmentPageHelper.addVacancy(recruitmentMockData, empNumber).then((vacancyRes) => {
-          const vacancyId = vacancyRes.body.data.id
-          recruitmentMockData.vacancyId = vacancyId
-
-          return RecruitmentPageHelper.addCandidate(recruitmentMockData, vacancyId).then((candidateRes) => {
-            const candidateId = candidateRes.body.data.id
-            recruitmentMockData.candidateId = candidateId
-
-            RecruitmentPageHelper.updateCandidateStatus(candidateId)
-            RecruitmentPageHelper.checkAllowedActions(candidateId)
-          })
-        })
-      })
+      ids: [jobTitleId]
     })
   }
 
@@ -182,15 +145,13 @@ class RecruitmentPageHelper {
 
   /**
    * verify status of interview
-   * @param {IRecruitmentFormData} recruitmentMockData 
+   * @param {number} candidateId
    */
-  static verifyInterviewStatus(recruitmentMockData: IRecruitmentFormData) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.GET, `${URLs.candidate}/${recruitmentMockData.candidateId}`).then(
-      (response) => {
-        expect(response.body.data.status.label).to.eq(STATUS.INTERVIEW_STATUS)
-      }
-    )
+  static verifyInterviewStatus(candidateId: number) {
+    CommonHelper.sendAPIRequest(HTTP_METHODS.GET, `${URLs.candidate}/${candidateId}`).then((response) => {
+      expect(response.body.data.status.label).to.eq(STATUS.INTERVIEW_STATUS)
+    })
   }
 }
 
-export { RecruitmentPageHelper }
+export { RecruitmentPageHelper, ALLOWED_ACTIONS }

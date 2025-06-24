@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import { HTML_TAGS, HTTP_METHODS, PAGES, SEPARATORS } from '../helpers/constants'
 import { URLs } from '../helpers/apis-helpers'
 import { ElementHandler } from '../element-handler'
+import { IEmployeeInfo } from '../types/employee.types'
 
 enum POST_FILTER_OPTION {
   MOST_RECENT = 'Most Recent Posts',
@@ -64,10 +65,10 @@ class BuzzPage {
 
   /**
    * verify poster name of the post
-   * @param {any} employeeInfo - info for the employee
+   * @param {IEmployeeInfo} employeeInfo - info for the employee
    * @param {number} [postIndex] - the index of the post
    */
-  static verifyPosterName(employeeInfo: any, postIndex: number = 0) {
+  static verifyPosterName(employeeInfo: IEmployeeInfo, postIndex: number = 0) {
     const { firstName, middleName, lastName } = employeeInfo
     const fullName = `${firstName} ${middleName} ${lastName}`.trim()
 

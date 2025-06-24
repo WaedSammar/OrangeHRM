@@ -87,11 +87,11 @@ class PIMPageHelper {
 
   /**
    * delete created user
-   * @param {IEmployeeInfo} employeeMockData 
+   * @param {number} empNumber
    */
-  static deleteUser(employeeMockData: IEmployeeInfo) {
+  static deleteUser(empNumber: number) {
     CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.employees, {
-      ids: [employeeMockData.empNumber]
+      ids: [empNumber]
     })
   }
 }

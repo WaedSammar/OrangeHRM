@@ -71,10 +71,10 @@ class RecruitmentPage {
 
   /**
    * fill Interview Title
-   * @param {IRecruitmentFormData} interviewData
+   * @param {string} interviewTitle
    */
-  static fillInterviewTitle(interviewData: IRecruitmentFormData) {
-    ElementHandler.findInputByLabel(LABELS.INTERVIEW_TITLE).type(interviewData.interviewTitle)
+  static fillInterviewTitle(interviewTitle: string) {
+    ElementHandler.findInputByLabel(LABELS.INTERVIEW_TITLE).type(interviewTitle)
   }
 
   /**
@@ -93,10 +93,10 @@ class RecruitmentPage {
 
   /**
    * fill Interview Data
-   * @param {IRecruitmentFormData} interviewData
+   * @param {string} interviewDate
    */
-  static fillInterviewData(interviewData: IRecruitmentFormData) {
-    ElementHandler.selectDate(interviewData.interviewDate)
+  static fillInterviewData(interviewDate: string) {
+    ElementHandler.selectDate(interviewDate)
   }
 
   /**
@@ -121,9 +121,9 @@ class RecruitmentPage {
    * @param {IEmployeeInfo} employeeMockData
    */
   static fillInterviewInfo(interviewData: IRecruitmentFormData, employeeMockData: IEmployeeInfo) {
-    this.fillInterviewTitle(interviewData)
+    this.fillInterviewTitle(interviewData.interviewTitle)
     this.fillInterviewerName(employeeMockData)
-    this.fillInterviewData(interviewData)
+    this.fillInterviewData(interviewData.interviewDate)
     this.fillInterviewTime()
     this.clickSave()
   }

@@ -1,6 +1,5 @@
-import CommonHelper from '../../support/helpers/common-helper'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
-import { RecruitmentPageHelper } from '../../support/helpers/recruitment-page-helper'
+import { ALLOWED_ACTIONS, RecruitmentPageHelper } from '../../support/helpers/recruitment-page-helper'
 import { RECRUITMENT_TABLE_HEADERS, RecruitmentPage } from '../../support/page-objects/recruitment-page'
 import { IEmployeeInfo } from '../../support/types/employee.types'
 import { IRecruitmentFormData } from '../../support/types/recruitmentFormData'
@@ -19,13 +18,35 @@ describe('Recruitment Page Test Cases', () => {
 
   beforeEach(() => {
     cy.login()
-    const randomNum = CommonHelper.generateRandomNumber()
     employeeInfo = {
       ...employeeMockData,
-      employeeId: `${employeeMockData.employeeId}${randomNum}`,
-      userName: `${employeeMockData.userName}${randomNum}`
+      employeeId: employeeMockData.employeeId,
+      userName: employeeMockData.userName
     }
-    return RecruitmentPageHelper.setupRecruitmentTest(employeeInfo, employeeMockData, recruitmentMockData)
+
+    PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
+      const empNumber = response.body.data.empNumber
+      employeeMockData.empNumber = empNumber
+
+      RecruitmentPageHelper.addJobTitle(recruitmentMockData).then((jobTitleRes) => {
+        const jobTitleId = jobTitleRes.body.data.id
+        recruitmentMockData.jobTitleId = jobTitleId
+
+        RecruitmentPageHelper.addVacancy(recruitmentMockData, empNumber).then((vacancyRes) => {
+          const vacancyId = vacancyRes.body.data.id
+          recruitmentMockData.vacancyId = vacancyId
+
+          RecruitmentPageHelper.addCandidate(recruitmentMockData, vacancyId).then((candidateRes) => {
+            const candidateId = candidateRes.body.data.id
+            recruitmentMockData.candidateId = candidateId
+
+            RecruitmentPageHelper.updateCandidateStatus(candidateId)
+            const expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
+            RecruitmentPageHelper.checkAllowedActions(expectedActions, candidateId)
+          })
+        })
+      })
+    })
   })
 
   it('Schedule an interview via UI', () => {
@@ -50,14 +71,14 @@ describe('Recruitment Page Test Cases', () => {
     }
     RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
     RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeMockData)
-    RecruitmentPageHelper.verifyInterviewStatus(recruitmentMockData)
+    RecruitmentPageHelper.verifyInterviewStatus(recruitmentMockData.candidateId)
     RecruitmentPage.markInterviewPassed()
   })
 
   afterEach(() => {
-    RecruitmentPageHelper.deleteVacancy(recruitmentMockData)
-    RecruitmentPageHelper.deleteCandidate(recruitmentMockData)
-    RecruitmentPageHelper.deleteJobTitle(recruitmentMockData)
-    PIMPageHelper.deleteUser(employeeMockData)
+    RecruitmentPageHelper.deleteVacancy(recruitmentMockData.vacancyId)
+    RecruitmentPageHelper.deleteCandidate(recruitmentMockData.candidateId)
+    RecruitmentPageHelper.deleteJobTitle(recruitmentMockData.jobTitleId)
+    PIMPageHelper.deleteUser(employeeMockData.empNumber)
   })
 })
