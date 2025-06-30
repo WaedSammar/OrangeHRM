@@ -33,7 +33,7 @@ class ElementHandler {
     selectField: '.oxd-select-text',
     dropdownOption: '.oxd-select-dropdown',
     dateInput: `${HTML_TAGS.input}[placeholder='yyyy-dd-mm']`,
-    closeBtn: '.oxd-date-input-link.--close'
+    closeCalenderBtn: '.--close'
   }
 
   /**
@@ -112,7 +112,7 @@ class ElementHandler {
    */
   static selectDate(date: string, index: number = 0) {
     cy.get(this.LOCATORS.dateInput).eq(index).should('be.visible').clear().type(date)
-    cy.get(this.LOCATORS.closeBtn).should('be.visible').click()
+    cy.get(this.LOCATORS.closeCalenderBtn).should('be.visible').click()
   }
 
   /**
@@ -217,6 +217,40 @@ class ElementHandler {
               })
             })
         })
+    })
+  }
+
+  static testing(data: TableRowData) {
+    const headers = Object.keys(data)
+    const matchesPerColumn: { [key: string]: number[] } = {}
+    headers.forEach((key) => {
+      matchesPerColumn[key] = []
+
+      // get the index for the column
+      this.getHeaderIndex(key).then((headerIndex) => {
+        cy.get(COMMON_LOCATORS.table)
+          .find(COMMON_LOCATORS.tableCard)
+          .each(($row, rowIndex) => {
+            cy.wrap($row)
+              .find(COMMON_LOCATORS.cell)
+              .eq(headerIndex)
+              .invoke('text')
+              .then((text) => {
+                // save row index if it betmatch the expected value
+                if (text === data[key]) {
+                  matchesPerColumn[key].push(rowIndex)
+                }
+              })
+          })
+      })
+    })
+
+    cy.then(() => {
+      const matchingIndices = matchesPerColumn[headers[0]].filter((index) => {
+        return headers.every((key) => matchesPerColumn[key].includes(index))
+      })
+      if (matchingIndices.length === 0) throw new Error('No matching rows found')
+      if (matchingIndices.length > 1) throw new Error('Multiple matching rows found')
     })
   }
 }

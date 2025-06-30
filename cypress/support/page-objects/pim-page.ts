@@ -44,7 +44,6 @@ class PIMPage {
     selectField: '.oxd-select-text',
     dropdownOption: '.oxd-select-dropdown',
     selectGender: `${HTML_TAGS.input}[type="radio"][value="1"]`,
-    closeBtn: '.oxd-date-input-link.--close',
     chosenGender: `${HTML_TAGS.input}[type="radio"]:checked`,
     uploadFile: `${HTML_TAGS.input}[type="file"]`,
     tableBody: '.oxd-table-body'

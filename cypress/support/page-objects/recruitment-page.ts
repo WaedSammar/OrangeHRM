@@ -17,7 +17,7 @@ enum INTERVIEW_STATUS {
   REJECT = 'Reject'
 }
 
-enum RECRUITMENT_TABLE_HEADERS {
+enum RECRUITMENT_CANDIDATE_TABLE_HEADERS {
   VACANCY = 'Vacancy',
   CANDIDATE = 'Candidate',
   HIRING_MANAGER = 'Hiring Manager',
@@ -174,4 +174,4 @@ class RecruitmentPage {
     this.clickSave()
   }
 }
-export { RecruitmentPage, RECRUITMENT_TABLE_HEADERS }
+export { RecruitmentPage, RECRUITMENT_CANDIDATE_TABLE_HEADERS }

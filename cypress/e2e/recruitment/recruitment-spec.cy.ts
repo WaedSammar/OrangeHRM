@@ -1,6 +1,6 @@
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { ALLOWED_ACTIONS, RecruitmentPageHelper } from '../../support/helpers/recruitment-page-helper'
-import { RECRUITMENT_TABLE_HEADERS, RecruitmentPage } from '../../support/page-objects/recruitment-page'
+import { RECRUITMENT_CANDIDATE_TABLE_HEADERS, RecruitmentPage } from '../../support/page-objects/recruitment-page'
 import { IEmployeeInfo } from '../../support/types/employee.types'
 import { IRecruitmentFormData } from '../../support/types/recruitmentFormData'
 
@@ -44,15 +44,15 @@ describe('Recruitment Page Test Cases', () => {
       })
     })
   })
-  8
+
   it('Schedule an interview via UI', () => {
     RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds.at(-1))
 
     RecruitmentPage.goToRecruitmentPage()
     const data = {
-      [RECRUITMENT_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
-      [RECRUITMENT_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
-      [RECRUITMENT_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
+      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
+      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
+      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
     }
     RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
     let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
@@ -69,9 +69,9 @@ describe('Recruitment Page Test Cases', () => {
 
     RecruitmentPage.goToRecruitmentPage()
     const data = {
-      [RECRUITMENT_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
-      [RECRUITMENT_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
-      [RECRUITMENT_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
+      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
+      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
+      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
     }
     RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
     RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds)
@@ -82,9 +82,9 @@ describe('Recruitment Page Test Cases', () => {
   })
 
   afterEach(() => {
-    RecruitmentPageHelper.deleteVacancy(vacancyIds)
-    RecruitmentPageHelper.deleteCandidate(candidateIds)
-    RecruitmentPageHelper.deleteJobTitle(jobTitleIds)
-    PIMPageHelper.deleteUser(employeeIds)
+    RecruitmentPageHelper.deleteVacancies(vacancyIds)
+    RecruitmentPageHelper.deleteCandidates(candidateIds)
+    RecruitmentPageHelper.deleteJobTitles(jobTitleIds)
+    PIMPageHelper.deleteUsers(employeeIds)
   })
 })

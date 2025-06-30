@@ -91,29 +91,29 @@ class RecruitmentPageHelper {
    * delete vacancy
    * @param {number[]} vacancyIds
    */
-  static deleteVacancy(vacancyIds: number[]) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.vacancy, {
-      ids: [vacancyIds]
-    })
+  static deleteVacancies(vacancyIds: number[]) {
+    CommonHelper.cleanup(URLs.vacancy, vacancyIds)
   }
 
   /**
    * delete candidate
    * @param {number[]} candidateIds
    */
-  static deleteCandidate(candidateIds: number[]) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.candidate, {
-      ids: [candidateIds]
-    })
+  static deleteCandidates(candidateIds: number[]) {
+    CommonHelper.cleanup(URLs.candidate, candidateIds)
   }
 
   /**
    * delete job title
    * @param {number []} jobTitleIds
    */
-  static deleteJobTitle(jobTitleIds: number[]) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.jobTitle, {
-      ids: [jobTitleIds]
+  static deleteJobTitles(jobTitleIds: number[]) {
+    CommonHelper.cleanup(URLs.jobTitle, jobTitleIds)
+  }
+
+  static delete(url, ids) {
+    CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, url, {
+      ids
     })
   }
 
