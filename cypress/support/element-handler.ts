@@ -160,10 +160,11 @@ class ElementHandler {
   }
 
   /**
-   * make validation for the user
-   * @param data
+   * get Matching Row By Data
+   * @param {validateTableRow} data 
+   * @returns 
    */
-  static validateTableRow(data: TableRowData, onRowFound?: ($row: JQuery<HTMLElement>) => void) {
+  static getMatchingRowByData(data: TableRowData) {
     const headers = Object.keys(data)
     const matchesPerColumn: { [key: string]: number[] } = {}
 
@@ -189,34 +190,35 @@ class ElementHandler {
       })
     })
 
-    cy.then(() => {
-      const matchingIndices = matchesPerColumn[headers[0]].filter((index) => {
-        return headers.every((key) => matchesPerColumn[key].includes(index))
-      })
+    return cy.then(() => {
+      const matchingIndices = matchesPerColumn[headers[0]].filter((index) =>
+        headers.every((key) => matchesPerColumn[key].includes(index))
+      )
+
       if (matchingIndices.length === 0) throw new Error('No matching rows found')
       if (matchingIndices.length > 1) throw new Error('Multiple matching rows found')
 
       const matchIndex = matchingIndices[0]
+      // get the row that match by index
+      return cy.get(COMMON_LOCATORS.table).find(COMMON_LOCATORS.tableCard).eq(matchIndex)
+    })
+  }
 
-      cy.get(COMMON_LOCATORS.table) // get the row that match by index
-        .find(COMMON_LOCATORS.tableCard)
-        .eq(matchIndex)
-        .then(($row) => {
-          if (onRowFound) {
-            onRowFound($row)
-            return
-          }
-
-          cy.wrap($row)
-            .find(COMMON_LOCATORS.cell)
-            .then(($cells) => {
-              //verify each cell betmatch the expected value
-              headers.forEach((key) => {
-                this.getHeaderIndex(key).then((headerIndex) => {
-                  cy.wrap($cells).eq(headerIndex).should('have.text', data[key])
-                })
-              })
+  /**
+   * validate Table Row
+  * @param {TableRowData} data 
+   */
+  static validateTableRow(data: TableRowData) {
+    this.getMatchingRowByData(data).then(($row) => {
+      cy.wrap($row)
+        .find(COMMON_LOCATORS.cell)
+        .then(($cells) => {
+          //verify each cell betmatch the expected value
+          Object.keys(data).forEach((key) => {
+            this.getHeaderIndex(key).then((headerIndex) => {
+              cy.wrap($cells).eq(headerIndex).should('have.text', data[key])
             })
+          })
         })
     })
   }
@@ -226,42 +228,17 @@ class ElementHandler {
    * @param {TableRowData} data
    */
   static clickEyeIconForShortlistedCandidate(data: TableRowData) {
-    ElementHandler.validateTableRow(data, ($row) => {
-      cy.wrap($row).find(this.LOCATORS.eyeIcon).click()
-    })
+    this.clickActionIconInRow(data, this.LOCATORS.eyeIcon)
   }
 
-  static testing(data: TableRowData) {
-    const headers = Object.keys(data)
-    const matchesPerColumn: { [key: string]: number[] } = {}
-    headers.forEach((key) => {
-      matchesPerColumn[key] = []
-
-      // get the index for the column
-      this.getHeaderIndex(key).then((headerIndex) => {
-        cy.get(COMMON_LOCATORS.table)
-          .find(COMMON_LOCATORS.tableCard)
-          .each(($row, rowIndex) => {
-            cy.wrap($row)
-              .find(COMMON_LOCATORS.cell)
-              .eq(headerIndex)
-              .invoke('text')
-              .then((text) => {
-                // save row index if it betmatch the expected value
-                if (text === data[key]) {
-                  matchesPerColumn[key].push(rowIndex)
-                }
-              })
-          })
-      })
-    })
-
-    cy.then(() => {
-      const matchingIndices = matchesPerColumn[headers[0]].filter((index) => {
-        return headers.every((key) => matchesPerColumn[key].includes(index))
-      })
-      if (matchingIndices.length === 0) throw new Error('No matching rows found')
-      if (matchingIndices.length > 1) throw new Error('Multiple matching rows found')
+  /**
+   * click on icon on the table
+   * @param {TableRowData} data 
+   * @param {string} locator 
+   */
+  static clickActionIconInRow(data: TableRowData, locator: string) {
+    this.getMatchingRowByData(data).then(($row) => {
+      cy.wrap($row).find(locator).click()
     })
   }
 }

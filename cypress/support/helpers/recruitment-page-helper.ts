@@ -112,12 +112,6 @@ class RecruitmentPageHelper {
     CommonHelper.cleanup(URLs.jobTitle, jobTitleIds)
   }
 
-  static delete(url, ids) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, url, {
-      ids
-    })
-  }
-
   /**
    * schedule interview via api
    * @param {IRecruitmentFormData} recruitmentMockData
