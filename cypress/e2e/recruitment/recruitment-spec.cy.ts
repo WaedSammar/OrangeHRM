@@ -6,6 +6,10 @@ import { IRecruitmentFormData } from '../../support/types/recruitmentFormData'
 
 describe('Recruitment Page Test Cases', () => {
   let recruitmentMockData: IRecruitmentFormData, employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo
+  let employeeIds: number[] = []
+  let vacancyIds: number[] = []
+  let candidateIds: number[] = []
+  let jobTitleIds: number[] = []
 
   before(() => {
     cy.fixture('recruitment-page-mock').then((candidatesData) => {
@@ -13,32 +17,28 @@ describe('Recruitment Page Test Cases', () => {
     })
     cy.fixture('employee-page-mock').then((addEmployeeData) => {
       employeeMockData = addEmployeeData
+      employeeInfo = { ...employeeMockData }
     })
   })
 
   beforeEach(() => {
     cy.login()
-    employeeInfo = {
-      ...employeeMockData,
-      employeeId: employeeMockData.employeeId,
-      userName: employeeMockData.userName
-    }
 
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber
-      employeeMockData.empNumber = empNumber
+      employeeIds.push(empNumber)
 
       RecruitmentPageHelper.addJobTitle(recruitmentMockData).then((jobTitleRes) => {
         const jobTitleId = jobTitleRes.body.data.id
-        recruitmentMockData.jobTitleId = jobTitleId
+        jobTitleIds.push(jobTitleId)
 
-        RecruitmentPageHelper.addVacancy(recruitmentMockData, empNumber).then((vacancyRes) => {
+        RecruitmentPageHelper.addVacancy(recruitmentMockData, empNumber, jobTitleId).then((vacancyRes) => {
           const vacancyId = vacancyRes.body.data.id
-          recruitmentMockData.vacancyId = vacancyId
+          vacancyIds.push(vacancyId)
 
           RecruitmentPageHelper.addCandidate(recruitmentMockData, vacancyId).then((candidateRes) => {
             const candidateId = candidateRes.body.data.id
-            recruitmentMockData.candidateId = candidateId
+            candidateIds.push(candidateId)
 
             RecruitmentPageHelper.updateCandidateStatus(candidateId)
             const expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
@@ -76,9 +76,9 @@ describe('Recruitment Page Test Cases', () => {
   })
 
   afterEach(() => {
-    RecruitmentPageHelper.deleteVacancy(recruitmentMockData.vacancyId)
-    RecruitmentPageHelper.deleteCandidate(recruitmentMockData.candidateId)
-    RecruitmentPageHelper.deleteJobTitle(recruitmentMockData.jobTitleId)
-    PIMPageHelper.deleteUser(employeeMockData.empNumber)
+    RecruitmentPageHelper.deleteVacancy(vacancyIds)
+    RecruitmentPageHelper.deleteCandidate(candidateIds)
+    RecruitmentPageHelper.deleteJobTitle(jobTitleIds)
+    PIMPageHelper.deleteUser(employeeIds)
   })
 })

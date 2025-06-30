@@ -2,7 +2,6 @@ import { IEmployeeInfo } from '../types/employee.types'
 import { IRecruitmentFormData } from '../types/recruitmentFormData'
 import CommonHelper from './common-helper'
 import { HTTP_METHODS } from './constants'
-import { PIMPageHelper } from './pim-page-helper'
 
 const URLs = {
   vacancy: `/web/index.php/api/v2/recruitment/vacancies`,
@@ -39,15 +38,16 @@ class RecruitmentPageHelper {
   }
 
   /**
-   * add new vacancy
+   * * add new vacancy
    * @param recruitmentMockData
    * @param empNumber
-   * @returns
+   * @param jobTitleId 
+   * @returns 
    */
-  static addVacancy(recruitmentMockData: IRecruitmentFormData, empNumber: number) {
+  static addVacancy(recruitmentMockData: IRecruitmentFormData, empNumber: number, jobTitleId: number) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.vacancy, {
       name: recruitmentMockData.vacancyName,
-      jobTitleId: recruitmentMockData.jobTitleId,
+      jobTitleId,
       employeeId: empNumber,
       status: recruitmentMockData.vacancyStatus,
       isPublished: recruitmentMockData.vacancyPublished
@@ -71,8 +71,8 @@ class RecruitmentPageHelper {
 
   /**
    * check allowed actions
-   * @param {ALLOWED_ACTIONS[]} expectedActions 
-   * @param {number} candidateId 
+   * @param {ALLOWED_ACTIONS[]} expectedActions
+   * @param {number} candidateId
    */
   static checkAllowedActions(expectedActions: ALLOWED_ACTIONS[], candidateId: number) {
     CommonHelper.sendAPIRequest(HTTP_METHODS.GET, `${URLs.candidate}/${candidateId}/${URLs.allowedActions}`).then(
@@ -96,31 +96,31 @@ class RecruitmentPageHelper {
 
   /**
    * delete vacancy
-   * @param {number} vacancyId
+   * @param {number[]} vacancyIds
    */
-  static deleteVacancy(vacancyId: number) {
+  static deleteVacancy(vacancyIds: number[]) {
     CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.vacancy, {
-      ids: [vacancyId]
+      ids: [vacancyIds]
     })
   }
 
   /**
    * delete candidate
-   * @param {number} candidateId
+   * @param {number []} candidateIds
    */
-  static deleteCandidate(candidateId: number) {
+  static deleteCandidate(candidateIds: number[]) {
     CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.candidate, {
-      ids: [candidateId]
+      ids: [candidateIds]
     })
   }
 
   /**
    * delete job title
-   * @param {number} jobTitleId
+   * @param {number []} jobTitleIds
    */
-  static deleteJobTitle(jobTitleId: number) {
+  static deleteJobTitle(jobTitleIds: number[]) {
     CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.jobTitle, {
-      ids: [jobTitleId]
+      ids: [jobTitleIds]
     })
   }
 
