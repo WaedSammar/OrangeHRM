@@ -39,10 +39,10 @@ class RecruitmentPageHelper {
 
   /**
    * * add new vacancy
-   * @param recruitmentMockData
-   * @param empNumber
-   * @param jobTitleId 
-   * @returns 
+   * @param {IRecruitmentFormData} recruitmentMockData
+   * @param {number} empNumber
+   * @param {number} jobTitleId
+   * @returns
    */
   static addVacancy(recruitmentMockData: IRecruitmentFormData, empNumber: number, jobTitleId: number) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.vacancy, {
@@ -56,8 +56,8 @@ class RecruitmentPageHelper {
 
   /**
    * add new candidate
-   * @param recruitmentMockData
-   * @param vacancyId
+   * @param {IRecruitmentFormData} recruitmentMockData
+   * @param {number} vacancyId
    * @returns
    */
   static addCandidate(recruitmentMockData: IRecruitmentFormData, vacancyId: number) {
@@ -70,28 +70,20 @@ class RecruitmentPageHelper {
   }
 
   /**
-   * check allowed actions
-   * @param {ALLOWED_ACTIONS[]} expectedActions
+   * update Candidates status to shortlist
    * @param {number} candidateId
+   * @returns
    */
-  static checkAllowedActions(expectedActions: ALLOWED_ACTIONS[], candidateId: number) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.GET, `${URLs.candidate}/${candidateId}/${URLs.allowedActions}`).then(
-      (res) => {
-        const allowedActions = res.body.data.map((action: { label: string }) => action.label)
-        expectedActions.forEach((expectedLabel) => {
-          expect(allowedActions).to.include(expectedLabel)
-        })
-      }
-    )
+  static updateCandidateStatus(candidateId: number, status: string) {
+    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, `${URLs.candidate}/${candidateId}/${status}`)
   }
 
   /**
-   * update Candidates status to shortlist
-   * @param candidateId
-   * @returns
+   * change candidate status to shortlisted
+   * @param {number} candidateId
    */
-  static updateCandidateStatus(candidateId: number) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, `${URLs.candidate}/${candidateId}/${URLs.shortlist}`)
+  static updateCandidateStatusToShortlisted(candidateId: number) {
+    this.updateCandidateStatus(candidateId, URLs.shortlist)
   }
 
   /**
@@ -106,7 +98,7 @@ class RecruitmentPageHelper {
 
   /**
    * delete candidate
-   * @param {number []} candidateIds
+   * @param {number[]} candidateIds
    */
   static deleteCandidate(candidateIds: number[]) {
     CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.candidate, {
@@ -127,28 +119,29 @@ class RecruitmentPageHelper {
   /**
    * schedule interview via api
    * @param {IRecruitmentFormData} recruitmentMockData
-   * @param {IEmployeeInfo} employeeMockData
+   * @param {number[]} interviewerEmpNumbers
+   * @param {number[]} candidateIds
    */
-  static scheduleInterview(recruitmentMockData: IRecruitmentFormData, employeeMockData: IEmployeeInfo) {
-    CommonHelper.sendAPIRequest(
-      HTTP_METHODS.POST,
-      `${URLs.candidate}/${recruitmentMockData.candidateId}/${URLs.scheduleInterview}`,
-      {
-        interviewName: recruitmentMockData.interviewTitle,
-        interviewerEmpNumbers: [employeeMockData.empNumber],
-        interviewDate: recruitmentMockData.interviewDate,
-        interviewTime: recruitmentMockData.interviewTime,
-        note: recruitmentMockData.jobNote
-      }
-    )
+  static scheduleInterview(
+    recruitmentMockData: IRecruitmentFormData,
+    interviewerEmpNumbers: number[],
+    candidateIds: number[]
+  ) {
+    CommonHelper.sendAPIRequest(HTTP_METHODS.POST, `${URLs.candidate}/${candidateIds}/${URLs.scheduleInterview}`, {
+      interviewName: recruitmentMockData.interviewTitle,
+      interviewerEmpNumbers,
+      interviewDate: recruitmentMockData.interviewDate,
+      interviewTime: recruitmentMockData.interviewTime,
+      note: recruitmentMockData.jobNote
+    })
   }
 
   /**
    * verify status of interview
-   * @param {number} candidateId
+   * @param {number} candidateIds
    */
-  static verifyInterviewStatus(candidateId: number) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.GET, `${URLs.candidate}/${candidateId}`).then((response) => {
+  static verifyInterviewStatus(candidateIds: number[]) {
+    CommonHelper.sendAPIRequest(HTTP_METHODS.GET, `${URLs.candidate}/${candidateIds}`).then((response) => {
       expect(response.body.data.status.label).to.eq(STATUS.INTERVIEW_STATUS)
     })
   }

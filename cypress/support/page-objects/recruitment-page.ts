@@ -1,7 +1,7 @@
 import { ElementHandler } from '../element-handler'
 import { APIsHelper } from '../helpers/apis-helpers'
 import CommonHelper from '../helpers/common-helper'
-import { COMMON_BUTTONS, PAGES } from '../helpers/constants'
+import { COMMON_BUTTONS, HTML_TAGS, PAGES } from '../helpers/constants'
 import { IEmployeeInfo } from '../types/employee.types'
 import { IRecruitmentFormData } from '../types/recruitmentFormData'
 import { TableRowData } from '../types/tableRowData.types'
@@ -49,6 +49,15 @@ class RecruitmentPage {
     ElementHandler.clickMenuItem(PAGES.RECRUITMENT)
   }
 
+  /**
+   * check allowed actions
+   * @param {string[]} expectedActions
+   */
+  static checkAllowedActions(expectedActions: string[]) {
+    expectedActions.forEach((action) => {
+      cy.get(HTML_TAGS.button).contains(action).should('be.visible')
+    })
+  }
   /**
    * click Eye Icon For Shortlisted Candidate
    * @param {TableRowData} data

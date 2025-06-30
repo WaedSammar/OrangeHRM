@@ -39,17 +39,15 @@ describe('Recruitment Page Test Cases', () => {
           RecruitmentPageHelper.addCandidate(recruitmentMockData, vacancyId).then((candidateRes) => {
             const candidateId = candidateRes.body.data.id
             candidateIds.push(candidateId)
-
-            RecruitmentPageHelper.updateCandidateStatus(candidateId)
-            const expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
-            RecruitmentPageHelper.checkAllowedActions(expectedActions, candidateId)
           })
         })
       })
     })
   })
-
+  8
   it('Schedule an interview via UI', () => {
+    RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds.at(-1))
+
     RecruitmentPage.goToRecruitmentPage()
     const data = {
       [RECRUITMENT_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
@@ -57,12 +55,16 @@ describe('Recruitment Page Test Cases', () => {
       [RECRUITMENT_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
     }
     RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
+    const expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
+    RecruitmentPage.checkAllowedActions(expectedActions)
     RecruitmentPage.scheduleInterview()
     RecruitmentPage.fillInterviewInfo(recruitmentMockData, employeeMockData)
     RecruitmentPage.verifyStatus()
   })
 
-  it('Schedule an interview via API', () => {
+  it('Mark a shortlisted candidate as interview passed', () => {
+    RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds.at(-1))
+
     RecruitmentPage.goToRecruitmentPage()
     const data = {
       [RECRUITMENT_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
@@ -70,8 +72,8 @@ describe('Recruitment Page Test Cases', () => {
       [RECRUITMENT_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
     }
     RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
-    RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeMockData)
-    RecruitmentPageHelper.verifyInterviewStatus(recruitmentMockData.candidateId)
+    RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds)
+    RecruitmentPageHelper.verifyInterviewStatus(candidateIds)
     RecruitmentPage.markInterviewPassed()
   })
 
