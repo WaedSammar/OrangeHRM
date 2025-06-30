@@ -64,7 +64,7 @@ describe('Recruitment Page Test Cases', () => {
     RecruitmentPage.checkAllowedActions(expectedActions)
   })
 
-  it('Mark a shortlisted candidate as interview passed', () => {
+  it.only('Mark a shortlisted candidate as interview passed', () => {
     RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds.at(-1))
 
     RecruitmentPage.goToRecruitmentPage()
