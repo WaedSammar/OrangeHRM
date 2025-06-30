@@ -1,4 +1,3 @@
-import { IEmployeeInfo } from '../types/employee.types'
 import { IRecruitmentFormData } from '../types/recruitmentFormData'
 import CommonHelper from './common-helper'
 import { HTTP_METHODS } from './constants'
@@ -20,7 +19,9 @@ enum STATUS {
 enum ALLOWED_ACTIONS {
   SCHEDULE_INTERVIEW = 'Schedule Interview',
   REJECT = 'Reject',
-  SHORTLISTED = 'Shortlist'
+  SHORTLISTED = 'Shortlist',
+  PASSED = 'Mark Interview Passed',
+  FAILED = 'Mark Interview Failed'
 }
 
 class RecruitmentPageHelper {

@@ -55,11 +55,13 @@ describe('Recruitment Page Test Cases', () => {
       [RECRUITMENT_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
     }
     RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
-    const expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
+    let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
     RecruitmentPage.checkAllowedActions(expectedActions)
     RecruitmentPage.scheduleInterview()
     RecruitmentPage.fillInterviewInfo(recruitmentMockData, employeeMockData)
     RecruitmentPage.verifyStatus()
+    expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
+    RecruitmentPage.checkAllowedActions(expectedActions)
   })
 
   it('Mark a shortlisted candidate as interview passed', () => {
@@ -73,7 +75,9 @@ describe('Recruitment Page Test Cases', () => {
     }
     RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
     RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds)
-    RecruitmentPageHelper.verifyInterviewStatus(candidateIds)
+    RecruitmentPage.verifyStatus()
+    const expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
+    RecruitmentPage.checkAllowedActions(expectedActions)
     RecruitmentPage.markInterviewPassed()
   })
 
