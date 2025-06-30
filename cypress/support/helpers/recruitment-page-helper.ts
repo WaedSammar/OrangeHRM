@@ -76,7 +76,7 @@ class RecruitmentPageHelper {
    * @param {number} candidateId
    * @returns
    */
-  static updateCandidateStatus(candidateId: number, status: string) {
+  static updateCandidateStatus(candidateId: number[], status: string) {
     CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, `${URLs.candidate}/${candidateId}/${status}`)
   }
 
@@ -84,7 +84,7 @@ class RecruitmentPageHelper {
    * change candidate status to shortlisted
    * @param {number} candidateId
    */
-  static updateCandidateStatusToShortlisted(candidateId: number) {
+  static updateCandidateStatusToShortlisted(candidateId: number[]) {
     this.updateCandidateStatus(candidateId, URLs.shortlist)
   }
 
@@ -123,22 +123,12 @@ class RecruitmentPageHelper {
     interviewerEmpNumbers: number[],
     candidateIds: number[]
   ) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.POST, `${URLs.candidate}/${candidateIds}/${URLs.scheduleInterview}`, {
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, `${URLs.candidate}/${candidateIds}/${URLs.scheduleInterview}`, {
       interviewName: recruitmentMockData.interviewTitle,
       interviewerEmpNumbers,
       interviewDate: recruitmentMockData.interviewDate,
       interviewTime: recruitmentMockData.interviewTime,
       note: recruitmentMockData.jobNote
-    })
-  }
-
-  /**
-   * verify status of interview
-   * @param {number} candidateIds
-   */
-  static verifyInterviewStatus(candidateIds: number[]) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.GET, `${URLs.candidate}/${candidateIds}`).then((response) => {
-      expect(response.body.data.status.label).to.eq(STATUS.INTERVIEW_STATUS)
     })
   }
 }

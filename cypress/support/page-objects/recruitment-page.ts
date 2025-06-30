@@ -4,6 +4,7 @@ import CommonHelper from '../helpers/common-helper'
 import { COMMON_BUTTONS, HTML_TAGS, PAGES } from '../helpers/constants'
 import { IEmployeeInfo } from '../types/employee.types'
 import { IRecruitmentFormData } from '../types/recruitmentFormData'
+import { TableRowData } from '../types/tableRowData.types'
 
 enum LABELS {
   INTERVIEW_TITLE = 'Interview Title',
@@ -45,6 +46,14 @@ class RecruitmentPage {
    */
   static goToRecruitmentPage() {
     ElementHandler.clickMenuItem(PAGES.RECRUITMENT)
+  }
+
+  /**
+   * click eye icon for shortlisted candidate
+   * @param {TableRowData} data 
+   */
+  static clickEyeIconForShortlistedCandidate(data: TableRowData) {
+    ElementHandler.clickEyeIconForShortlistedCandidate(data)
   }
 
   /**
