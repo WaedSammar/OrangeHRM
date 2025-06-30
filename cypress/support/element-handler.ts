@@ -33,7 +33,8 @@ class ElementHandler {
     selectField: '.oxd-select-text',
     dropdownOption: '.oxd-select-dropdown',
     dateInput: `${HTML_TAGS.input}[placeholder='yyyy-dd-mm']`,
-    closeCalenderBtn: '.--close'
+    closeCalenderBtn: '.--close',
+    eyeIcon: '.bi-eye-fill'
   }
 
   /**
@@ -217,6 +218,16 @@ class ElementHandler {
               })
             })
         })
+    })
+  }
+
+  /**
+   * click Eye Icon For Shortlisted Candidate
+   * @param {TableRowData} data
+   */
+  static clickEyeIconForShortlistedCandidate(data: TableRowData) {
+    ElementHandler.validateTableRow(data, ($row) => {
+      cy.wrap($row).find(this.LOCATORS.eyeIcon).click()
     })
   }
 

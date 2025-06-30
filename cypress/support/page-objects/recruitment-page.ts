@@ -4,7 +4,6 @@ import CommonHelper from '../helpers/common-helper'
 import { COMMON_BUTTONS, HTML_TAGS, PAGES } from '../helpers/constants'
 import { IEmployeeInfo } from '../types/employee.types'
 import { IRecruitmentFormData } from '../types/recruitmentFormData'
-import { TableRowData } from '../types/tableRowData.types'
 
 enum LABELS {
   INTERVIEW_TITLE = 'Interview Title',
@@ -36,7 +35,6 @@ enum BUTTONS {
 
 class RecruitmentPage {
   private static LOCATORS = {
-    eyeIcon: '.bi-eye-fill',
     autoComplete: '.oxd-autocomplete-option',
     timeIcon: '.oxd-time-input--clock',
     recruitmentStatus: '.orangehrm-recruitment-status'
@@ -56,15 +54,6 @@ class RecruitmentPage {
   static checkAllowedActions(expectedActions: string[]) {
     expectedActions.forEach((action) => {
       cy.get(HTML_TAGS.button).contains(action).should('be.visible')
-    })
-  }
-  /**
-   * click Eye Icon For Shortlisted Candidate
-   * @param {TableRowData} data
-   */
-  static clickEyeIconForShortlistedCandidate(data: TableRowData) {
-    ElementHandler.validateTableRow(data, ($row) => {
-      cy.wrap($row).find(this.LOCATORS.eyeIcon).click()
     })
   }
 
@@ -169,7 +158,7 @@ class RecruitmentPage {
    * change interview status
    * @param {string} status
    */
-  static changeInterviewStatus(status: string) {
+  static changeInterviewStatus(status: INTERVIEW_STATUS) {
     ElementHandler.clickButton(status)
     this.clickSave()
   }
