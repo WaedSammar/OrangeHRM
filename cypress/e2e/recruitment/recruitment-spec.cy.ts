@@ -124,6 +124,11 @@ describe('Recruitment Page Test Cases', () => {
     RecruitmentPageHelper.deleteVacancies(vacancyIds)
     RecruitmentPageHelper.deleteCandidates(candidateIds)
     RecruitmentPageHelper.deleteJobTitles(jobTitleIds)
-    PIMPageHelper.deleteUsers(employeeIds)
+    PIMPageHelper.deleteUsers(employeeIds).then(() => {
+      employeeIds.length = 0
+      candidateIds.length = 0
+      vacancyIds.length = 0
+      jobTitleIds.length = 0
+    })
   })
 })

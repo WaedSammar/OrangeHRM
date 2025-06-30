@@ -90,7 +90,7 @@ class PIMPageHelper {
    * @param {number []} empNumbers
    */
   static deleteUsers(empNumbers: number[]) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.employees, {
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.DELETE, URLs.employees, {
       ids: empNumbers
     })
   }
