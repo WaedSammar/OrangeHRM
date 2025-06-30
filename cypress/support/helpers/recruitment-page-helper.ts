@@ -21,7 +21,8 @@ enum ALLOWED_ACTIONS {
   REJECT = 'Reject',
   SHORTLISTED = 'Shortlist',
   PASSED = 'Mark Interview Passed',
-  FAILED = 'Mark Interview Failed'
+  FAILED = 'Mark Interview Failed',
+  OFFER_JOB = 'Offer Job'
 }
 
 class RecruitmentPageHelper {

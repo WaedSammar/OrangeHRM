@@ -77,9 +77,11 @@ describe('Recruitment Page Test Cases', () => {
     ElementHandler.clickEyeIconForShortlistedCandidate(data)
     RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds)
     RecruitmentPage.verifyStatus()
-    const expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
+    let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
     RecruitmentPage.checkAllowedActions(expectedActions)
     RecruitmentPage.markInterviewPassed()
+    expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW, ALLOWED_ACTIONS.OFFER_JOB]
+    RecruitmentPage.checkAllowedActions(expectedActions)
   })
 
   it('Mark a shortlisted candidate as interview failed', () => {
@@ -94,9 +96,11 @@ describe('Recruitment Page Test Cases', () => {
     ElementHandler.clickEyeIconForShortlistedCandidate(data)
     RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds)
     RecruitmentPage.verifyStatus()
-    const expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
+    let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
     RecruitmentPage.checkAllowedActions(expectedActions)
     RecruitmentPage.markInterviewFailed()
+    expectedActions = [ALLOWED_ACTIONS.REJECT]
+    RecruitmentPage.checkAllowedActions(expectedActions)
   })
 
   it('Mark a shortlisted candidate as interview reject', () => {
