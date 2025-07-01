@@ -1,4 +1,5 @@
 import { COMMON_URLs } from '../element-handler'
+import { PIMInitializer } from '../initializers/pim-page/pim-page-initializers'
 import { GENDER } from '../page-objects/pim-page'
 import { IEmployeeInfo } from '../types/employee.types'
 import CommonHelper from './common-helper'
@@ -10,7 +11,7 @@ const URLs = {
   customField: `custom-fields`
 }
 
-enum UserRole {
+export enum UserRole {
   ADMIN = 1,
   ESS = 2
 }
@@ -23,30 +24,26 @@ const GenderMap: Record<GENDER, number> = {
 class PIMPageHelper {
   /**
    * create employee basic via API
-   * @param {IEmployeeInfo} employeeInfo
    * @returns - API response
    */
-  static createEmployeeViaAPI(employeeInfo: IEmployeeInfo) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.employees, {
-      firstName: employeeInfo.firstName,
-      middleName: employeeInfo.middleName,
-      lastName: employeeInfo.lastName,
-      employeeId: employeeInfo.employeeId
+  static createEmployeeViaAPI() {
+    const payload = PIMInitializer.generateMinimalEmployeePayload()
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.employees, payload).then((response) => {
+      response
     })
   }
 
   /**
    * add username and password for the employee
-   * @param {IEmployeeInfo} employeeInfo
    * @param {number} empNumber
    */
-  static createUserViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
+  static createUserViaAPI(empNumber: number) {
+    const payload = PIMInitializer.generateUserPayload()
     CommonHelper.sendAPIRequest(HTTP_METHODS.POST, COMMON_URLs.users, {
-      username: employeeInfo.userName,
-      password: employeeInfo.password,
-      status: employeeInfo.status,
-      userRoleId: UserRole.ESS,
+      ...payload,
       empNumber
+    }).then((response) => {
+      response
     })
   }
 
