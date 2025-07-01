@@ -103,6 +103,8 @@ describe('Employee management - Add and Save Test Cases', () => {
   it('Verify added employee appears in the table', () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((res) => {
       const empNumber = res.body.data.empNumber
+      employeeNum.push(empNumber)
+
       PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(() => {
         PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
         PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber)
