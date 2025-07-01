@@ -1,11 +1,9 @@
 import { LoginPage, LOGIN_PAGE_MSGS } from '../../support/page-objects/login-page'
 
 describe('Login Page Test Cases', () => {
-  let correctUsername, correctPassword, wrongUsername, wrongPassword
+  let correctUsername: string, correctPassword: string, wrongUsername: string, wrongPassword: string
 
   beforeEach(() => {
-    cy.visit('/')
-
     cy.fixture('login-page-mock').then((loginData) => {
       correctUsername = loginData.correctUsername
       correctPassword = loginData.correctPassword
@@ -15,75 +13,75 @@ describe('Login Page Test Cases', () => {
   })
 
   it('Should log in Successfully with correct credentials', () => {
-    LoginPage.fill_username_field(correctUsername)
-    LoginPage.fill_password_field(correctPassword)
-    LoginPage.click_submit()
-    LoginPage.check_dashboard_url()
+    LoginPage.fillUsernameField(correctUsername)
+    LoginPage.fillPasswordField(correctPassword)
+    LoginPage.clickSubmit()
+    LoginPage.checkDashboardURL()
   })
 
   it('Should allow login with case-insensitive Username', () => {
-    LoginPage.fill_username_field(correctUsername.toUpperCase())
-    LoginPage.fill_password_field(correctPassword)
-    LoginPage.click_submit()
-    LoginPage.check_dashboard_url()
+    LoginPage.fillUsernameField(correctUsername.toUpperCase())
+    LoginPage.fillPasswordField(correctPassword)
+    LoginPage.clickSubmit()
+    LoginPage.checkDashboardURL()
   })
 
   it('Should show error for incorrect Password', () => {
-    LoginPage.fill_username_field(correctUsername)
-    LoginPage.fill_password_field(wrongPassword)
-    LoginPage.click_submit()
-    LoginPage.check_error_message(LOGIN_PAGE_MSGS.INVALID_CREDENTIALS)
+    LoginPage.fillUsernameField(correctUsername)
+    LoginPage.fillPasswordField(wrongPassword)
+    LoginPage.clickSubmit()
+    LoginPage.checkErrorMessage(LOGIN_PAGE_MSGS.INVALID_CREDENTIALS)
   })
 
   it('Should show error for incorrect Username', () => {
-    LoginPage.fill_username_field(wrongUsername)
-    LoginPage.fill_password_field(correctPassword)
-    LoginPage.click_submit()
-    LoginPage.check_error_message(LOGIN_PAGE_MSGS.INVALID_CREDENTIALS)
+    LoginPage.fillUsernameField(wrongUsername)
+    LoginPage.fillPasswordField(correctPassword)
+    LoginPage.clickSubmit()
+    LoginPage.checkErrorMessage(LOGIN_PAGE_MSGS.INVALID_CREDENTIALS)
   })
 
   it('Should show error for incorrect Username and Password', () => {
-    LoginPage.fill_username_field(wrongUsername)
-    LoginPage.fill_password_field(wrongPassword)
-    LoginPage.click_submit()
-    LoginPage.check_error_message(LOGIN_PAGE_MSGS.INVALID_CREDENTIALS)
+    LoginPage.fillUsernameField(wrongUsername)
+    LoginPage.fillPasswordField(wrongPassword)
+    LoginPage.clickSubmit()
+    LoginPage.checkErrorMessage(LOGIN_PAGE_MSGS.INVALID_CREDENTIALS)
   })
 
   it('Should show validation messages for empty Username and Password', () => {
-    LoginPage.click_submit()
-    LoginPage.check_required_field(2)
+    LoginPage.clickSubmit()
+    LoginPage.checkRequiredField(2)
   })
 
   it('Should show validation message for empty Username and correct Password', () => {
-    LoginPage.fill_password_field(correctPassword)
-    LoginPage.click_submit()
-    LoginPage.check_required_field(1)
+    LoginPage.fillPasswordField(correctPassword)
+    LoginPage.clickSubmit()
+    LoginPage.checkRequiredField(1)
   })
 
   it('Should show validation message for empty Username and wrong Password', () => {
-    LoginPage.fill_password_field(wrongPassword)
-    LoginPage.click_submit()
-    LoginPage.check_required_field(1)
+    LoginPage.fillPasswordField(wrongPassword)
+    LoginPage.clickSubmit()
+    LoginPage.checkRequiredField(1)
   })
 
   it('Should show validation message for empty Password and correct Username', () => {
-    LoginPage.fill_username_field(correctUsername)
-    LoginPage.click_submit()
-    LoginPage.check_required_field(1)
+    LoginPage.fillUsernameField(correctUsername)
+    LoginPage.clickSubmit()
+    LoginPage.checkRequiredField(1)
   })
 
   it('Should show validation message for empty Password and wrong Username', () => {
-    LoginPage.fill_username_field(wrongUsername)
-    LoginPage.click_submit()
-    LoginPage.check_required_field(1)
+    LoginPage.fillUsernameField(wrongUsername)
+    LoginPage.clickSubmit()
+    LoginPage.checkRequiredField(1)
   })
 
   it('Should hide the password field content', () => {
-    LoginPage.check_password_hidden()
+    LoginPage.checkPasswordHidden()
   })
 
   it('Should shown red color in the Required field', () => {
-    LoginPage.click_submit()
-    LoginPage.check_required_color()
+    LoginPage.clickSubmit()
+    LoginPage.checkRequiredColor()
   })
 })
