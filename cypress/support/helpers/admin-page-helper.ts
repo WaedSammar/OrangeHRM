@@ -1,6 +1,7 @@
 import { COMMON_URLs } from '../element-handler'
 import CommonHelper from './common-helper'
 import { HTTP_METHODS, SIZE_LIMIT } from './constants'
+import { PIMPageHelper } from './pim-page-helper'
 
 class AdminPageHelper {
   /**
@@ -13,8 +14,8 @@ class AdminPageHelper {
 
   /**
    * adding nationality via API
-   * @param {string} nationality 
-   * @returns 
+   * @param {string} nationality
+   * @returns
    */
   static addNationality(nationality: string) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, COMMON_URLs.nationalities, {
@@ -41,8 +42,8 @@ class AdminPageHelper {
 
   /**
    * delete user using username
-   * @param {string} username 
-   * @returns 
+   * @param {string} username
+   * @returns
    */
   static deleteUserByUsername(username: string) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.GET, COMMON_URLs.users).then((response) => {

@@ -4,14 +4,13 @@ import { APIsHelper } from '../../support/helpers/apis-helpers'
 import CommonHelper from '../../support/helpers/common-helper'
 import { SEPARATORS } from '../../support/helpers/constants'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
-import { PIMInitializer } from '../../support/initializers/pim-page/pim-page-initializers'
-import { AdminPage } from '../../support/page-objects/admin-page'
 import { MyInfo } from '../../support/page-objects/my-info-page'
 import { PIM_TABLE_HEADERS, PIMPage } from '../../support/page-objects/pim-page'
 import { IEmployeeInfo } from '../../support/types/employee.types'
 
 describe('Employee management - Add and Save Test Cases', () => {
   let employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo, nationalityId: number
+  let employeeNum: number[] = []
 
   before(() => {
     cy.fixture('employee-page-mock').then((addEmployeeData) => {
@@ -28,13 +27,11 @@ describe('Employee management - Add and Save Test Cases', () => {
   })
 
   beforeEach(() => {
+    employeeNum = []
     cy.login()
 
-    const randomNum = CommonHelper.generateRandomNumber()
     employeeInfo = {
       ...employeeMockData,
-      employeeId: `${employeeMockData.employeeId}${randomNum}`,
-      userName: `${employeeMockData.userName}${randomNum}`,
       nationality: employeeMockData.newNationality,
       nationalityId
     }
@@ -61,9 +58,10 @@ describe('Employee management - Add and Save Test Cases', () => {
     PIMPage.verifyEmployeeInfo(employeeInfo)
   })
 
-  it.only('Adding a new employee via API', () => {
+  it('Adding a new employee via API', () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber
+      employeeNum.push(empNumber)
 
       PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(() => {
         PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
@@ -105,9 +103,10 @@ describe('Employee management - Add and Save Test Cases', () => {
   it('Verify added employee appears in the table', () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((res) => {
       const empNumber = res.body.data.empNumber
-      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber)
-      PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
-      PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber)
+      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(() => {
+        PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
+        PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber)
+      })
     })
 
     PIMPage.goToPIMPage()
@@ -123,7 +122,7 @@ describe('Employee management - Add and Save Test Cases', () => {
   afterEach(() => {
     ElementHandler.logout()
     cy.login()
-    // AdminPageHelper.deleteUserByUsername(employeeInfo.userName)
+    AdminPageHelper.deleteUserByUsername(employeeInfo.userName)
   })
 
   after(() => {
