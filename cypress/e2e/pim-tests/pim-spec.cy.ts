@@ -64,14 +64,14 @@ describe('Employee management - Add and Save Test Cases', () => {
   it.only('Adding a new employee via API', () => {
     PIMPageHelper.createEmployeeViaAPI().then((response) => {
       const empNumber = response.body.data.empNumber
-      PIMPageHelper.createUserViaAPI(empNumber)
-      // PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
-      // PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber)
+      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber)
+      PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
+      PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber)
     })
-    // ElementHandler.logout()
-    // cy.login(employeeInfo.userName, employeeInfo.password)
-    // MyInfo.goToMyInfoPage()
-    // PIMPage.verifyEmployeeInfo(employeeInfo)
+    ElementHandler.logout()
+    cy.login(employeeInfo.userName, employeeInfo.password)
+    MyInfo.goToMyInfoPage()
+    PIMPage.verifyEmployeeInfo(employeeInfo)
   })
 
   it('Adding a new employee, upload attachment and verify it', () => {

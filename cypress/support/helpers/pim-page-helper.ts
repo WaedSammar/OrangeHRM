@@ -27,7 +27,7 @@ class PIMPageHelper {
    * @returns - API response
    */
   static createEmployeeViaAPI() {
-    const payload = PIMInitializer.generateMinimalEmployeePayload()
+    const payload = PIMInitializer.generateEmployeePayload()
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.employees, payload).then((response) => {
       response
     })
@@ -37,8 +37,8 @@ class PIMPageHelper {
    * add username and password for the employee
    * @param {number} empNumber
    */
-  static createUserViaAPI(empNumber: number) {
-    const payload = PIMInitializer.generateUserPayload()
+  static createUserViaAPI(employeeData:IEmployeeInfo, empNumber: number) {
+    const payload = PIMInitializer.initializerUserPayload(employeeData)
     CommonHelper.sendAPIRequest(HTTP_METHODS.POST, COMMON_URLs.users, {
       ...payload,
       empNumber
@@ -53,20 +53,10 @@ class PIMPageHelper {
    * @param {number} empNumber
    */
   static updateEmployeeDetailsViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
+    const payload = PIMInitializer.initializerUpdatedDetailsPayload(employeeInfo)
+
     const url = `${URLs.employees}/${empNumber}/${URLs.personalDetails}`
-    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, {
-      firstName: employeeInfo.firstName,
-      middleName: employeeInfo.middleName,
-      lastName: employeeInfo.lastName,
-      employeeId: employeeInfo.employeeId,
-      otherId: employeeInfo.otherId,
-      drivingLicenseNo: employeeInfo.licenseNum,
-      drivingLicenseExpiredDate: employeeInfo.expDate,
-      birthday: employeeInfo.dateOfBirth,
-      gender: GenderMap[employeeInfo.gender],
-      maritalStatus: employeeInfo.maritalState,
-      nationalityId: employeeInfo.nationalityId
-    })
+    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, payload)
   }
 
   /**
@@ -75,11 +65,9 @@ class PIMPageHelper {
    * @param {number} empNumber
    */
   static updateEmployeeCustomFieldsViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
+    const payload = PIMInitializer.initializerCustomFieldPayload(employeeInfo)
     const url = `${URLs.employees}/${empNumber}/${URLs.customField}`
-    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, {
-      custom1: employeeInfo.bloodType,
-      custom2: employeeInfo.testField
-    })
+    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, payload)
   }
 
   /**
