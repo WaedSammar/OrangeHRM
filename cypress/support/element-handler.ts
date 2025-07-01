@@ -161,8 +161,8 @@ class ElementHandler {
 
   /**
    * get Matching Row By Data
-   * @param {validateTableRow} data 
-   * @returns 
+   * @param {validateTableRow} data
+   * @returns
    */
   static getMatchingRowByData(data: TableRowData) {
     const headers = Object.keys(data)
@@ -198,19 +198,20 @@ class ElementHandler {
       if (matchingIndices.length === 0) throw new Error('No matching rows found')
       if (matchingIndices.length > 1) throw new Error('Multiple matching rows found')
 
-      const matchIndex = matchingIndices[0]
-      // get the row that match by index
-      return cy.get(COMMON_LOCATORS.table).find(COMMON_LOCATORS.tableCard).eq(matchIndex)
+      return matchingIndices[0]
     })
   }
 
   /**
    * validate Table Row
-  * @param {TableRowData} data 
+   * @param {TableRowData} data
    */
   static validateTableRow(data: TableRowData) {
-    this.getMatchingRowByData(data).then(($row) => {
-      cy.wrap($row)
+    this.getMatchingRowByData(data).then((matchIndex) => {
+      // get the row that match by index
+      cy.get(COMMON_LOCATORS.table)
+        .find(COMMON_LOCATORS.tableCard)
+        .eq(matchIndex)
         .find(COMMON_LOCATORS.cell)
         .then(($cells) => {
           //verify each cell betmatch the expected value
@@ -233,12 +234,12 @@ class ElementHandler {
 
   /**
    * click on icon on the table
-   * @param {TableRowData} data 
-   * @param {string} locator 
+   * @param {TableRowData} data
+   * @param {string} locator
    */
   static clickActionIconInRow(data: TableRowData, locator: string) {
-    this.getMatchingRowByData(data).then(($row) => {
-      cy.wrap($row).find(locator).click()
+    this.getMatchingRowByData(data).then((matchIndex) => {
+      cy.get(COMMON_LOCATORS.table).find(COMMON_LOCATORS.tableCard).eq(matchIndex).find(locator).click()
     })
   }
 }
