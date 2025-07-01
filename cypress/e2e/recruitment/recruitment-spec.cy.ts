@@ -50,79 +50,80 @@ describe('Recruitment Page Test Cases', () => {
   })
 
   it('Schedule an interview via UI', () => {
-    RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds)
-
-    RecruitmentPage.goToRecruitmentPage()
-    const data = {
-      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
-      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
-      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
-    }
-    RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
-    let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
-    RecruitmentPage.checkAllowedActions(expectedActions)
-    RecruitmentPage.scheduleInterview()
-    RecruitmentPage.fillInterviewInfo(recruitmentMockData, employeeMockData)
-    RecruitmentPage.verifyStatus()
-    expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
-    RecruitmentPage.checkAllowedActions(expectedActions)
+    RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds).then(() => {
+      RecruitmentPage.goToRecruitmentPage()
+      const data = {
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
+      }
+      RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
+      let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
+      RecruitmentPage.checkAllowedActions(expectedActions)
+      RecruitmentPage.scheduleInterview()
+      RecruitmentPage.fillInterviewInfo(recruitmentMockData, employeeMockData)
+      RecruitmentPage.verifyStatus()
+      expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
+      RecruitmentPage.checkAllowedActions(expectedActions)
+    })
   })
 
   it('Mark a shortlisted candidate as interview passed', () => {
-    RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds)
+    RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds).then(() => {
+      RecruitmentPage.goToRecruitmentPage()
+      const data = {
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
+      }
 
-    RecruitmentPage.goToRecruitmentPage()
-    const data = {
-      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
-      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
-      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
-    }
-    RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
-    RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds).then(() => {
-      RecruitmentPage.verifyStatus()
-      let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
-      RecruitmentPage.checkAllowedActions(expectedActions)
-      RecruitmentPage.markInterviewPassed()
-      expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW, ALLOWED_ACTIONS.OFFER_JOB]
-      RecruitmentPage.checkAllowedActions(expectedActions)
+      RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
+      RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds).then(() => {
+        RecruitmentPage.verifyStatus()
+        let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
+        RecruitmentPage.checkAllowedActions(expectedActions)
+        RecruitmentPage.markInterviewPassed()
+        expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW, ALLOWED_ACTIONS.OFFER_JOB]
+        RecruitmentPage.checkAllowedActions(expectedActions)
+      })
     })
   })
 
   it('Mark a shortlisted candidate as interview failed', () => {
-    RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds)
-
-    RecruitmentPage.goToRecruitmentPage()
-    const data = {
-      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
-      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
-      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
-    }
-    RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
-    RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds).then(() => {
-      RecruitmentPage.verifyStatus()
-      let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
-      RecruitmentPage.checkAllowedActions(expectedActions)
-      RecruitmentPage.markInterviewFailed()
-      expectedActions = [ALLOWED_ACTIONS.REJECT]
-      RecruitmentPage.checkAllowedActions(expectedActions)
+    RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds).then(() => {
+      RecruitmentPage.goToRecruitmentPage()
+      const data = {
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
+      }
+      RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
+      RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds).then(() => {
+        RecruitmentPage.verifyStatus()
+        let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
+        RecruitmentPage.checkAllowedActions(expectedActions)
+        RecruitmentPage.markInterviewFailed()
+        expectedActions = [ALLOWED_ACTIONS.REJECT]
+        RecruitmentPage.checkAllowedActions(expectedActions)
+      })
     })
   })
 
   it('Mark a shortlisted candidate as interview reject', () => {
-    RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds)
-
-    RecruitmentPage.goToRecruitmentPage()
-    const data = {
-      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
-      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
-      [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
-    }
-    RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
-    RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds).then(() => {
-      RecruitmentPage.verifyStatus()
-      const expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
-      RecruitmentPage.checkAllowedActions(expectedActions)
-      RecruitmentPage.rejectCandidate()
+    RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds).then(() => {
+      RecruitmentPage.goToRecruitmentPage()
+      const data = {
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
+      }
+      RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
+      RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds).then(() => {
+        RecruitmentPage.verifyStatus()
+        const expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
+        RecruitmentPage.checkAllowedActions(expectedActions)
+        RecruitmentPage.rejectCandidate()
+      })
     })
   })
 

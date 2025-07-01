@@ -77,7 +77,7 @@ class RecruitmentPageHelper {
    * @returns
    */
   static updateCandidateStatus(candidateId: number[], status: string) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, `${URLs.candidate}/${candidateId}/${status}`)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, `${URLs.candidate}/${candidateId}/${status}`)
   }
 
   /**
@@ -85,7 +85,7 @@ class RecruitmentPageHelper {
    * @param {number} candidateId
    */
   static updateCandidateStatusToShortlisted(candidateId: number[]) {
-    this.updateCandidateStatus(candidateId, URLs.shortlist)
+    return this.updateCandidateStatus(candidateId, URLs.shortlist)
   }
 
   /**
