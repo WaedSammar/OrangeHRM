@@ -84,5 +84,13 @@ class PIMPageHelper {
       custom2: employeeInfo.testField
     })
   }
+
+  /**
+   * delete created user
+   * @param {number []} empNumbers
+   */
+  static deleteUsers(empNumbers: number[]) {
+    return CommonHelper.cleanup(URLs.employees, empNumbers)
+  }
 }
 export { PIMPageHelper }

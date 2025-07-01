@@ -8,7 +8,10 @@ const COMMON_LOCATORS = {
   loaderIcon: '.oxd-loading-spinner',
   submitBtn: `${HTML_TAGS.button}[type='submit']`,
   downloadIcon: '.oxd-icon.bi-download',
-  trashIcon: '.oxd-icon.bi-trash'
+  trashIcon: '.oxd-icon.bi-trash',
+  table: '[role="table"]',
+  cell: '[role="cell"]',
+  tableCard: '.oxd-table-card'
 }
 
 const COMMON_URLs = {
@@ -25,10 +28,13 @@ enum DROP_DOWN {
 
 class ElementHandler {
   private static LOCATORS = {
-    table: '[role="table"]',
     columnHeader: '[role="columnheader"]',
-    cell: '[role="cell"]',
-    tableCard: '.oxd-table-card'
+    inputGroup: '.oxd-input-group',
+    selectField: '.oxd-select-text',
+    dropdownOption: '.oxd-select-dropdown',
+    dateInput: `${HTML_TAGS.input}[placeholder='yyyy-dd-mm']`,
+    closeCalenderBtn: '.--close',
+    eyeIcon: '.bi-eye-fill'
   }
 
   /**
@@ -101,6 +107,26 @@ class ElementHandler {
   }
 
   /**
+   * select date from calender and close it
+   * @param {string} date
+   * @param {number} index
+   */
+  static selectDate(date: string, index: number = 0) {
+    cy.get(this.LOCATORS.dateInput).eq(index).should('be.visible').clear().type(date)
+    cy.get(this.LOCATORS.closeCalenderBtn).should('be.visible').click()
+  }
+
+  /**
+   * select option from dropdown
+   * @param {string} label - label for input text
+   * @param {string} option - option to select
+   */
+  static selectDropdownByLabel(label: string, option: string) {
+    cy.contains(HTML_TAGS.label, label).parents(this.LOCATORS.inputGroup).find(this.LOCATORS.selectField).click()
+    cy.get(this.LOCATORS.dropdownOption).contains(option).click()
+  }
+
+  /**
    * save information user entered
    * @param index
    */
@@ -123,7 +149,7 @@ class ElementHandler {
    */
   static getHeaderIndex(headerName: string) {
     return new Cypress.Promise<number>((resolve) => {
-      cy.get(this.LOCATORS.table)
+      cy.get(COMMON_LOCATORS.table)
         .find(this.LOCATORS.columnHeader)
         .contains(headerName)
         .invoke('index')
@@ -134,10 +160,11 @@ class ElementHandler {
   }
 
   /**
-   * make validation for the user
-   * @param data
+   * get Matching Row By Data
+   * @param {validateTableRow} data
+   * @returns
    */
-  static validateTableRow(data: TableRowData) {
+  static getMatchingRowByData(data: TableRowData) {
     const headers = Object.keys(data)
     const matchesPerColumn: { [key: string]: number[] } = {}
 
@@ -146,11 +173,11 @@ class ElementHandler {
 
       // get the index for the column
       this.getHeaderIndex(key).then((headerIndex) => {
-        cy.get(this.LOCATORS.table)
-          .find(this.LOCATORS.tableCard)
+        cy.get(COMMON_LOCATORS.table)
+          .find(COMMON_LOCATORS.tableCard)
           .each(($row, rowIndex) => {
             cy.wrap($row)
-              .find(this.LOCATORS.cell)
+              .find(COMMON_LOCATORS.cell)
               .eq(headerIndex)
               .invoke('text')
               .then((text) => {
@@ -163,27 +190,56 @@ class ElementHandler {
       })
     })
 
-    cy.then(() => {
-      const matchingIndices = matchesPerColumn[headers[0]].filter((index) => {
-        return headers.every((key) => matchesPerColumn[key].includes(index))
-      })
+    return cy.then(() => {
+      const matchingIndices = matchesPerColumn[headers[0]].filter((index) =>
+        headers.every((key) => matchesPerColumn[key].includes(index))
+      )
+
       if (matchingIndices.length === 0) throw new Error('No matching rows found')
       if (matchingIndices.length > 1) throw new Error('Multiple matching rows found')
 
-      const matchIndex = matchingIndices[0]
+      return matchingIndices[0]
+    })
+  }
 
-      cy.get(this.LOCATORS.table) // get the row that match by index
-        .find(this.LOCATORS.tableCard)
+  /**
+   * validate Table Row
+   * @param {TableRowData} data
+   */
+  static validateTableRow(data: TableRowData) {
+    this.getMatchingRowByData(data).then((matchIndex) => {
+      // get the row that match by index
+      cy.get(COMMON_LOCATORS.table)
+        .find(COMMON_LOCATORS.tableCard)
         .eq(matchIndex)
-        .find(this.LOCATORS.cell)
+        .find(COMMON_LOCATORS.cell)
         .then(($cells) => {
           //verify each cell betmatch the expected value
-          headers.forEach((key) => {
+          Object.keys(data).forEach((key) => {
             this.getHeaderIndex(key).then((headerIndex) => {
               cy.wrap($cells).eq(headerIndex).should('have.text', data[key])
             })
           })
         })
+    })
+  }
+
+  /**
+   * click Eye Icon For Shortlisted Candidate
+   * @param {TableRowData} data
+   */
+  static clickEyeIconForShortlistedCandidate(data: TableRowData) {
+    this.clickActionIconInRow(data, this.LOCATORS.eyeIcon)
+  }
+
+  /**
+   * click on icon on the table
+   * @param {TableRowData} data
+   * @param {string} locator
+   */
+  static clickActionIconInRow(data: TableRowData, locator: string) {
+    this.getMatchingRowByData(data).then((matchIndex) => {
+      cy.get(COMMON_LOCATORS.table).find(COMMON_LOCATORS.tableCard).eq(matchIndex).find(locator).click()
     })
   }
 }

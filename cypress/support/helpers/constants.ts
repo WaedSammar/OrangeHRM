@@ -2,7 +2,8 @@ export enum PAGES {
   BUZZ = 'Buzz',
   PIM = 'PIM',
   MY_INFO = 'My Info',
-  ADMIN = 'Admin'
+  ADMIN = 'Admin',
+  RECRUITMENT = 'Recruitment'
 }
 
 export enum HTTP_METHODS {
@@ -56,5 +57,6 @@ export enum SIZE_LIMIT {
 
 export enum COMMON_BUTTONS {
   ADD = 'Add',
-  SEARCH = 'Search'
+  SEARCH = 'Search',
+  SAVE = 'Save'
 }

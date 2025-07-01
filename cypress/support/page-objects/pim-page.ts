@@ -44,7 +44,6 @@ class PIMPage {
     selectField: '.oxd-select-text',
     dropdownOption: '.oxd-select-dropdown',
     selectGender: `${HTML_TAGS.input}[type="radio"][value="1"]`,
-    closeBtn: '.oxd-date-input-link.--close',
     chosenGender: `${HTML_TAGS.input}[type="radio"]:checked`,
     uploadFile: `${HTML_TAGS.input}[type="file"]`,
     tableBody: '.oxd-table-body'
@@ -164,27 +163,10 @@ class PIMPage {
   /**
    * select date from calender
    * @param {string} date - chosen date
-   * @param {number} index - index for input field (e.g., 0 = license expiry, 1 = birthday)
+   * @param {number} index - index for input field
    */
   static selectDate(date: string, index: number = 0) {
-    cy.get(this.LOCATORS.dateInput).eq(index).should('be.visible').clear().type(date)
-  }
-
-  /**
-   * remove focus to remove calender
-   */
-  static closeCalender() {
-    cy.get(this.LOCATORS.closeBtn).should('be.visible').click()
-  }
-
-  /**
-   * select option from dropdown
-   * @param {string} label - label for input text
-   * @param {string} option - option to select
-   */
-  static selectDropdownByLabel(label: string, option: string) {
-    cy.contains(HTML_TAGS.label, label).parents(this.LOCATORS.inputGroup).find(this.LOCATORS.selectField).click()
-    cy.get(this.LOCATORS.dropdownOption).contains(option).click()
+    ElementHandler.selectDate(date, index)
   }
 
   /**
@@ -192,7 +174,7 @@ class PIMPage {
    * @param text - chosen nationality
    */
   static selectNationality(text: string) {
-    this.selectDropdownByLabel(LABELS.NATIONALITY, text)
+    ElementHandler.selectDropdownByLabel(LABELS.NATIONALITY, text)
   }
 
   /**
@@ -200,7 +182,7 @@ class PIMPage {
    * @param text - employee marital state
    */
   static selectMaritalStatus(text: string) {
-    this.selectDropdownByLabel(LABELS.MARITAL_STATUS, text)
+    ElementHandler.selectDropdownByLabel(LABELS.MARITAL_STATUS, text)
   }
 
   /**
@@ -216,7 +198,7 @@ class PIMPage {
    * @param text - blood type
    */
   static selectBloodType(text: string) {
-    this.selectDropdownByLabel(LABELS.BLOOD_TYPE, text)
+    ElementHandler.selectDropdownByLabel(LABELS.BLOOD_TYPE, text)
   }
 
   /**
@@ -381,7 +363,6 @@ class PIMPage {
     PIMPage.fillOtherId(employeeInfo.otherId)
     PIMPage.fillLicenseNum(employeeInfo.licenseNum)
     PIMPage.selectDate(employeeInfo.expDate)
-    PIMPage.closeCalender()
     PIMPage.selectNationality(employeeInfo.nationality)
     PIMPage.selectMaritalStatus(employeeInfo.maritalState)
     PIMPage.selectDate(employeeInfo.dateOfBirth, 1)
