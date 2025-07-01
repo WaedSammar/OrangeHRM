@@ -70,6 +70,19 @@ class PIMPageHelper {
   }
 
   /**
+   * get empNumber By EmployeeId
+   * @param {string} employeeId 
+   * @returns 
+   */
+  static getEmpNumberByEmployeeId(employeeId: string): Cypress.Chainable<number | null> {
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.GET, URLs.employees).then((response) => {
+      const employees = response.body.data
+      const matchedEmployee = employees.find((emp) => emp.employeeId === employeeId)
+      return matchedEmployee ? matchedEmployee.empNumber : null
+    })
+  }
+
+  /**
    * delete created user
    * @param {number []} empNumbers
    */

@@ -10,7 +10,6 @@ import { IEmployeeInfo } from '../../support/types/employee.types'
 
 describe('Employee management - Add and Save Test Cases', () => {
   let employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo, nationalityId: number
-  let employeeNum: number[] = []
 
   before(() => {
     cy.fixture('employee-page-mock').then((addEmployeeData) => {
@@ -27,7 +26,6 @@ describe('Employee management - Add and Save Test Cases', () => {
   })
 
   beforeEach(() => {
-    employeeNum = []
     cy.login()
 
     employeeInfo = {
@@ -61,7 +59,6 @@ describe('Employee management - Add and Save Test Cases', () => {
   it('Adding a new employee via API', () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber
-      employeeNum.push(empNumber)
 
       PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(() => {
         PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
@@ -75,7 +72,7 @@ describe('Employee management - Add and Save Test Cases', () => {
     })
   })
 
-  it('Adding a new employee, upload attachment and verify it', () => {
+  it.only('Adding a new employee, upload attachment and verify it', () => {
     PIMPage.goToPIMPage()
     PIMPage.clickAddBtn()
     PIMPage.fillEmployeeInfo(employeeInfo)
@@ -103,7 +100,6 @@ describe('Employee management - Add and Save Test Cases', () => {
   it('Verify added employee appears in the table', () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((res) => {
       const empNumber = res.body.data.empNumber
-      employeeNum.push(empNumber)
 
       PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(() => {
         PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
@@ -124,7 +120,11 @@ describe('Employee management - Add and Save Test Cases', () => {
   afterEach(() => {
     ElementHandler.logout()
     cy.login()
-    AdminPageHelper.deleteUserByUsername(employeeInfo.userName)
+    PIMPageHelper.getEmpNumberByEmployeeId(employeeInfo.employeeId).then((empNumber) => {
+      if (empNumber) {
+        PIMPageHelper.deleteUsers([empNumber])
+      }
+    })
   })
 
   after(() => {
