@@ -1,8 +1,9 @@
 import dayjs from 'dayjs'
 import { HTML_TAGS, HTTP_METHODS, PAGES, SEPARATORS } from '../helpers/constants'
-import { URLs } from '../helpers/apis-helpers'
+import { APIsHelper, URLs } from '../helpers/apis-helpers'
 import { ElementHandler } from '../element-handler'
 import { IEmployeeInfo } from '../types/employee.types'
+import CommonHelper from '../helpers/common-helper'
 
 enum POST_FILTER_OPTION {
   MOST_RECENT = 'Most Recent Posts',
@@ -60,7 +61,10 @@ class BuzzPage {
    * submit a post
    */
   static submitPost() {
+    const createPostAliasName = CommonHelper.generateRandomString(2, 'CreatePost_')
+    APIsHelper.interceptPostRequest(createPostAliasName)
     cy.get(HTML_TAGS.button).contains('Post').click()
+    return APIsHelper.getInterceptionApiResponse(createPostAliasName)
   }
 
   /**
@@ -113,7 +117,10 @@ class BuzzPage {
    * @param {POST_FILTER_OPTION} filterOption - filter option
    */
   static applyPostFilter(filterOption: POST_FILTER_OPTION) {
+    const mostLikedFilterAliasName = CommonHelper.generateRandomString(2, 'mostLikedPost')
+    APIsHelper.interceptPostFilter(mostLikedFilterAliasName)
     cy.get(this.LOCATORS.postFilter).contains(filterOption).click()
+    APIsHelper.waitForApiResponse(mostLikedFilterAliasName)
   }
 
   /**
