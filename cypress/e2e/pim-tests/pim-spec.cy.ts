@@ -17,13 +17,13 @@ describe('Employee management - Add and Save Test Cases', () => {
     cy.fixture('employee-page-mock').then((addEmployeeData) => {
       employeeMockData = addEmployeeData
 
-      // cy.login()
-      // AdminPageHelper.addNationality(employeeMockData.newNationality)
-      // AdminPageHelper.getNationality().then((res) => {
-      //   const added = res.body.data.find(({ name }) => name === employeeMockData.newNationality)
-      //   nationalityId = added.id
-      // })
-      // ElementHandler.logout()
+      cy.login()
+      AdminPageHelper.addNationality(employeeMockData.newNationality)
+      AdminPageHelper.getNationality().then((res) => {
+        const added = res.body.data.find(({ name }) => name === employeeMockData.newNationality)
+        nationalityId = added.id
+      })
+      ElementHandler.logout()
     })
   })
 
@@ -62,16 +62,19 @@ describe('Employee management - Add and Save Test Cases', () => {
   })
 
   it.only('Adding a new employee via API', () => {
-    PIMPageHelper.createEmployeeViaAPI().then((response) => {
+    PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber
-      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber)
-      PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
-      PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber)
+
+      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(() => {
+        PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
+        PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber)
+
+        ElementHandler.logout()
+        cy.login(employeeInfo.userName, employeeInfo.password)
+        MyInfo.goToMyInfoPage()
+        PIMPage.verifyEmployeeInfo(employeeInfo)
+      })
     })
-    ElementHandler.logout()
-    cy.login(employeeInfo.userName, employeeInfo.password)
-    MyInfo.goToMyInfoPage()
-    PIMPage.verifyEmployeeInfo(employeeInfo)
   })
 
   it('Adding a new employee, upload attachment and verify it', () => {
@@ -118,12 +121,12 @@ describe('Employee management - Add and Save Test Cases', () => {
   })
 
   afterEach(() => {
-    // ElementHandler.logout()
-    // cy.login()
+    ElementHandler.logout()
+    cy.login()
     // AdminPageHelper.deleteUserByUsername(employeeInfo.userName)
   })
 
   after(() => {
-    // AdminPageHelper.deleteNationalities([nationalityId])
+    AdminPageHelper.deleteNationalities([nationalityId])
   })
 })

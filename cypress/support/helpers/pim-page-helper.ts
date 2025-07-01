@@ -26,8 +26,9 @@ class PIMPageHelper {
    * create employee basic via API
    * @returns - API response
    */
-  static createEmployeeViaAPI() {
+  static createEmployeeViaAPI(employeeInfo: IEmployeeInfo) {
     const payload = PIMInitializer.generateEmployeePayload()
+    Object.assign(employeeInfo, payload)
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.employees, payload).then((response) => {
       response
     })
@@ -37,9 +38,11 @@ class PIMPageHelper {
    * add username and password for the employee
    * @param {number} empNumber
    */
-  static createUserViaAPI(employeeData:IEmployeeInfo, empNumber: number) {
-    const payload = PIMInitializer.initializerUserPayload(employeeData)
-    CommonHelper.sendAPIRequest(HTTP_METHODS.POST, COMMON_URLs.users, {
+  static createUserViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
+    const payload = PIMInitializer.initializerUserPayload()
+    employeeInfo.userName = payload.username
+    employeeInfo.password = payload.password
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, COMMON_URLs.users, {
       ...payload,
       empNumber
     }).then((response) => {
@@ -54,7 +57,6 @@ class PIMPageHelper {
    */
   static updateEmployeeDetailsViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
     const payload = PIMInitializer.initializerUpdatedDetailsPayload(employeeInfo)
-
     const url = `${URLs.employees}/${empNumber}/${URLs.personalDetails}`
     CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, payload)
   }

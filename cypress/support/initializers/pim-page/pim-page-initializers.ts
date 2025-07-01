@@ -54,10 +54,10 @@ class PIMInitializer {
     return payload
   }
 
-  static initializerUserPayload(employeeData: IEmployeeInfo) {
+  static initializerUserPayload() {
     const payload = {
-      username: employeeData.userName || faker.internet.username(),
-      password: employeeData.password || faker.internet.password({ prefix: 'yo12' }),
+      username:  faker.internet.username(),
+      password: faker.internet.password({ prefix: 'yo12' }),
       status: true,
       userRoleId: UserRole.ESS
     }
@@ -66,12 +66,12 @@ class PIMInitializer {
 
   static initializerUpdatedDetailsPayload(employeeData: IEmployeeInfo) {
     const payload = {
-      firstName: faker.person.firstName(),
-      middleName: faker.person.middleName(),
-      lastName: faker.person.lastName(),
-      employeeId: faker.number.int({ min: 1000, max: 9999 }).toString(),
-      otherId: faker.string.alphanumeric(3),
-      drivingLicenseNo: faker.number.int({ min: 100, max: 999 }).toString(),
+      firstName: employeeData.firstName,
+      middleName: employeeData.middleName,
+      lastName: employeeData.lastName,
+      employeeId: employeeData.employeeId,
+      otherId: employeeData.otherId,
+      drivingLicenseNo: employeeData.licenseNum,
       drivingLicenseExpiredDate: employeeData.expDate,
       birthday: employeeData.dateOfBirth,
       gender: GenderMap[employeeData.gender],
@@ -82,7 +82,7 @@ class PIMInitializer {
   }
 
   static initializerCustomFieldPayload(employeeData: IEmployeeInfo) {
-    const payload = { custom1: employeeData.bloodType, custom2: faker.number.int({ min: 1, max: 99 }).toString() }
+    const payload = { custom1: employeeData.bloodType, custom2: employeeData.testField }
     return payload
   }
 }
