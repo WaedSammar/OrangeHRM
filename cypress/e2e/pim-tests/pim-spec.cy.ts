@@ -1,7 +1,7 @@
 import { ElementHandler } from '../../support/element-handler'
 import { AdminPageHelper } from '../../support/helpers/admin-page-helper'
 import { APIsHelper } from '../../support/helpers/apis-helpers'
-import CommonHelper from '../../support/helpers/common-helper'
+import { CommonHelper } from '../../support/helpers/common-helper'
 import { SEPARATORS } from '../../support/helpers/constants'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { MyInfo } from '../../support/page-objects/my-info-page'

@@ -1,6 +1,6 @@
 import { ElementHandler } from '../element-handler'
 import { APIsHelper } from '../helpers/apis-helpers'
-import CommonHelper from '../helpers/common-helper'
+import { CommonHelper } from '../helpers/common-helper'
 import { COMMON_BUTTONS, HTML_TAGS, PAGES } from '../helpers/constants'
 import { IEmployeeInfo } from '../types/employee.types'
 import { IRecruitmentFormData } from '../types/recruitmentFormData'

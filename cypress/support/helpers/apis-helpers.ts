@@ -1,4 +1,4 @@
-import CommonHelper from './common-helper'
+import { CommonHelper } from './common-helper'
 import { HTTP_METHODS, HTTP_STATUS_CODE } from './constants'
 
 const baseURL = Cypress.config().baseUrl

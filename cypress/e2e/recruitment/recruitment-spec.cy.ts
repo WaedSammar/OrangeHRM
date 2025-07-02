@@ -61,7 +61,7 @@ describe('Recruitment Page Test Cases', () => {
       let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
       RecruitmentPage.checkAllowedActions(expectedActions)
       RecruitmentPage.scheduleInterview()
-      RecruitmentPage.fillInterviewInfo(recruitmentMockData, employeeMockData)
+      RecruitmentPage.fillInterviewInfo(recruitmentMockData, employeeInfo)
       RecruitmentPage.verifyStatus()
       expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
       RecruitmentPage.checkAllowedActions(expectedActions)

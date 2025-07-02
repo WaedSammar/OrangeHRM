@@ -3,7 +3,7 @@ import { HTML_TAGS, HTTP_METHODS, PAGES, SEPARATORS } from '../helpers/constants
 import { APIsHelper, URLs } from '../helpers/apis-helpers'
 import { ElementHandler } from '../element-handler'
 import { IEmployeeInfo } from '../types/employee.types'
-import CommonHelper from '../helpers/common-helper'
+import { CommonHelper } from '../helpers/common-helper'
 
 enum POST_FILTER_OPTION {
   MOST_RECENT = 'Most Recent Posts',
