@@ -1,7 +1,6 @@
-import { COMMON_URLs } from '../element-handler'
-import { PIMInitializer } from '../initializers/pim-page/pim-page-initializers'
+import { PIMInitializer } from '../initializers/pim-page/pim-page-initializer'
 import { IEmployeeInfo } from '../types/employee.types'
-import CommonHelper from './common-helper'
+import { CommonHelper, COMMON_URLs } from './common-helper'
 import { HTTP_METHODS } from './constants'
 
 const URLs = {
@@ -71,8 +70,8 @@ class PIMPageHelper {
 
   /**
    * get empNumber By EmployeeId
-   * @param {string} employeeId 
-   * @returns 
+   * @param {string} employeeId
+   * @returns
    */
   static getEmpNumberByEmployeeId(employeeId: string): Cypress.Chainable<number | null> {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.GET, URLs.employees).then((response) => {

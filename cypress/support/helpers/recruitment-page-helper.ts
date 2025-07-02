@@ -1,5 +1,5 @@
 import { IRecruitmentFormData } from '../types/recruitmentFormData'
-import CommonHelper from './common-helper'
+import { CommonHelper } from './common-helper'
 import { HTTP_METHODS } from './constants'
 
 const URLs = {
@@ -7,13 +7,8 @@ const URLs = {
   candidate: `/web/index.php/api/v2/recruitment/candidates`,
   jobTitle: `/web/index.php/api/v2/admin/job-titles`,
   shortlist: `shortlist`,
-  employee: `/web/index.php/api/v2/pim/employees`,
   allowedActions: `actions/allowed`,
   scheduleInterview: `shedule-interview`
-}
-
-enum STATUS {
-  INTERVIEW_STATUS = 'Interview Scheduled'
 }
 
 enum ALLOWED_ACTIONS {

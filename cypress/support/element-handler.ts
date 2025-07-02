@@ -14,11 +14,6 @@ const COMMON_LOCATORS = {
   tableCard: '.oxd-table-card'
 }
 
-const COMMON_URLs = {
-  nationalities: `/web/index.php/api/v2/admin/nationalities`,
-  users: `/web/index.php/api/v2/admin/users`
-}
-
 enum DROP_DOWN {
   ABOUT = 'About',
   SUPPORT = 'Support',
@@ -256,4 +251,4 @@ class ElementHandler {
     })
   }
 }
-export { ElementHandler, COMMON_LOCATORS, COMMON_URLs }
+export { ElementHandler, COMMON_LOCATORS }

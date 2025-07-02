@@ -1,5 +1,4 @@
-import { COMMON_URLs } from '../element-handler'
-import CommonHelper from './common-helper'
+import { CommonHelper, COMMON_URLs } from './common-helper'
 import { HTTP_METHODS, SIZE_LIMIT } from './constants'
 
 enum URLs {
