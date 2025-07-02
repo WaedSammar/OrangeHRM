@@ -1,20 +1,14 @@
-import { COMMON_LOCATORS, ElementHandler } from '../element-handler'
+import { ElementHandler } from '../element-handler'
 import { COMMON_BUTTONS, PAGES } from '../helpers/constants'
 
-enum BUTTONS {
-  NATIONALITIES = 'Nationalities',
-  DELETE = ' Yes, Delete '
-}
-
 class AdminPage {
-
   /**
    * go to admin page
    */
   static goToAdminPage() {
     ElementHandler.clickMenuItem(PAGES.ADMIN)
   }
-  
+
   /**
    * click add button
    */
@@ -23,18 +17,10 @@ class AdminPage {
   }
 
   /**
-   * delete created user
-   */
-  static deleteCreatedUsername() {
-    cy.get(COMMON_LOCATORS.trashIcon).click()
-    ElementHandler.clickButton(BUTTONS.DELETE)
-  }
-
-  /**
    * save button
    * @param index
    */
-  static clickSave(index: number = 0, buttonText: string = 'Save') {
+  static clickSave(index: number = 0, buttonText: string = COMMON_BUTTONS.SAVE) {
     ElementHandler.clickSave(index, buttonText)
   }
 }

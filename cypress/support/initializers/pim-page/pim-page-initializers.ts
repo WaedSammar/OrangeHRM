@@ -3,7 +3,7 @@ import { GENDER } from '../../page-objects/pim-page'
 import { IEmployeeInfo } from '../../types/employee.types'
 import { faker } from '@faker-js/faker'
 
-const GenderMap: Record<GENDER, number> = {
+export const GenderMap: Record<GENDER, number> = {
   [GENDER.MALE]: 1,
   [GENDER.FEMALE]: 2
 }

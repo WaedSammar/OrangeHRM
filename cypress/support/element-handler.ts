@@ -127,6 +127,19 @@ class ElementHandler {
   }
 
   /**
+   * get the dropdown value by label 
+   * @param {string} label 
+   * @returns 
+   */
+  static getDropdownValueByLabel(label: string) {
+    return cy
+      .contains(HTML_TAGS.label, label)
+      .parents(this.LOCATORS.inputGroup)
+      .find(this.LOCATORS.selectField)
+      .invoke(HTML_TAGS.text)
+  }
+
+  /**
    * save information user entered
    * @param index
    */

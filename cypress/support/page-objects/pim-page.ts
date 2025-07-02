@@ -1,7 +1,8 @@
 import { COMMON_LOCATORS, ElementHandler } from '../element-handler'
 import { APIsHelper } from '../helpers/apis-helpers'
 import CommonHelper from '../helpers/common-helper'
-import { CYPRESS_FOLDERS, HTML_TAGS, PAGES, TIMEOUT } from '../helpers/constants'
+import { COMMON_BUTTONS, CYPRESS_FOLDERS, HTML_TAGS, PAGES, TIMEOUT } from '../helpers/constants'
+import { GenderMap } from '../initializers/pim-page/pim-page-initializers'
 import { IEmployeeInfo } from '../types/employee.types'
 
 enum LABELS {
@@ -63,7 +64,7 @@ class PIMPage {
    * go to add employee
    */
   static clickAddBtn() {
-    ElementHandler.clickButton('Add')
+    ElementHandler.clickButton(COMMON_BUTTONS.ADD)
   }
 
   /**
@@ -133,7 +134,7 @@ class PIMPage {
    * save button
    * @param index
    */
-  static clickSave(index: number = 0, buttonText: string = 'Save') {
+  static clickSave(index: number = 0, buttonText: string = COMMON_BUTTONS.SAVE) {
     ElementHandler.clickSave(index, buttonText)
   }
 
@@ -268,22 +269,14 @@ class PIMPage {
    * @returns
    */
   static getNationality() {
-    return cy
-      .contains(HTML_TAGS.label, LABELS.NATIONALITY)
-      .parents(this.LOCATORS.inputGroup)
-      .find(this.LOCATORS.selectField)
-      .invoke(HTML_TAGS.text)
+    return ElementHandler.getDropdownValueByLabel(LABELS.NATIONALITY)
   }
 
   /**
    * verify Marital Status
    */
   static getMaritalStatus() {
-    return cy
-      .contains(HTML_TAGS.label, LABELS.MARITAL_STATUS)
-      .parents(this.LOCATORS.inputGroup)
-      .find(this.LOCATORS.selectField)
-      .invoke(HTML_TAGS.text)
+    return ElementHandler.getDropdownValueByLabel(LABELS.MARITAL_STATUS)
   }
 
   /**
@@ -360,13 +353,13 @@ class PIMPage {
    * @param employeeInfo
    */
   static fillPersonalDetails(employeeInfo: IEmployeeInfo) {
-    PIMPage.fillOtherId(employeeInfo.otherId)
-    PIMPage.fillLicenseNum(employeeInfo.licenseNum)
-    PIMPage.selectDate(employeeInfo.expDate)
-    PIMPage.selectNationality(employeeInfo.nationality)
-    PIMPage.selectMaritalStatus(employeeInfo.maritalState)
-    PIMPage.selectDate(employeeInfo.dateOfBirth, 1)
-    PIMPage.selectGender(employeeInfo.gender)
+    this.fillOtherId(employeeInfo.otherId)
+    this.fillLicenseNum(employeeInfo.licenseNum)
+    this.selectDate(employeeInfo.expDate)
+    this.selectNationality(employeeInfo.nationality)
+    this.selectMaritalStatus(employeeInfo.maritalState)
+    this.selectDate(employeeInfo.dateOfBirth, 1)
+    this.selectGender(employeeInfo.gender)
   }
 
   /**
@@ -374,8 +367,8 @@ class PIMPage {
    * @param employeeInfo
    */
   static fillAdditionalEmployeeDetails(employeeInfo: IEmployeeInfo) {
-    PIMPage.selectBloodType(employeeInfo.bloodType)
-    PIMPage.fillTestField(employeeInfo.testField)
+    this.selectBloodType(employeeInfo.bloodType)
+    this.fillTestField(employeeInfo.testField)
   }
 
   /**
@@ -393,7 +386,7 @@ class PIMPage {
     this.getBirthday().should('eq', employeeInfo.dateOfBirth)
     this.getNationality().should('eq', employeeInfo.nationality)
     this.getMaritalStatus().should('eq', employeeInfo.maritalState)
-    const expectedGenderValue = employeeInfo.gender === GENDER.MALE ? '1' : '2'
+    const expectedGenderValue = GenderMap[employeeInfo.gender].toString()
     this.getGender().should('eq', expectedGenderValue)
     this.getBloodType().should('eq', employeeInfo.bloodType)
     this.getTestField().should('eq', employeeInfo.testField)
