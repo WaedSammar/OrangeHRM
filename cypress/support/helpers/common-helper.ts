@@ -6,6 +6,17 @@ const COMMON_URLs = {
   DASHBOARD: '/dashboard'
 }
 
+export enum BloodType {
+  A_POSITIVE = 'A+',
+  A_NEGATIVE = 'A-',
+  B_POSITIVE = 'B+',
+  B_NEGATIVE = 'B-',
+  AB_POSITIVE = 'AB+',
+  AB_NEGATIVE = 'AB-',
+  O_POSITIVE = 'O+',
+  O_NEGATIVE = 'O-'
+}
+
 class CommonHelper {
   static generateRandomString(length: number = 7, prefix: string = '', suffix: string = ''): string {
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -21,6 +32,16 @@ class CommonHelper {
     return Math.floor(Math.random() * max)
   }
 
+  static generateRandomBloodType() {
+    return this.getRandomEnum(BloodType)
+  }
+
+  static getRandomEnum<T>(enumObj: T) {
+    const values = Object.values(enumObj)
+    const randomIndex = Math.floor(Math.random() * values.length)
+    return values[randomIndex]
+  }
+  
   static interceptRequests(requestURL: string, httpRequestMethod: HTTP_METHODS, aliasName: string) {
     return new Cypress.Promise((resolve) => {
       cy.intercept({

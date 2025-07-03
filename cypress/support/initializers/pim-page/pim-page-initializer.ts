@@ -1,3 +1,4 @@
+import { CommonHelper } from '../../helpers/common-helper'
 import { UserRole } from '../../helpers/pim-page-helper'
 import { GENDER } from '../../page-objects/pim-page'
 import { IEmployeeInfo } from '../../types/employee.types'
@@ -66,7 +67,7 @@ class PIMInitializer {
    */
   static initializerCustomFieldPayload(employeeData: IEmployeeInfo) {
     const payload = {
-      custom1: employeeData.bloodType,
+      custom1: employeeData.bloodType || CommonHelper.generateRandomBloodType(),
       custom2: employeeData.testField || faker.number.int({ min: 100, max: 999 }).toString()
     }
     return payload
