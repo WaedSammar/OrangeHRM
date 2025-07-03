@@ -3,7 +3,7 @@ import { APIsHelper } from '../helpers/apis-helpers'
 import { CommonHelper } from '../helpers/common-helper'
 import { COMMON_BUTTONS, HTML_TAGS, PAGES } from '../helpers/constants'
 import { IEmployeeInfo } from '../types/employee.types'
-import { IRecruitmentFormData } from '../types/recruitmentFormData'
+import { IRecruitmentFormData } from '../types/recruitmentFormData.types'
 import { TableRowData } from '../types/tableRowData.types'
 
 enum LABELS {
@@ -50,7 +50,7 @@ class RecruitmentPage {
 
   /**
    * click eye icon for shortlisted candidate
-   * @param {TableRowData} data 
+   * @param {TableRowData} data
    */
   static clickEyeIconForShortlistedCandidate(data: TableRowData) {
     ElementHandler.clickEyeIconForShortlistedCandidate(data)

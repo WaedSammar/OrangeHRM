@@ -1,4 +1,4 @@
-import { IRecruitmentFormData } from '../types/recruitmentFormData'
+import { IRecruitmentFormData } from '../types/recruitmentFormData.types'
 import { CommonHelper } from './common-helper'
 import { HTTP_METHODS } from './constants'
 
@@ -118,13 +118,17 @@ class RecruitmentPageHelper {
     interviewerEmpNumbers: number[],
     candidateIds: number[]
   ) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, `${URLs.candidate}/${candidateIds}/${URLs.scheduleInterview}`, {
-      interviewName: recruitmentMockData.interviewTitle,
-      interviewerEmpNumbers,
-      interviewDate: recruitmentMockData.interviewDate,
-      interviewTime: recruitmentMockData.interviewTime,
-      note: recruitmentMockData.jobNote
-    })
+    return CommonHelper.sendAPIRequest(
+      HTTP_METHODS.POST,
+      `${URLs.candidate}/${candidateIds}/${URLs.scheduleInterview}`,
+      {
+        interviewName: recruitmentMockData.interviewTitle,
+        interviewerEmpNumbers,
+        interviewDate: recruitmentMockData.interviewDate,
+        interviewTime: recruitmentMockData.interviewTime,
+        note: recruitmentMockData.jobNote
+      }
+    )
   }
 }
 

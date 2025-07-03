@@ -1,12 +1,9 @@
+import { COMMON_URLs } from '../helpers/common-helper'
+import { COLORS, INPUT_TYPE } from '../helpers/constants'
+
 enum LOGIN_PAGE_MSGS {
   INVALID_CREDENTIALS = 'Invalid credentials',
   REQUIRED_FIELD = 'Required'
-}
-
-enum CheckValues {
-  DASHBOARD = '/dashboard',
-  PASSWORD = 'password',
-  COLOR = 'rgb(235, 9, 16)'
 }
 
 class LoginPage {
@@ -37,11 +34,11 @@ class LoginPage {
   }
 
   static checkDashboardURL() {
-    cy.url().should('include', CheckValues.DASHBOARD)
+    cy.url().should('include', COMMON_URLs.DASHBOARD)
   }
 
   static checkPasswordHidden() {
-    cy.get(this.LOCATORS.password).should('have.attr', 'type', CheckValues.PASSWORD)
+    cy.get(this.LOCATORS.password).should('have.attr', 'type', INPUT_TYPE.PASSWORD)
   }
 
   static checkErrorMessage(message: string) {
@@ -55,7 +52,7 @@ class LoginPage {
   static checkRequiredColor() {
     cy.get(this.LOCATORS.requiredMsg).each(($el) => {
       cy.wrap($el).should('contain.text', LOGIN_PAGE_MSGS.REQUIRED_FIELD)
-      cy.wrap($el).should('have.css', 'color', CheckValues.COLOR)
+      cy.wrap($el).should('have.css', 'color', COLORS.RED)
     })
   }
 }

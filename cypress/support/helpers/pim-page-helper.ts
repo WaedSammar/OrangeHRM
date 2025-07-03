@@ -54,7 +54,7 @@ class PIMPageHelper {
   static updateEmployeeDetailsViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
     const payload = PIMInitializer.initializerUpdatedDetailsPayload(employeeInfo)
     const url = `${URLs.employees}/${empNumber}/${URLs.personalDetails}`
-    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, payload)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, payload)
   }
 
   /**
@@ -65,7 +65,7 @@ class PIMPageHelper {
   static updateEmployeeCustomFieldsViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
     const payload = PIMInitializer.initializerCustomFieldPayload(employeeInfo)
     const url = `${URLs.employees}/${empNumber}/${URLs.customField}`
-    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, payload)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, payload)
   }
 
   /**

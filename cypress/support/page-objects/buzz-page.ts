@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import { HTML_TAGS, HTTP_METHODS, PAGES, SEPARATORS } from '../helpers/constants'
 import { APIsHelper, URLs } from '../helpers/apis-helpers'
 import { ElementHandler } from '../element-handler'
-import { IEmployeeInfo } from '../types/employee.types'
+import { IEmployeeNameInfo } from '../types/employee.types'
 import { CommonHelper } from '../helpers/common-helper'
 
 enum POST_FILTER_OPTION {
@@ -72,7 +72,7 @@ class BuzzPage {
    * @param {IEmployeeInfo} employeeInfo - info for the employee
    * @param {number} [postIndex] - the index of the post
    */
-  static verifyPosterName(employeeInfo: IEmployeeInfo, postIndex: number = 0) {
+  static verifyPosterName(employeeInfo: IEmployeeNameInfo, postIndex: number = 0) {
     const { firstName, middleName, lastName } = employeeInfo
     const fullName = `${firstName} ${middleName} ${lastName}`.trim()
 
@@ -117,10 +117,10 @@ class BuzzPage {
    * @param {POST_FILTER_OPTION} filterOption - filter option
    */
   static applyPostFilter(filterOption: POST_FILTER_OPTION) {
-    const mostLikedFilterAliasName = CommonHelper.generateRandomString(2, 'mostLikedPost')
-    APIsHelper.interceptPostFilter(mostLikedFilterAliasName)
+  const aliasName = CommonHelper.generateRandomString(2, `${filterOption} Filter`)
+    APIsHelper.interceptPostFilter(aliasName)
     cy.get(this.LOCATORS.postFilter).contains(filterOption).click()
-    APIsHelper.waitForApiResponse(mostLikedFilterAliasName)
+    APIsHelper.waitForApiResponse(aliasName)
   }
 
   /**

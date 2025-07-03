@@ -3,6 +3,7 @@ import { HTTP_METHODS } from './constants'
 const COMMON_URLs = {
   nationalities: `/web/index.php/api/v2/admin/nationalities`,
   users: `/web/index.php/api/v2/admin/users`,
+  DASHBOARD: '/dashboard'
 }
 
 class CommonHelper {

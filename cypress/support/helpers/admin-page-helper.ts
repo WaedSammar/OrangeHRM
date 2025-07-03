@@ -1,7 +1,7 @@
 import { CommonHelper, COMMON_URLs } from './common-helper'
 import { HTTP_METHODS, SIZE_LIMIT } from './constants'
 
-enum URLs {
+enum PARAMS {
   LIMIT = '?limit='
 }
 
@@ -11,7 +11,7 @@ class AdminPageHelper {
    * @returns
    */
   static getNationality(limit: number = SIZE_LIMIT.fiveHundred) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.GET, `${COMMON_URLs.nationalities}${URLs.LIMIT}${limit}`)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.GET, `${COMMON_URLs.nationalities}${PARAMS.LIMIT}${limit}`)
   }
 
   /**

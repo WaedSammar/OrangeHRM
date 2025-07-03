@@ -1,5 +1,5 @@
+import { ICreatePostResponse } from '../../support/apis/responses/buzz'
 import { BuzzPage, POST_FILTER_OPTION } from '../../support/page-objects/buzz-page'
-import { ICreatePostResponse } from '../../support/types/employee-post'
 
 describe('Buzz News Feed Test Cases', () => {
   let postText: string

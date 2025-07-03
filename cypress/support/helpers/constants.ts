@@ -60,3 +60,11 @@ export enum COMMON_BUTTONS {
   SEARCH = 'Search',
   SAVE = 'Save'
 }
+
+export enum COLORS {
+  RED = 'rgb(235, 9, 16)'
+}
+
+export enum INPUT_TYPE {
+  PASSWORD = 'password'
+}

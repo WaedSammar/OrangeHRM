@@ -2,7 +2,7 @@ import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { ALLOWED_ACTIONS, RecruitmentPageHelper } from '../../support/helpers/recruitment-page-helper'
 import { RECRUITMENT_CANDIDATE_TABLE_HEADERS, RecruitmentPage } from '../../support/page-objects/recruitment-page'
 import { IEmployeeInfo } from '../../support/types/employee.types'
-import { IRecruitmentFormData } from '../../support/types/recruitmentFormData'
+import { IRecruitmentFormData } from '../../support/types/recruitmentFormData.types'
 
 describe('Recruitment Page Test Cases', () => {
   let recruitmentMockData: IRecruitmentFormData, employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo

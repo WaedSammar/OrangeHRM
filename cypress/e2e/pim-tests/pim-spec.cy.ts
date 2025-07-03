@@ -61,13 +61,14 @@ describe('Employee management - Add and Save Test Cases', () => {
       const empNumber = response.body.data.empNumber
 
       PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(() => {
-        PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
-        PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber)
-
-        ElementHandler.logout()
-        cy.login(employeeInfo.userName, employeeInfo.password)
-        MyInfo.goToMyInfoPage()
-        PIMPage.verifyEmployeeInfo(employeeInfo)
+        PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber).then(() => {
+          PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber).then(() => {
+            ElementHandler.logout()
+            cy.login(employeeInfo.userName, employeeInfo.password)
+            MyInfo.goToMyInfoPage()
+            PIMPage.verifyEmployeeInfo(employeeInfo)
+          })
+        })
       })
     })
   })
@@ -102,19 +103,20 @@ describe('Employee management - Add and Save Test Cases', () => {
       const empNumber = res.body.data.empNumber
 
       PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(() => {
-        PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
-        PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber)
+        PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber).then(() => {
+          PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber).then(() => {
+            PIMPage.goToPIMPage()
+            const data = {
+              [PIM_TABLE_HEADERS.ID]: employeeInfo.employeeId,
+              [PIM_TABLE_HEADERS.FIRST_AND_MIDDLE_NAME]: `${employeeInfo.firstName} ${employeeInfo.middleName}`,
+              [PIM_TABLE_HEADERS.LAST_NAME]: employeeInfo.lastName,
+              [PIM_TABLE_HEADERS.JOB_TITLE]: SEPARATORS.EMPTY
+            }
+            ElementHandler.validateTableRow(data)
+          })
+        })
       })
     })
-
-    PIMPage.goToPIMPage()
-    const data = {
-      [PIM_TABLE_HEADERS.ID]: employeeInfo.employeeId,
-      [PIM_TABLE_HEADERS.FIRST_AND_MIDDLE_NAME]: `${employeeInfo.firstName} ${employeeInfo.middleName}`,
-      [PIM_TABLE_HEADERS.LAST_NAME]: employeeInfo.lastName,
-      [PIM_TABLE_HEADERS.JOB_TITLE]: SEPARATORS.EMPTY
-    }
-    ElementHandler.validateTableRow(data)
   })
 
   afterEach(() => {
