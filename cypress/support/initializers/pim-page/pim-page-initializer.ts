@@ -1,6 +1,7 @@
+import dayjs from 'dayjs'
 import { CommonHelper } from '../../helpers/common-helper'
 import { UserRole } from '../../helpers/pim-page-helper'
-import { GENDER } from '../../page-objects/pim-page'
+import { BLOOD_TYPE, GENDER, MARITAL_STATUS } from '../../page-objects/pim-page'
 import { IEmployeeInfo } from '../../types/employee.types'
 import { faker } from '@faker-js/faker'
 
@@ -9,30 +10,34 @@ export const GenderMap: Record<GENDER, number> = {
   [GENDER.FEMALE]: 2
 }
 
+export const CHANGE_DATE_FORMAT = (date: Date): string => dayjs(date).format('YYYY-DD-MM')
+
 class PIMInitializer {
   /**
    * initializer for create employee payload
+   * @param {IEmployeeInfo} employeeData
    * @returns
    */
-  static initializerEmployeePayload() {
+  static initializerEmployeePayload(employeeData: IEmployeeInfo) {
     const payload = {
-      firstName: faker.person.firstName(),
-      middleName: faker.person.middleName(),
-      lastName: faker.person.lastName(),
-      employeeId: faker.number.int({ min: 1000, max: 9999 }).toString()
+      firstName: employeeData.firstName || faker.person.firstName(),
+      middleName: employeeData.middleName || faker.person.middleName(),
+      lastName: employeeData.lastName || faker.person.lastName(),
+      employeeId: employeeData.employeeId || faker.number.int({ min: 1000, max: 9999 }).toString()
     }
     return payload
   }
 
   /**
    * initializer for create user payload
+   * @param {IEmployeeInfo} employeeData
    * @returns
    */
-  static initializerUserPayload() {
+  static initializerUserPayload(employeeData: IEmployeeInfo) {
     const payload = {
-      username: faker.internet.username(),
-      password: faker.internet.password({ prefix: 'yo12' }),
-      status: true,
+      username: employeeData.userName || faker.internet.username(),
+      password: employeeData.password || faker.internet.password({ prefix: 'yo12' }),
+      status: employeeData.status || faker.datatype.boolean(),
       userRoleId: UserRole.ESS
     }
     return payload
@@ -51,10 +56,10 @@ class PIMInitializer {
       employeeId: employeeData.employeeId || faker.number.int({ min: 1000, max: 9999 }).toString(),
       otherId: employeeData.otherId || faker.string.alphanumeric(4),
       drivingLicenseNo: employeeData.licenseNum || faker.string.alphanumeric(6),
-      drivingLicenseExpiredDate: employeeData.expDate,
-      birthday: employeeData.dateOfBirth,
-      gender: GenderMap[employeeData.gender] || CommonHelper.generateRandomGender(),
-      maritalStatus: employeeData.maritalState || CommonHelper.generateRandomMaritalStatus(),
+      birthday: employeeData.dateOfBirth || CHANGE_DATE_FORMAT(faker.date.birthdate()),
+      drivingLicenseExpiredDate: employeeData.expDate || CHANGE_DATE_FORMAT(faker.date.future()),
+      gender: GenderMap[employeeData.gender] || CommonHelper.getRandomEnum(GENDER),
+      maritalStatus: employeeData.maritalState || CommonHelper.getRandomEnum(MARITAL_STATUS),
       nationalityId: employeeData.nationalityId
     }
     return payload
@@ -67,7 +72,7 @@ class PIMInitializer {
    */
   static initializerCustomFieldPayload(employeeData: IEmployeeInfo) {
     const payload = {
-      custom1: employeeData.bloodType || CommonHelper.generateRandomBloodType(),
+      custom1: employeeData.bloodType || CommonHelper.getRandomEnum(BLOOD_TYPE),
       custom2: employeeData.testField || faker.number.int({ min: 100, max: 999 }).toString()
     }
     return payload

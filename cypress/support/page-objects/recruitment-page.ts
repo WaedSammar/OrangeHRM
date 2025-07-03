@@ -86,23 +86,23 @@ class RecruitmentPage {
 
   /**
    * fill Interviewer Name
-   * @param {IEmployeeInfo} employeeMockData
+   * @param {IEmployeeInfo} employeeInfo
    */
-  static fillInterviewerName(employeeMockData: IEmployeeInfo) {
+  static fillInterviewerName(employeeInfo: IEmployeeInfo) {
     const loadInterviewerName = CommonHelper.generateRandomString(3, 'loadInterviewerName')
     APIsHelper.interceptInterviewerName(loadInterviewerName)
     ElementHandler.findInputByLabel(LABELS.INTERVIEWER).type(
-      `${employeeMockData.firstName} ${employeeMockData.middleName} ${employeeMockData.lastName}`
+      `${employeeInfo.firstName} ${employeeInfo.middleName} ${employeeInfo.lastName}`
     )
     APIsHelper.waitForApiResponse(loadInterviewerName)
     cy.get(this.LOCATORS.autoComplete).eq(0).click()
   }
 
   /**
-   * fill Interview Data
+   * fill Interview Date
    * @param {string} interviewDate
    */
-  static fillInterviewData(interviewDate: string) {
+  static fillInterviewDate(interviewDate: string) {
     ElementHandler.selectDate(interviewDate)
   }
 
@@ -125,12 +125,12 @@ class RecruitmentPage {
   /**
    * fill interview form information
    * @param {IRecruitmentFormData} interviewData
-   * @param {IEmployeeInfo} employeeMockData
+   * @param {IEmployeeInfo} employeeInfo
    */
-  static fillInterviewInfo(interviewData: IRecruitmentFormData, employeeMockData: IEmployeeInfo) {
+  static fillInterviewInfo(interviewData: IRecruitmentFormData, employeeInfo: IEmployeeInfo) {
     this.fillInterviewTitle(interviewData.interviewTitle)
-    this.fillInterviewerName(employeeMockData)
-    this.fillInterviewData(interviewData.interviewDate)
+    this.fillInterviewerName(employeeInfo)
+    this.fillInterviewDate(interviewData.interviewDate)
     this.fillInterviewTime()
     this.clickSave()
   }

@@ -32,6 +32,24 @@ enum PIM_TABLE_HEADERS {
   JOB_TITLE = 'Job Title'
 }
 
+export enum BLOOD_TYPE {
+  A_POSITIVE = 'A+',
+  A_NEGATIVE = 'A-',
+  B_POSITIVE = 'B+',
+  B_NEGATIVE = 'B-',
+  AB_POSITIVE = 'AB+',
+  AB_NEGATIVE = 'AB-',
+  O_POSITIVE = 'O+',
+  O_NEGATIVE = 'O-'
+}
+
+export enum MARITAL_STATUS {
+  SINGLE = 'Single',
+  MARRIED = 'Married',
+  DIVORCED = 'Divorced',
+  WIDOWED = 'Widowed'
+}
+
 class PIMPage {
   private static LOCATORS = {
     firstName: '.orangehrm-firstname',

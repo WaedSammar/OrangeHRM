@@ -10,6 +10,7 @@ describe('Recruitment Page Test Cases', () => {
   let vacancyIds: number[] = []
   let candidateIds: number[] = []
   let jobTitleIds: number[] = []
+  let createdUsersMap: Record<string, IEmployeeInfo> = {}
 
   before(() => {
     cy.fixture('recruitment-page-mock').then((candidatesData) => {
@@ -29,8 +30,9 @@ describe('Recruitment Page Test Cases', () => {
     cy.login()
 
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
-      const empNumber = response.body.data.empNumber
-      employeeIds.push(empNumber)
+      const empNumber = response.body.data.empNumber.toString()
+      employeeIds.push(Number(empNumber))
+      createdUsersMap[empNumber] = response.body.data
 
       RecruitmentPageHelper.addJobTitle(recruitmentMockData).then((jobTitleRes) => {
         const jobTitleId = jobTitleRes.body.data.id
@@ -61,7 +63,8 @@ describe('Recruitment Page Test Cases', () => {
       let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
       RecruitmentPage.checkAllowedActions(expectedActions)
       RecruitmentPage.scheduleInterview()
-      RecruitmentPage.fillInterviewInfo(recruitmentMockData, employeeInfo)
+      const interviewerData = createdUsersMap[employeeIds[0].toString()]
+      RecruitmentPage.fillInterviewInfo(recruitmentMockData, interviewerData)
       RecruitmentPage.verifyStatus()
       expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
       RecruitmentPage.checkAllowedActions(expectedActions)

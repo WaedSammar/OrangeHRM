@@ -6,29 +6,6 @@ const COMMON_URLs = {
   DASHBOARD: '/dashboard'
 }
 
-export enum BloodType {
-  A_POSITIVE = 'A+',
-  A_NEGATIVE = 'A-',
-  B_POSITIVE = 'B+',
-  B_NEGATIVE = 'B-',
-  AB_POSITIVE = 'AB+',
-  AB_NEGATIVE = 'AB-',
-  O_POSITIVE = 'O+',
-  O_NEGATIVE = 'O-'
-}
-
-export enum GENDER {
-  MALE = 'Male',
-  FEMALE = 'Female'
-}
-
-export enum MaritalStatus {
-  SINGLE = 'Single',
-  MARRIED = 'Married',
-  DIVORCED = 'Divorced',
-  WIDOWED = 'Widowed'
-}
-
 class CommonHelper {
   static generateRandomString(length: number = 7, prefix: string = '', suffix: string = ''): string {
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -42,18 +19,6 @@ class CommonHelper {
 
   static generateRandomNumber(max: number = 10000): number {
     return Math.floor(Math.random() * max)
-  }
-
-  static generateRandomBloodType() {
-    return this.getRandomEnum(BloodType)
-  }
-
-  static generateRandomGender(): GENDER {
-    return this.getRandomEnum(GENDER)
-  }
-
-  static generateRandomMaritalStatus(): MaritalStatus {
-    return this.getRandomEnum(MaritalStatus)
   }
 
   static getRandomEnum<T>(enumObj: T) {

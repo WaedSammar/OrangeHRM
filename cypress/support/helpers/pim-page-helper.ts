@@ -17,18 +17,11 @@ export enum UserRole {
 class PIMPageHelper {
   /**
    *
-   * @param employeeInfo
+   * @param {IEmployeeInfo} employeeInfo
    * @returns
    */
   static createEmployeeViaAPI(employeeInfo: IEmployeeInfo) {
-    const payload = PIMInitializer.initializerEmployeePayload()
-    Object.assign(employeeInfo, payload)
-
-    for (const key in payload) {
-      if (!(key in employeeInfo)) {
-        employeeInfo[key] = payload[key]
-      }
-    }
+    const payload = PIMInitializer.initializerEmployeePayload(employeeInfo)
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.employees, payload).then((response) => {
       return response
     })
@@ -41,14 +34,12 @@ class PIMPageHelper {
    * @returns
    */
   static createUserViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
-    const payload = PIMInitializer.initializerUserPayload()
-    employeeInfo.userName = payload.username
-    employeeInfo.password = payload.password
+    const payload = PIMInitializer.initializerUserPayload(employeeInfo)
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, COMMON_URLs.users, {
       ...payload,
       empNumber
     }).then((response) => {
-      response
+      return response
     })
   }
 
