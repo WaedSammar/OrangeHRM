@@ -28,7 +28,7 @@ describe('Recruitment Page Test Cases', () => {
     jobTitleIds = []
     cy.login()
 
-    PIMPageHelper.createEmployeeViaAPI().then((response) => {
+    PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber
       employeeIds.push(empNumber)
 

@@ -57,7 +57,7 @@ describe('Employee management - Add and Save Test Cases', () => {
   })
 
   it('Adding a new employee via API', () => {
-    PIMPageHelper.createEmployeeViaAPI().then((response) => {
+    PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber
 
       PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(() => {

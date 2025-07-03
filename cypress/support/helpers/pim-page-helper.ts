@@ -16,13 +16,21 @@ export enum UserRole {
 
 class PIMPageHelper {
   /**
-   * create employee basic via API
+   *
+   * @param employeeInfo
    * @returns
    */
-  static createEmployeeViaAPI() {
+  static createEmployeeViaAPI(employeeInfo: IEmployeeInfo) {
     const payload = PIMInitializer.initializerEmployeePayload()
+    Object.assign(employeeInfo, payload)
+
+    for (const key in payload) {
+      if (!(key in employeeInfo)) {
+        employeeInfo[key] = payload[key]
+      }
+    }
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.employees, payload).then((response) => {
-      response
+      return response
     })
   }
 
