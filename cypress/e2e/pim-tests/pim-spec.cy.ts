@@ -15,13 +15,13 @@ describe('Employee management - Add and Save Test Cases', () => {
     cy.fixture('employee-page-mock').then((addEmployeeData) => {
       employeeMockData = addEmployeeData
 
-      // cy.login()
-      // AdminPageHelper.addNationality(employeeMockData.newNationality)
-      // AdminPageHelper.getNationality().then((res) => {
-      //   const added = res.body.data.find(({ name }) => name === employeeMockData.newNationality)
-      //   nationalityId = added.id
-      // })
-      // ElementHandler.logout()
+      cy.login()
+      AdminPageHelper.addNationality(employeeMockData.newNationality)
+      AdminPageHelper.getNationality().then((res) => {
+        const added = res.body.data.find(({ name }) => name === employeeMockData.newNationality)
+        nationalityId = added.id
+      })
+      ElementHandler.logout()
     })
   })
 
@@ -30,8 +30,8 @@ describe('Employee management - Add and Save Test Cases', () => {
 
     employeeInfo = {
       ...employeeMockData,
-      // nationality: employeeMockData.newNationality,
-      // nationalityId
+      nationality: employeeMockData.newNationality,
+      nationalityId
     }
   })
 
@@ -56,8 +56,8 @@ describe('Employee management - Add and Save Test Cases', () => {
     PIMPage.verifyEmployeeInfo(employeeInfo)
   })
 
-  it.only('Adding a new employee via API', () => {
-    PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
+  it('Adding a new employee via API', () => {
+    PIMPageHelper.createEmployeeViaAPI().then((response) => {
       const empNumber = response.body.data.empNumber
 
       PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(() => {
@@ -120,16 +120,16 @@ describe('Employee management - Add and Save Test Cases', () => {
   })
 
   afterEach(() => {
-    // ElementHandler.logout()
-    // cy.login()
-    // PIMPageHelper.getEmpNumberByEmployeeId(employeeInfo.employeeId).then((empNumber) => {
-    //   if (empNumber) {
-    //     PIMPageHelper.deleteUsers([empNumber])
-    //   }
-    // })
+    ElementHandler.logout()
+    cy.login()
+    PIMPageHelper.getEmpNumberByEmployeeId(employeeInfo.employeeId).then((empNumber) => {
+      if (empNumber) {
+        PIMPageHelper.deleteUsers([empNumber])
+      }
+    })
   })
 
   after(() => {
-    // AdminPageHelper.deleteNationalities([nationalityId])
+    AdminPageHelper.deleteNationalities([nationalityId])
   })
 })
