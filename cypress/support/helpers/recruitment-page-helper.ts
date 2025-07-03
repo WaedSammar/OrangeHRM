@@ -1,3 +1,4 @@
+import { RecruitmentInitializer } from '../initializers/recruitment-page/recruitment-page-initializer'
 import { IRecruitmentFormData } from '../types/recruitmentFormData'
 import { CommonHelper } from './common-helper'
 import { HTTP_METHODS } from './constants'
@@ -27,10 +28,9 @@ class RecruitmentPageHelper {
    * @returns
    */
   static addJobTitle(recruitmentMockData: IRecruitmentFormData) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.jobTitle, {
-      title: recruitmentMockData.jobTitleName,
-      description: recruitmentMockData.jobDescription,
-      note: recruitmentMockData.jobNote
+    const payload = RecruitmentInitializer.initializerAddJobTitle(recruitmentMockData)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.jobTitle, payload).then((response) => {
+      return response
     })
   }
 
@@ -42,12 +42,9 @@ class RecruitmentPageHelper {
    * @returns
    */
   static addVacancy(recruitmentMockData: IRecruitmentFormData, empNumber: number, jobTitleId: number) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.vacancy, {
-      name: recruitmentMockData.vacancyName,
-      jobTitleId,
-      employeeId: empNumber,
-      status: recruitmentMockData.vacancyStatus,
-      isPublished: recruitmentMockData.vacancyPublished
+    const payload = RecruitmentInitializer.initializerAddVacancy(recruitmentMockData, empNumber, jobTitleId)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.vacancy, payload).then((response) => {
+      return response
     })
   }
 
@@ -58,11 +55,9 @@ class RecruitmentPageHelper {
    * @returns
    */
   static addCandidate(recruitmentMockData: IRecruitmentFormData, vacancyId: number) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.candidate, {
-      firstName: recruitmentMockData.candidateFirstName,
-      lastName: recruitmentMockData.candidateLastName,
-      email: recruitmentMockData.candidateEmail,
-      vacancyId
+    const payload = RecruitmentInitializer.initializerAddCandidate(recruitmentMockData, vacancyId)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.candidate, payload).then((response) => {
+      return response
     })
   }
 
@@ -118,17 +113,14 @@ class RecruitmentPageHelper {
     interviewerEmpNumbers: number[],
     candidateIds: number[]
   ) {
+    const payload = RecruitmentInitializer.initializerScheduleInterview(recruitmentMockData, interviewerEmpNumbers)
     return CommonHelper.sendAPIRequest(
       HTTP_METHODS.POST,
       `${URLs.candidate}/${candidateIds}/${URLs.scheduleInterview}`,
-      {
-        interviewName: recruitmentMockData.interviewTitle,
-        interviewerEmpNumbers,
-        interviewDate: recruitmentMockData.interviewDate,
-        interviewTime: recruitmentMockData.interviewTime,
-        note: recruitmentMockData.jobNote
-      }
-    )
+      payload
+    ).then((response) => {
+      return response
+    })
   }
 }
 
