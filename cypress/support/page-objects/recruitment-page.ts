@@ -2,9 +2,9 @@ import { ElementHandler } from '../element-handler'
 import { APIsHelper } from '../helpers/apis-helpers'
 import { CommonHelper } from '../helpers/common-helper'
 import { COMMON_BUTTONS, HTML_TAGS, PAGES } from '../helpers/constants'
-import { IEmployeeInfo } from '../types/employee.types'
-import { IRecruitmentFormData } from '../types/recruitmentFormData.types'
-import { TableRowData } from '../types/tableRowData.types'
+import { IEmployeeInfo } from '../types/employee'
+import { IRecruitmentFormData } from '../types/recruitmentFormData'
+import { TableRowData } from '../types/tableRowData'
 
 enum LABELS {
   INTERVIEW_TITLE = 'Interview Title',

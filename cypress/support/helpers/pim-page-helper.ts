@@ -1,5 +1,5 @@
 import { PIMInitializer } from '../initializers/pim-page/pim-page-initializer'
-import { IEmployeeInfo } from '../types/employee.types'
+import { IEmployeeInfo } from '../types/employee'
 import { CommonHelper, COMMON_URLs } from './common-helper'
 import { HTTP_METHODS } from './constants'
 

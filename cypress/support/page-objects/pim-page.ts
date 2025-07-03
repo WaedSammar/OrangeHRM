@@ -3,7 +3,7 @@ import { APIsHelper } from '../helpers/apis-helpers'
 import { CommonHelper } from '../helpers/common-helper'
 import { COMMON_BUTTONS, CYPRESS_FOLDERS, HTML_TAGS, PAGES, TIMEOUT } from '../helpers/constants'
 import { GenderMap } from '../initializers/pim-page/pim-page-initializer'
-import { IEmployeeInfo } from '../types/employee.types'
+import { IEmployeeInfo } from '../types/employee'
 
 enum LABELS {
   EMPLOYEE_ID = 'Employee Id',

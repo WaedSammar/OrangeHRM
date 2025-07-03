@@ -1,5 +1,5 @@
 import { HTML_TAGS, TIMEOUT } from './helpers/constants'
-import { TableRowData } from './types/tableRowData.types'
+import { TableRowData } from './types/tableRowData'
 
 const COMMON_LOCATORS = {
   menuBtn: 'span.oxd-main-menu-item--name',
@@ -122,9 +122,9 @@ class ElementHandler {
   }
 
   /**
-   * get the dropdown value by label 
-   * @param {string} label 
-   * @returns 
+   * get the dropdown value by label
+   * @param {string} label
+   * @returns
    */
   static getDropdownValueByLabel(label: string) {
     return cy

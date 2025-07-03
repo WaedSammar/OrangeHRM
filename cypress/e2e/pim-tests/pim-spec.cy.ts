@@ -7,7 +7,7 @@ import { SEPARATORS } from '../../support/helpers/constants'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { MyInfo } from '../../support/page-objects/my-info-page'
 import { PIM_TABLE_HEADERS, PIMPage } from '../../support/page-objects/pim-page'
-import { IEmployeeInfo } from '../../support/types/employee.types'
+import { IEmployeeInfo } from '../../support/types/employee'
 
 describe('Employee management - Add and Save Test Cases', () => {
   let employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo, nationalityId: number
@@ -57,7 +57,7 @@ describe('Employee management - Add and Save Test Cases', () => {
     PIMPage.verifyEmployeeInfo(employeeInfo)
   })
 
-  it.only('Adding a new employee via API', () => {
+  it('Adding a new employee via API', () => {
     employeeInfo.userName = faker.internet.userName()
     employeeInfo.password = faker.internet.password()
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {

@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import { HTML_TAGS, HTTP_METHODS, PAGES, SEPARATORS } from '../helpers/constants'
 import { APIsHelper, URLs } from '../helpers/apis-helpers'
 import { ElementHandler } from '../element-handler'
-import { IEmployeeNameInfo } from '../types/employee.types'
+import { IEmployeeNameInfo } from '../types/employee'
 import { CommonHelper } from '../helpers/common-helper'
 
 enum POST_FILTER_OPTION {
@@ -117,7 +117,7 @@ class BuzzPage {
    * @param {POST_FILTER_OPTION} filterOption - filter option
    */
   static applyPostFilter(filterOption: POST_FILTER_OPTION) {
-  const aliasName = CommonHelper.generateRandomString(2, `${filterOption} Filter`)
+    const aliasName = CommonHelper.generateRandomString(2, `${filterOption} Filter`)
     APIsHelper.interceptPostFilter(aliasName)
     cy.get(this.LOCATORS.postFilter).contains(filterOption).click()
     APIsHelper.waitForApiResponse(aliasName)

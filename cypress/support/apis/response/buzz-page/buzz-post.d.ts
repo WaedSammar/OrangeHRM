@@ -10,3 +10,13 @@ export interface IEmployee {
 export interface IPost {
   id: number
 }
+
+export interface ICreatePostResponse {
+  data: {
+    employee: IEmployee
+    post: IPost
+    createdAt: string
+    meta: any[]
+    rels: any[]
+  }
+}

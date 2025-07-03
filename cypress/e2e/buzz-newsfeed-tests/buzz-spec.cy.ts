@@ -1,4 +1,4 @@
-import { ICreatePostResponse } from '../../support/apis/responses/buzz'
+import { ICreatePostResponse } from '../../support/apis/response/buzz-page/buzz-post'
 import { BuzzPage, POST_FILTER_OPTION } from '../../support/page-objects/buzz-page'
 
 describe('Buzz News Feed Test Cases', () => {

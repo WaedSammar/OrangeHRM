@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import { CommonHelper } from '../../helpers/common-helper'
 import { UserRole } from '../../helpers/pim-page-helper'
 import { BLOOD_TYPE, GENDER, MARITAL_STATUS } from '../../page-objects/pim-page'
-import { IEmployeeInfo } from '../../types/employee.types'
+import { IEmployeeInfo } from '../../types/employee'
 import { faker } from '@faker-js/faker'
 
 export const GenderMap: Record<GENDER, number> = {
