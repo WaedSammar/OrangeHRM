@@ -17,6 +17,18 @@ export enum BloodType {
   O_NEGATIVE = 'O-'
 }
 
+export enum GENDER {
+  MALE = 'Male',
+  FEMALE = 'Female'
+}
+
+export enum MaritalStatus {
+  SINGLE = 'Single',
+  MARRIED = 'Married',
+  DIVORCED = 'Divorced',
+  WIDOWED = 'Widowed'
+}
+
 class CommonHelper {
   static generateRandomString(length: number = 7, prefix: string = '', suffix: string = ''): string {
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -36,12 +48,20 @@ class CommonHelper {
     return this.getRandomEnum(BloodType)
   }
 
+  static generateRandomGender(): GENDER {
+    return this.getRandomEnum(GENDER)
+  }
+
+  static generateRandomMaritalStatus(): MaritalStatus {
+    return this.getRandomEnum(MaritalStatus)
+  }
+
   static getRandomEnum<T>(enumObj: T) {
     const values = Object.values(enumObj)
     const randomIndex = Math.floor(Math.random() * values.length)
     return values[randomIndex]
   }
-  
+
   static interceptRequests(requestURL: string, httpRequestMethod: HTTP_METHODS, aliasName: string) {
     return new Cypress.Promise((resolve) => {
       cy.intercept({

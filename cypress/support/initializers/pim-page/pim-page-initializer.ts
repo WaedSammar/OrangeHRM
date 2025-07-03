@@ -45,16 +45,16 @@ class PIMInitializer {
    */
   static initializerUpdatedDetailsPayload(employeeData: IEmployeeInfo) {
     const payload = {
-      firstName: employeeData.firstName,
-      middleName: employeeData.middleName,
-      lastName: employeeData.lastName,
-      employeeId: employeeData.employeeId,
-      otherId: employeeData.otherId,
-      drivingLicenseNo: employeeData.licenseNum,
+      firstName: employeeData.firstName || faker.person.firstName(),
+      middleName: employeeData.middleName || faker.person.middleName(),
+      lastName: employeeData.lastName || faker.person.lastName(),
+      employeeId: employeeData.employeeId || faker.number.int({ min: 1000, max: 9999 }).toString(),
+      otherId: employeeData.otherId || faker.string.alphanumeric(4),
+      drivingLicenseNo: employeeData.licenseNum || faker.string.alphanumeric(6),
       drivingLicenseExpiredDate: employeeData.expDate,
       birthday: employeeData.dateOfBirth,
-      gender: GenderMap[employeeData.gender],
-      maritalStatus: employeeData.maritalState,
+      gender: GenderMap[employeeData.gender] || CommonHelper.generateRandomGender(),
+      maritalStatus: employeeData.maritalState || CommonHelper.generateRandomMaritalStatus(),
       nationalityId: employeeData.nationalityId
     }
     return payload
