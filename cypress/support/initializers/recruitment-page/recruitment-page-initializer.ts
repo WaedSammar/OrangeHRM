@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { faker } from '@faker-js/faker/.'
+import { faker } from '@faker-js/faker'
 import { IRecruitmentFormData } from '../../types/recruitmentFormData'
 import { CHANGE_DATE_FORMAT } from '../pim-page/pim-page-initializer'
 
@@ -11,7 +11,7 @@ class RecruitmentInitializer {
    */
   static initializerAddJobTitle(recruitmentMockData: IRecruitmentFormData) {
     const payload = {
-      title: recruitmentMockData.jobTitleName || faker.name.jobTitle(),
+      title: recruitmentMockData.jobTitleName || faker.person.jobTitle(),
       description: recruitmentMockData.jobDescription || faker.lorem.sentence(),
       note: recruitmentMockData.jobNote || faker.lorem.sentence()
     }
@@ -27,7 +27,7 @@ class RecruitmentInitializer {
    */
   static initializerAddVacancy(recruitmentMockData: IRecruitmentFormData, empNumber: number, jobTitleId: number) {
     const payload = {
-      name: recruitmentMockData.vacancyName || `Vacancy for ${faker.name.jobTitle()}`,
+      name: recruitmentMockData.vacancyName || `Vacancy for ${faker.person.jobTitle()}`,
       jobTitleId,
       employeeId: empNumber,
       status: recruitmentMockData.vacancyStatus || true,
