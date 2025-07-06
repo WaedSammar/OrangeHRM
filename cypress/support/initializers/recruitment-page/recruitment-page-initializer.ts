@@ -21,17 +21,17 @@ class RecruitmentInitializer {
   /**
    * create initializer for adding vacancy
    * @param {IRecruitmentFormData} recruitmentMockData
-   * @param {number} empNumber
+   * @param {number} employeeId
    * @param {number} jobTitleId
    * @returns
    */
-  static initializerAddVacancy(recruitmentMockData: IRecruitmentFormData, empNumber: number, jobTitleId: number) {
+  static initializerAddVacancy(recruitmentMockData: IRecruitmentFormData, employeeId: number, jobTitleId: number) {
     const payload = {
       name: recruitmentMockData.vacancyName || `Vacancy for ${faker.person.jobTitle()}`,
       jobTitleId,
-      employeeId: empNumber,
-      status: recruitmentMockData.vacancyStatus || true,
-      isPublished: recruitmentMockData.vacancyPublished || true
+      employeeId,
+      status: recruitmentMockData.vacancyStatus ?? true,
+      isPublished: recruitmentMockData.vacancyPublished ?? true
     }
     return payload
   }

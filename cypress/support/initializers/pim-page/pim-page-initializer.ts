@@ -23,7 +23,7 @@ class PIMInitializer {
       firstName: employeeData.firstName || faker.person.firstName(),
       middleName: employeeData.middleName || faker.person.middleName(),
       lastName: employeeData.lastName || faker.person.lastName(),
-      employeeId: employeeData.employeeId || faker.number.int({ min: 1000, max: 9999 }).toString()
+      employeeId: employeeData.employeeId ?? faker.number.int({ min: 1000, max: 9999 }).toString()
     }
     return payload
   }
@@ -37,7 +37,7 @@ class PIMInitializer {
     const payload = {
       username: employeeData.userName || faker.internet.username(),
       password: employeeData.password || faker.internet.password({ prefix: 'yo12' }),
-      status: employeeData.status || faker.datatype.boolean(),
+      status: employeeData.status ?? faker.datatype.boolean(),
       userRoleId: UserRole.ESS
     }
     return payload
@@ -53,12 +53,12 @@ class PIMInitializer {
       firstName: employeeData.firstName || faker.person.firstName(),
       middleName: employeeData.middleName || faker.person.middleName(),
       lastName: employeeData.lastName || faker.person.lastName(),
-      employeeId: employeeData.employeeId || faker.number.int({ min: 1000, max: 9999 }).toString(),
+      employeeId: employeeData.employeeId ?? faker.number.int({ min: 1000, max: 9999 }).toString(),
       otherId: employeeData.otherId || faker.string.alphanumeric(4),
       drivingLicenseNo: employeeData.licenseNum || faker.string.alphanumeric(6),
       birthday: employeeData.dateOfBirth || CHANGE_DATE_FORMAT(faker.date.birthdate()),
       drivingLicenseExpiredDate: employeeData.expDate || CHANGE_DATE_FORMAT(faker.date.future()),
-      gender: GenderMap[employeeData.gender] || CommonHelper.getRandomEnum(GENDER),
+      gender: GenderMap[employeeData.gender] ?? CommonHelper.getRandomEnum(GENDER),
       maritalStatus: employeeData.maritalState || CommonHelper.getRandomEnum(MARITAL_STATUS),
       nationalityId: employeeData.nationalityId
     }
