@@ -67,7 +67,7 @@ describe('Recruitment Page Test Cases', () => {
       const data = {
         [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
         [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: vacancyData.name,
-        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${candidateData.candidateFirstName}  ${candidateData.candidateLastName}`
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${candidateData.firstName}  ${candidateData.lastName}`
       }
       RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
       let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
@@ -114,7 +114,7 @@ describe('Recruitment Page Test Cases', () => {
       const data = {
         [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
         [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: vacancyData.name,
-        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${candidateData.candidateFirstName}  ${candidateData.candidateLastName}`
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${candidateData.firstName}  ${candidateData.lastName}`
       }
       RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
       RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds).then(() => {
@@ -137,7 +137,7 @@ describe('Recruitment Page Test Cases', () => {
       const data = {
         [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
         [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: vacancyData.name,
-        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${candidateData.candidateFirstName}  ${candidateData.candidateLastName}`
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${candidateData.firstName}  ${candidateData.lastName}`
       }
       RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
       RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds).then(() => {

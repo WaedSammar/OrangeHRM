@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker'
 import { ElementHandler } from '../../support/element-handler'
 import { AdminPageHelper } from '../../support/helpers/admin-page-helper'
 import { APIsHelper } from '../../support/helpers/apis-helpers'
@@ -58,16 +57,14 @@ describe('Employee management - Add and Save Test Cases', () => {
   })
 
   it('Adding a new employee via API', () => {
-    employeeInfo.userName = faker.internet.userName()
-    employeeInfo.password = faker.internet.password()
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber
 
-      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(() => {
+      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(({ credentials }) => {
         PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber).then(() => {
           PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber).then(() => {
             ElementHandler.logout()
-            cy.login(employeeInfo.userName, employeeInfo.password)
+            cy.login(credentials.username, credentials.password)
             MyInfo.goToMyInfoPage()
             PIMPage.verifyEmployeeInfo(employeeInfo)
           })

@@ -40,7 +40,13 @@ class PIMPageHelper {
       ...payload,
       empNumber
     }).then((response) => {
-      return response
+      return {
+        response,
+        credentials: {
+          username: payload.username,
+          password: payload.password
+        }
+      }
     })
   }
 
