@@ -1,6 +1,12 @@
 import { CommonHelper } from './common-helper'
 import { HTTP_METHODS, HTTP_STATUS_CODE } from './constants'
 
+const COMMON_URLs = {
+  nationalities: `/web/index.php/api/v2/admin/nationalities`,
+  users: `/web/index.php/api/v2/admin/users`,
+  DASHBOARD: '/dashboard'
+}
+
 const baseURL = Cypress.config().baseUrl
 const URLs = {
   posts: `${baseURL}/web/index.php/api/v2/buzz/posts`,
@@ -55,4 +61,4 @@ class APIsHelper {
     })
   }
 }
-export { APIsHelper, URLs }
+export { APIsHelper, URLs, COMMON_URLs }

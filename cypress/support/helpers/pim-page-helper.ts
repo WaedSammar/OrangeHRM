@@ -1,6 +1,7 @@
 import { PIMInitializer } from '../initializers/pim-page/pim-page-initializer'
 import { IEmployeeInfo } from '../types/employee'
-import { CommonHelper, COMMON_URLs } from './common-helper'
+import { COMMON_URLs } from './apis-helpers'
+import { CommonHelper } from './common-helper'
 import { HTTP_METHODS } from './constants'
 
 const URLs = {

@@ -1,4 +1,4 @@
-import { COMMON_URLs } from '../helpers/common-helper'
+import { COMMON_URLs } from '../helpers/apis-helpers'
 import { COLORS, INPUT_TYPE } from '../helpers/constants'
 
 enum LOGIN_PAGE_MSGS {

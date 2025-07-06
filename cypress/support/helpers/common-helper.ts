@@ -1,11 +1,5 @@
 import { HTTP_METHODS } from './constants'
 
-const COMMON_URLs = {
-  nationalities: `/web/index.php/api/v2/admin/nationalities`,
-  users: `/web/index.php/api/v2/admin/users`,
-  DASHBOARD: '/dashboard'
-}
-
 class CommonHelper {
   static generateRandomString(length: number = 7, prefix: string = '', suffix: string = ''): string {
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -61,4 +55,4 @@ class CommonHelper {
     })
   }
 }
-export { CommonHelper, COMMON_URLs }
+export { CommonHelper }

@@ -126,9 +126,7 @@ describe('Employee management - Add and Save Test Cases', () => {
     ElementHandler.logout()
     cy.login()
     PIMPageHelper.getEmpNumberByEmployeeId(employeeInfo.employeeId).then((empNumber) => {
-      if (empNumber) {
-        PIMPageHelper.deleteUsers([empNumber])
-      }
+      PIMPageHelper.deleteUsers([empNumber!])
     })
   })
 
