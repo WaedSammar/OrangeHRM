@@ -1,7 +1,11 @@
+import { COMMON_URLs } from '../helpers/apis-helpers'
+import { COLORS, INPUT_TYPE } from '../helpers/constants'
+
 enum LOGIN_PAGE_MSGS {
   INVALID_CREDENTIALS = 'Invalid credentials',
   REQUIRED_FIELD = 'Required'
 }
+
 class LoginPage {
   private static LOCATORS = {
     username: "[name='username']",
@@ -11,45 +15,44 @@ class LoginPage {
     requiredMsg: '.oxd-input-field-error-message'
   }
 
-  //Actions
   static login(username: string, password: string) {
-    this.fill_username_field(username)
-    this.fill_password_field(password)
-    this.click_submit()
+    this.fillUsernameField(username)
+    this.fillPasswordField(password)
+    this.clickSubmit()
   }
 
-  static fill_username_field(username: string) {
+  static fillUsernameField(username: string) {
     cy.get(this.LOCATORS.username).clear().type(username)
   }
 
-  static fill_password_field(password: string) {
+  static fillPasswordField(password: string) {
     cy.get(this.LOCATORS.password).clear().type(password)
   }
 
-  static click_submit() {
+  static clickSubmit() {
     cy.get(this.LOCATORS.loginBtn).click()
   }
 
-  static check_dashboard_url() {
-    cy.url().should('include', '/dashboard')
+  static checkDashboardURL() {
+    cy.url().should('include', COMMON_URLs.DASHBOARD)
   }
 
-  static check_password_hidden() {
-    cy.get(this.LOCATORS.password).should('have.attr', 'type', 'password')
+  static checkPasswordHidden() {
+    cy.get(this.LOCATORS.password).should('have.attr', 'type', INPUT_TYPE.PASSWORD)
   }
 
-  static check_error_message(message: string) {
+  static checkErrorMessage(message: string) {
     cy.get(this.LOCATORS.errorMsg).should('contain.text', message)
   }
 
-  static check_required_field(counter: number) {
+  static checkRequiredField(counter: number) {
     cy.get(this.LOCATORS.requiredMsg).should('have.length', counter)
   }
 
-  static check_required_color() {
+  static checkRequiredColor() {
     cy.get(this.LOCATORS.requiredMsg).each(($el) => {
       cy.wrap($el).should('contain.text', LOGIN_PAGE_MSGS.REQUIRED_FIELD)
-      cy.wrap($el).should('have.css', 'color', 'rgb(235, 9, 16)')
+      cy.wrap($el).should('have.css', 'color', COLORS.RED)
     })
   }
 }

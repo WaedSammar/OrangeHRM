@@ -15,6 +15,12 @@ class CommonHelper {
     return Math.floor(Math.random() * max)
   }
 
+  static getRandomEnum<T>(enumObj: T) {
+    const values = Object.values(enumObj)
+    const randomIndex = Math.floor(Math.random() * values.length)
+    return values[randomIndex]
+  }
+
   static interceptRequests(requestURL: string, httpRequestMethod: HTTP_METHODS, aliasName: string) {
     return new Cypress.Promise((resolve) => {
       cy.intercept({
@@ -49,4 +55,4 @@ class CommonHelper {
     })
   }
 }
-export default CommonHelper
+export { CommonHelper }

@@ -1,7 +1,8 @@
+import { ICandidate, IJobTitle, IVacancy } from '../../support/apis/response/recruitment-page/recruitment'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { ALLOWED_ACTIONS, RecruitmentPageHelper } from '../../support/helpers/recruitment-page-helper'
 import { RECRUITMENT_CANDIDATE_TABLE_HEADERS, RecruitmentPage } from '../../support/page-objects/recruitment-page'
-import { IEmployeeInfo } from '../../support/types/employee.types'
+import { IEmployeeInfo } from '../../support/types/employee'
 import { IRecruitmentFormData } from '../../support/types/recruitmentFormData'
 
 describe('Recruitment Page Test Cases', () => {
@@ -10,6 +11,10 @@ describe('Recruitment Page Test Cases', () => {
   let vacancyIds: number[] = []
   let candidateIds: number[] = []
   let jobTitleIds: number[] = []
+  let createdUsersMap: Record<string, IEmployeeInfo> = {}
+  let createdJobTitlesMap: Record<number, IJobTitle> = {}
+  let createdVacanciesMap: Record<number, IVacancy> = {}
+  let createdCandidatesMap: Record<number, ICandidate> = {}
 
   before(() => {
     cy.fixture('recruitment-page-mock').then((candidatesData) => {
@@ -29,20 +34,24 @@ describe('Recruitment Page Test Cases', () => {
     cy.login()
 
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
-      const empNumber = response.body.data.empNumber
-      employeeIds.push(empNumber)
+      const empNumber = response.body.data.empNumber.toString()
+      employeeIds.push(Number(empNumber))
+      createdUsersMap[empNumber] = response.body.data
 
       RecruitmentPageHelper.addJobTitle(recruitmentMockData).then((jobTitleRes) => {
         const jobTitleId = jobTitleRes.body.data.id
         jobTitleIds.push(jobTitleId)
+        createdJobTitlesMap[jobTitleId] = jobTitleRes.body.data
 
         RecruitmentPageHelper.addVacancy(recruitmentMockData, empNumber, jobTitleId).then((vacancyRes) => {
           const vacancyId = vacancyRes.body.data.id
           vacancyIds.push(vacancyId)
+          createdVacanciesMap[vacancyId] = vacancyRes.body.data
 
           RecruitmentPageHelper.addCandidate(recruitmentMockData, vacancyId).then((candidateRes) => {
             const candidateId = candidateRes.body.data.id
             candidateIds.push(candidateId)
+            createdCandidatesMap[candidateId] = candidateRes.body.data
           })
         })
       })
@@ -50,18 +59,22 @@ describe('Recruitment Page Test Cases', () => {
   })
 
   it('Schedule an interview via UI', () => {
+    const candidateData = createdCandidatesMap[candidateIds[0]]
+    const vacancyData = createdVacanciesMap[vacancyIds[0]]
+
     RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds).then(() => {
       RecruitmentPage.goToRecruitmentPage()
       const data = {
         [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
-        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
-        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: vacancyData.name,
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${candidateData.firstName}  ${candidateData.lastName}`
       }
       RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
       let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
       RecruitmentPage.checkAllowedActions(expectedActions)
       RecruitmentPage.scheduleInterview()
-      RecruitmentPage.fillInterviewInfo(recruitmentMockData, employeeMockData)
+      const interviewerData = createdUsersMap[employeeIds[0].toString()]
+      RecruitmentPage.fillInterviewInfo(recruitmentMockData, interviewerData)
       RecruitmentPage.verifyStatus()
       expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
       RecruitmentPage.checkAllowedActions(expectedActions)
@@ -69,12 +82,15 @@ describe('Recruitment Page Test Cases', () => {
   })
 
   it('Mark a shortlisted candidate as interview passed', () => {
+    const candidateData = createdCandidatesMap[candidateIds[0]]
+    const vacancyData = createdVacanciesMap[vacancyIds[0]]
+
     RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds).then(() => {
       RecruitmentPage.goToRecruitmentPage()
       const data = {
         [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
-        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
-        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: vacancyData.name,
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${candidateData.firstName}  ${candidateData.lastName}`
       }
 
       RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
@@ -90,12 +106,15 @@ describe('Recruitment Page Test Cases', () => {
   })
 
   it('Mark a shortlisted candidate as interview failed', () => {
+    const candidateData = createdCandidatesMap[candidateIds[0]]
+    const vacancyData = createdVacanciesMap[vacancyIds[0]]
+
     RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds).then(() => {
       RecruitmentPage.goToRecruitmentPage()
       const data = {
         [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
-        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
-        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: vacancyData.name,
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${candidateData.firstName}  ${candidateData.lastName}`
       }
       RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
       RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds).then(() => {
@@ -110,12 +129,15 @@ describe('Recruitment Page Test Cases', () => {
   })
 
   it('Mark a shortlisted candidate as interview reject', () => {
+    const candidateData = createdCandidatesMap[candidateIds[0]]
+    const vacancyData = createdVacanciesMap[vacancyIds[0]]
+
     RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds).then(() => {
       RecruitmentPage.goToRecruitmentPage()
       const data = {
         [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
-        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: recruitmentMockData.vacancyName,
-        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${recruitmentMockData.candidateFirstName}  ${recruitmentMockData.candidateLastName}`
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: vacancyData.name,
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${candidateData.firstName}  ${candidateData.lastName}`
       }
       RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
       RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds).then(() => {

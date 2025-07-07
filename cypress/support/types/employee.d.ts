@@ -21,3 +21,9 @@ export interface IEmployeeInfo {
   status: true
   newNationality: string
 }
+
+export type IEmployeeNameInfo = {
+  firstName: string
+  middleName: string
+  lastName: string
+}

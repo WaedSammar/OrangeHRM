@@ -1,13 +1,12 @@
 import { ElementHandler } from '../../support/element-handler'
 import { AdminPageHelper } from '../../support/helpers/admin-page-helper'
 import { APIsHelper } from '../../support/helpers/apis-helpers'
-import CommonHelper from '../../support/helpers/common-helper'
+import { CommonHelper } from '../../support/helpers/common-helper'
 import { SEPARATORS } from '../../support/helpers/constants'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
-import { AdminPage } from '../../support/page-objects/admin-page'
 import { MyInfo } from '../../support/page-objects/my-info-page'
 import { PIM_TABLE_HEADERS, PIMPage } from '../../support/page-objects/pim-page'
-import { IEmployeeInfo } from '../../support/types/employee.types'
+import { IEmployeeInfo } from '../../support/types/employee'
 
 describe('Employee management - Add and Save Test Cases', () => {
   let employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo, nationalityId: number
@@ -17,7 +16,6 @@ describe('Employee management - Add and Save Test Cases', () => {
       employeeMockData = addEmployeeData
 
       cy.login()
-      AdminPage.goToAdminPage()
       AdminPageHelper.addNationality(employeeMockData.newNationality)
       AdminPageHelper.getNationality().then((res) => {
         const added = res.body.data.find(({ name }) => name === employeeMockData.newNationality)
@@ -30,11 +28,8 @@ describe('Employee management - Add and Save Test Cases', () => {
   beforeEach(() => {
     cy.login()
 
-    const randomNum = CommonHelper.generateRandomNumber()
     employeeInfo = {
       ...employeeMockData,
-      employeeId: `${employeeMockData.employeeId}${randomNum}`,
-      userName: `${employeeMockData.userName}${randomNum}`,
       nationality: employeeMockData.newNationality,
       nationalityId
     }
@@ -64,14 +59,18 @@ describe('Employee management - Add and Save Test Cases', () => {
   it('Adding a new employee via API', () => {
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber
-      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber)
-      PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
-      PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber)
+
+      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(({ credentials }) => {
+        PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber).then(() => {
+          PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber).then(() => {
+            ElementHandler.logout()
+            cy.login(credentials.username, credentials.password)
+            MyInfo.goToMyInfoPage()
+            PIMPage.verifyEmployeeInfo(employeeInfo)
+          })
+        })
+      })
     })
-    ElementHandler.logout()
-    cy.login(employeeInfo.userName, employeeInfo.password)
-    MyInfo.goToMyInfoPage()
-    PIMPage.verifyEmployeeInfo(employeeInfo)
   })
 
   it('Adding a new employee, upload attachment and verify it', () => {
@@ -100,28 +99,32 @@ describe('Employee management - Add and Save Test Cases', () => {
   })
 
   it('Verify added employee appears in the table', () => {
-    PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((res) => {
-      const empNumber = res.body.data.empNumber
-      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber)
-      PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber)
-      PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber)
-    })
+    PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
+      const empNumber = response.body.data.empNumber
 
-    PIMPage.goToPIMPage()
-    const data = {
-      [PIM_TABLE_HEADERS.ID]: employeeInfo.employeeId,
-      [PIM_TABLE_HEADERS.FIRST_AND_MIDDLE_NAME]: `${employeeInfo.firstName} ${employeeInfo.middleName}`,
-      [PIM_TABLE_HEADERS.LAST_NAME]: employeeInfo.lastName,
-      [PIM_TABLE_HEADERS.JOB_TITLE]: SEPARATORS.EMPTY
-    }
-    ElementHandler.validateTableRow(data)
+      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(() => {
+        PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber).then(() => {
+          PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber).then(() => {
+            PIMPage.goToPIMPage()
+            const data = {
+              [PIM_TABLE_HEADERS.ID]: employeeInfo.employeeId,
+              [PIM_TABLE_HEADERS.FIRST_AND_MIDDLE_NAME]: `${employeeInfo.firstName} ${employeeInfo.middleName}`,
+              [PIM_TABLE_HEADERS.LAST_NAME]: employeeInfo.lastName,
+              [PIM_TABLE_HEADERS.JOB_TITLE]: SEPARATORS.EMPTY
+            }
+            ElementHandler.validateTableRow(data)
+          })
+        })
+      })
+    })
   })
 
   afterEach(() => {
     ElementHandler.logout()
     cy.login()
-    AdminPage.goToAdminPage()
-    AdminPageHelper.deleteUserByUsername(employeeInfo.userName)
+    PIMPageHelper.getEmpNumberByEmployeeId(employeeInfo.employeeId).then((empNumber) => {
+      PIMPageHelper.deleteUsers([empNumber!])
+    })
   })
 
   after(() => {

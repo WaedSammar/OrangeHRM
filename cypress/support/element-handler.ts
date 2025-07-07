@@ -1,5 +1,5 @@
 import { HTML_TAGS, TIMEOUT } from './helpers/constants'
-import { TableRowData } from './types/tableRowData.types'
+import { TableRowData } from './types/tableRowData'
 
 const COMMON_LOCATORS = {
   menuBtn: 'span.oxd-main-menu-item--name',
@@ -12,11 +12,6 @@ const COMMON_LOCATORS = {
   table: '[role="table"]',
   cell: '[role="cell"]',
   tableCard: '.oxd-table-card'
-}
-
-const COMMON_URLs = {
-  nationalities: `/web/index.php/api/v2/admin/nationalities`,
-  users: `/web/index.php/api/v2/admin/users`
 }
 
 enum DROP_DOWN {
@@ -124,6 +119,19 @@ class ElementHandler {
   static selectDropdownByLabel(label: string, option: string) {
     cy.contains(HTML_TAGS.label, label).parents(this.LOCATORS.inputGroup).find(this.LOCATORS.selectField).click()
     cy.get(this.LOCATORS.dropdownOption).contains(option).click()
+  }
+
+  /**
+   * get the dropdown value by label
+   * @param {string} label
+   * @returns
+   */
+  static getDropdownValueByLabel(label: string) {
+    return cy
+      .contains(HTML_TAGS.label, label)
+      .parents(this.LOCATORS.inputGroup)
+      .find(this.LOCATORS.selectField)
+      .invoke(HTML_TAGS.text)
   }
 
   /**
@@ -243,4 +251,4 @@ class ElementHandler {
     })
   }
 }
-export { ElementHandler, COMMON_LOCATORS, COMMON_URLs }
+export { ElementHandler, COMMON_LOCATORS }

@@ -1,7 +1,7 @@
-import { COMMON_URLs } from '../element-handler'
-import { GENDER } from '../page-objects/pim-page'
-import { IEmployeeInfo } from '../types/employee.types'
-import CommonHelper from './common-helper'
+import { PIMInitializer } from '../initializers/pim-page/pim-page-initializer'
+import { IEmployeeInfo } from '../types/employee'
+import { COMMON_URLs } from './apis-helpers'
+import { CommonHelper } from './common-helper'
 import { HTTP_METHODS } from './constants'
 
 const URLs = {
@@ -10,28 +10,21 @@ const URLs = {
   customField: `custom-fields`
 }
 
-enum UserRole {
+export enum UserRole {
   ADMIN = 1,
   ESS = 2
 }
 
-const GenderMap: Record<GENDER, number> = {
-  [GENDER.MALE]: 1,
-  [GENDER.FEMALE]: 2
-}
-
 class PIMPageHelper {
   /**
-   * create employee basic via API
+   *
    * @param {IEmployeeInfo} employeeInfo
-   * @returns - API response
+   * @returns
    */
   static createEmployeeViaAPI(employeeInfo: IEmployeeInfo) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.employees, {
-      firstName: employeeInfo.firstName,
-      middleName: employeeInfo.middleName,
-      lastName: employeeInfo.lastName,
-      employeeId: employeeInfo.employeeId
+    const payload = PIMInitializer.initializerEmployeePayload(employeeInfo)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.employees, payload).then((response) => {
+      return response
     })
   }
 
@@ -39,14 +32,21 @@ class PIMPageHelper {
    * add username and password for the employee
    * @param {IEmployeeInfo} employeeInfo
    * @param {number} empNumber
+   * @returns
    */
   static createUserViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
-    CommonHelper.sendAPIRequest(HTTP_METHODS.POST, COMMON_URLs.users, {
-      username: employeeInfo.userName,
-      password: employeeInfo.password,
-      status: employeeInfo.status,
-      userRoleId: UserRole.ESS,
+    const payload = PIMInitializer.initializerUserPayload(employeeInfo)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, COMMON_URLs.users, {
+      ...payload,
       empNumber
+    }).then((response) => {
+      return {
+        response,
+        credentials: {
+          username: payload.username,
+          password: payload.password
+        }
+      }
     })
   }
 
@@ -56,20 +56,9 @@ class PIMPageHelper {
    * @param {number} empNumber
    */
   static updateEmployeeDetailsViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
+    const payload = PIMInitializer.initializerUpdatedDetailsPayload(employeeInfo)
     const url = `${URLs.employees}/${empNumber}/${URLs.personalDetails}`
-    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, {
-      firstName: employeeInfo.firstName,
-      middleName: employeeInfo.middleName,
-      lastName: employeeInfo.lastName,
-      employeeId: employeeInfo.employeeId,
-      otherId: employeeInfo.otherId,
-      drivingLicenseNo: employeeInfo.licenseNum,
-      drivingLicenseExpiredDate: employeeInfo.expDate,
-      birthday: employeeInfo.dateOfBirth,
-      gender: GenderMap[employeeInfo.gender],
-      maritalStatus: employeeInfo.maritalState,
-      nationalityId: employeeInfo.nationalityId
-    })
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, payload)
   }
 
   /**
@@ -78,10 +67,21 @@ class PIMPageHelper {
    * @param {number} empNumber
    */
   static updateEmployeeCustomFieldsViaAPI(employeeInfo: IEmployeeInfo, empNumber: number) {
+    const payload = PIMInitializer.initializerCustomFieldPayload(employeeInfo)
     const url = `${URLs.employees}/${empNumber}/${URLs.customField}`
-    CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, {
-      custom1: employeeInfo.bloodType,
-      custom2: employeeInfo.testField
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, url, payload)
+  }
+
+  /**
+   * get empNumber By EmployeeId
+   * @param {string} employeeId
+   * @returns
+   */
+  static getEmpNumberByEmployeeId(employeeId: string): Cypress.Chainable<number | null> {
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.GET, URLs.employees).then((response) => {
+      const employees = response.body.data
+      const matchedEmployee = employees.find((emp) => emp.employeeId === employeeId)
+      return matchedEmployee ? matchedEmployee.empNumber : null
     })
   }
 

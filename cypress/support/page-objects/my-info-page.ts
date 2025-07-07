@@ -1,6 +1,6 @@
 import { ElementHandler } from '../element-handler'
 import { APIsHelper } from '../helpers/apis-helpers'
-import CommonHelper from '../helpers/common-helper'
+import { CommonHelper } from '../helpers/common-helper'
 import { PAGES } from '../helpers/constants'
 
 class MyInfo {

@@ -1,6 +1,10 @@
-import { COMMON_URLs } from '../element-handler'
-import CommonHelper from './common-helper'
+import { COMMON_URLs } from './apis-helpers'
+import { CommonHelper } from './common-helper'
 import { HTTP_METHODS, SIZE_LIMIT } from './constants'
+
+enum PARAMS {
+  LIMIT = '?limit='
+}
 
 class AdminPageHelper {
   /**
@@ -8,13 +12,13 @@ class AdminPageHelper {
    * @returns
    */
   static getNationality(limit: number = SIZE_LIMIT.fiveHundred) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.GET, `${COMMON_URLs.nationalities}?limit=${limit}`)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.GET, `${COMMON_URLs.nationalities}${PARAMS.LIMIT}${limit}`)
   }
 
   /**
    * adding nationality via API
-   * @param {string} nationality 
-   * @returns 
+   * @param {string} nationality
+   * @returns
    */
   static addNationality(nationality: string) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, COMMON_URLs.nationalities, {
@@ -27,38 +31,7 @@ class AdminPageHelper {
    * @param {number[]} ids
    */
   static deleteNationalities(ids: number[]) {
-    CommonHelper.sendAPIRequest(
-      HTTP_METHODS.DELETE,
-      COMMON_URLs.nationalities,
-      {
-        ids
-      },
-      {
-        'Content-Type': 'application/json'
-      }
-    )
-  }
-
-  /**
-   * delete user using username
-   * @param {string} username 
-   * @returns 
-   */
-  static deleteUserByUsername(username: string) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.GET, COMMON_URLs.users).then((response) => {
-      const users = response.body.data
-      const userToDelete = users.find(({ userName }) => userName === username)
-      const userId = userToDelete.id
-
-      return CommonHelper.sendAPIRequest(
-        HTTP_METHODS.DELETE,
-        COMMON_URLs.users,
-        { ids: [userId.toString()] },
-        {
-          'Content-Type': 'application/json'
-        }
-      )
-    })
+    CommonHelper.cleanup(COMMON_URLs.nationalities, ids)
   }
 }
 export { AdminPageHelper }
