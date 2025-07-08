@@ -1,3 +1,4 @@
+import { ElementHandler } from '../../support/element-handler'
 import { LeavePageHelper } from '../../support/helpers/leave-page-helper'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { IEmployeeInfo } from '../../support/types/employee'
@@ -45,7 +46,18 @@ describe('Leave page test cases', () => {
     })
   })
 
-  it('Validate schedule status after admin approval', () => {})
+  it('Validate schedule status after admin approval', () => {
+    ElementHandler.logout()
+    cy.login(employeeInfo.userName, employeeInfo.password)
+
+    LeavePageHelper.applyLeaveRequest(leavePageInfo, leaveTypeIds[0]).then((response) => {
+      const requestId = response.body.data.id
+
+      ElementHandler.logout()
+      cy.login()
+      LeavePageHelper.approveLeaveRequest(leavePageInfo, requestId).then(() => {})
+    })
+  })
 
   afterEach(() => {
     PIMPageHelper.deleteUsers(employeeIds)

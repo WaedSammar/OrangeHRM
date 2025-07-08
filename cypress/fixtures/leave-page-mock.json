@@ -5,5 +5,9 @@
   "leavePerStartedMonth": 1,
   "entitlementDuration": 10,
   "entitlementFromDate": "2025-01-01",
-  "entitlementEndDate": "2025-12-31"
+  "entitlementEndDate": "2025-12-31",
+  "leaveRequestComment": "Emergency",
+  "leaveRequestFromData": "2025-07-08",
+  "leaveRequestEndData": "2025-07-18",
+  "leaveRequestStatus": "APPROVE"
 }

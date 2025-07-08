@@ -5,7 +5,9 @@ import { HTTP_METHODS } from './constants'
 const URLs = {
   leaveType: `/web/index.php/api/v2/leave/leave-types`,
   leavePeriod: `/web/index.php/api/v2/leave/leave-period`,
-  entitlements: `/web/index.php/api/v2/leave/leave-entitlements`
+  entitlements: `/web/index.php/api/v2/leave/leave-entitlements`,
+  leaveRequest: `/web/index.php/api/v2/leave/leave-requests`,
+  employeeRequest: `/web/index.php/api/v2/leave/employees/leave-requests`
 }
 
 class LeavePageHelper {
@@ -47,6 +49,33 @@ class LeavePageHelper {
       fromDate: leavePageInfo.entitlementFromDate,
       leaveTypeId,
       toDate: leavePageInfo.entitlementEndDate
+    })
+  }
+
+  /**
+   * apply leave request
+   * @param {ILeave} leavePageInfo
+   * @param {number} leaveTypeId
+   * @returns
+   */
+  static applyLeaveRequest(leavePageInfo: ILeave, leaveTypeId: number) {
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.leaveRequest, {
+      comment: leavePageInfo.leaveRequestComment,
+      fromDate: leavePageInfo.leaveRequestFromData,
+      leaveTypeId,
+      toDate: leavePageInfo.leaveRequestEndData
+    })
+  }
+
+  /**
+   * approve leave request by admin
+   * @param {ILeave} leavePageInfo 
+   * @param {number} requestId 
+   * @returns 
+   */
+  static approveLeaveRequest(leavePageInfo: ILeave, requestId: number) {
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, `${URLs.employeeRequest}/${requestId}`, {
+      action: leavePageInfo.leaveRequestStatus
     })
   }
 

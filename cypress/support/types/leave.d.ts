@@ -6,4 +6,8 @@ export interface ILeave {
   entitlementDuration: number
   entitlementFromDate: string
   entitlementEndDate: string
+  leaveRequestComment: string
+  leaveRequestFromData: string
+  leaveRequestEndData: string
+  leaveRequestStatus: string
 }
