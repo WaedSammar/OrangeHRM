@@ -1,0 +1,9 @@
+{
+  "leaveTypeName": "Casual Leave",
+  "leaveSituational": false,
+  "leavePerStartedDay": 1,
+  "leavePerStartedMonth": 1,
+  "entitlementDuration": 10,
+  "entitlementFromDate": "2025-01-01",
+  "entitlementEndDate": "2025-12-31"
+}
