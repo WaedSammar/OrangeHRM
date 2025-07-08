@@ -1,6 +1,8 @@
-import { ElementHandler } from '../../support/element-handler'
+import dayjs from 'dayjs'
+import { DATE_FORMAT, DATE_UNIT, ElementHandler } from '../../support/element-handler'
 import { LeavePageHelper } from '../../support/helpers/leave-page-helper'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
+import { LEAVE_TABLE_HEADERS, LeavePage } from '../../support/page-objects/leave-page'
 import { IEmployeeInfo } from '../../support/types/employee'
 import { ILeave } from '../../support/types/leave'
 
@@ -24,6 +26,9 @@ describe('Leave page test cases', () => {
     employeeIds = []
     leaveTypeIds = []
     entitlementIds = []
+
+    leavePageInfo.leaveRequestFromData = dayjs().add(5, DATE_UNIT.DAY).format(DATE_FORMAT.DEFAULT)
+    leavePageInfo.leaveRequestEndData = dayjs().add(10, DATE_UNIT.DAY).format(DATE_FORMAT.DEFAULT)
 
     cy.login()
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
@@ -55,11 +60,24 @@ describe('Leave page test cases', () => {
 
       ElementHandler.logout()
       cy.login()
-      LeavePageHelper.approveLeaveRequest(leavePageInfo, requestId).then(() => {})
+
+      LeavePageHelper.approveLeaveRequest(leavePageInfo, requestId).then(() => {
+        ElementHandler.logout()
+        cy.login(employeeInfo.userName, employeeInfo.password)
+
+        LeavePage.goToLeavePage()
+        const data = {
+          [LEAVE_TABLE_HEADERS.EMPLOYEE_NAME]: `${employeeInfo.firstName} ${employeeInfo.middleName} ${employeeInfo.lastName}`,
+          [LEAVE_TABLE_HEADERS.STATUS]: leavePageInfo.leaveStatus
+        }
+        ElementHandler.validateTableRow(data)
+      })
     })
   })
 
   afterEach(() => {
+    ElementHandler.logout()
+    cy.login()
     PIMPageHelper.deleteUsers(employeeIds)
     LeavePageHelper.deleteLeaveType(leaveTypeIds)
   })

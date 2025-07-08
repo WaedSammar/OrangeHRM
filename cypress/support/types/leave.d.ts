@@ -10,4 +10,5 @@ export interface ILeave {
   leaveRequestFromData: string
   leaveRequestEndData: string
   leaveRequestStatus: string
+  leaveStatus: string
 }

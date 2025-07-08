@@ -21,6 +21,16 @@ enum DROP_DOWN {
   LOGOUT = 'Logout'
 }
 
+enum DATE_UNIT {
+  DAY = 'day',
+  MONTH = 'month',
+  YEAR = 'year'
+}
+
+enum DATE_FORMAT {
+  DEFAULT = 'YYYY-MM-DD'
+}
+
 class ElementHandler {
   private static LOCATORS = {
     columnHeader: '[role="columnheader"]',
@@ -251,4 +261,4 @@ class ElementHandler {
     })
   }
 }
-export { ElementHandler, COMMON_LOCATORS }
+export { ElementHandler, COMMON_LOCATORS, DATE_FORMAT, DATE_UNIT }
