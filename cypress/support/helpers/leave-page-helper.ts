@@ -1,8 +1,9 @@
 import dayjs from 'dayjs'
 import { DATE_UNIT, DATE_FORMAT } from '../../support/helpers/constants'
-import { ILeave } from '../types/leave'
+import { ILeaveRequestData } from '../types/leave'
 import { CommonHelper } from './common-helper'
 import { HTTP_METHODS } from './constants'
+import { LeaveInitializer } from '../initializers/leave-page/leave-page-initializer'
 
 const URLs = {
   leaveType: `/web/index.php/api/v2/leave/leave-types`,
@@ -15,7 +16,7 @@ const URLs = {
 class LeavePageHelper {
   /**
    * generate future leave dates
-   * @returns 
+   * @returns
    */
   static generateFutureLeaveDates() {
     return {
@@ -26,67 +27,62 @@ class LeavePageHelper {
 
   /**
    * add new leave type
-   * @param {ILeave} leavePageInfo
+   * @param {ILeaveRequestData} leavePageInfo
    * @returns
    */
-  static addLeaveType(leavePageInfo: ILeave) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.leaveType, {
-      name: `${leavePageInfo.leaveTypeName} ${Date.now()}`,
-      situational: false
+  static addLeaveType(leavePageInfo: ILeaveRequestData) {
+    const payload = LeaveInitializer.InitializerAddLeaveType(leavePageInfo)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.leaveType, payload).then((response) => {
+      return response
     })
   }
 
   /**
    * select leave period
-   * @param {ILeave} leavePageInfo
+   * @param {ILeaveRequestData} leavePageInfo
    * @returns
    */
-  static selectLeavePeriod(leavePageInfo: ILeave) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, URLs.leavePeriod, {
-      startDay: leavePageInfo.leavePerStartedDay,
-      startMonth: leavePageInfo.leavePerStartedMonth
+  static selectLeavePeriod(leavePageInfo: ILeaveRequestData) {
+    const payload = LeaveInitializer.InitializerSelectLeavePeriod(leavePageInfo)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, URLs.leavePeriod, payload).then((response) => {
+      return response
     })
   }
 
   /**
    * add entitlements
-   * @param {ILeave} leavePageInfo
+   * @param {ILeaveRequestData} leavePageInfo
    * @param {number} empNumber
    * @param {number} leaveTypeId
    * @returns
    */
-  static addEntitlements(leavePageInfo: ILeave, empNumber: any, leaveTypeId: number) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.entitlements, {
-      empNumber,
-      entitlement: leavePageInfo.entitlementDuration,
-      fromDate: leavePageInfo.entitlementFromDate,
-      leaveTypeId,
-      toDate: leavePageInfo.entitlementEndDate
+  static addEntitlements(leavePageInfo: ILeaveRequestData, empNumber: number, leaveTypeId: number) {
+    const payload = LeaveInitializer.InitializerAddEntitlements(leavePageInfo, empNumber, leaveTypeId)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.entitlements, payload).then((response) => {
+      return response
     })
   }
 
   /**
    * apply leave request
-   * @param {ILeave} leavePageInfo
+   * @param {ILeaveRequestData} leavePageInfo
    * @param {number} leaveTypeId
    * @returns
    */
-  static applyLeaveRequest(leavePageInfo: ILeave, leaveTypeId: number) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.leaveRequest, {
-      comment: leavePageInfo.leaveRequestComment,
-      fromDate: leavePageInfo.leaveRequestFromDate,
-      leaveTypeId,
-      toDate: leavePageInfo.leaveRequestEndDate
+  static applyLeaveRequest(leavePageInfo: ILeaveRequestData, leaveTypeId: number) {
+    const payload = LeaveInitializer.InitializerApplyLeaveRequest(leavePageInfo, leaveTypeId)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.leaveRequest, payload).then((response) => {
+      return response
     })
   }
 
   /**
    * approve leave request by admin
-   * @param {ILeave} leavePageInfo
+   * @param {ILeaveRequestData} leavePageInfo
    * @param {number} requestId
    * @returns
    */
-  static approveLeaveRequest(leavePageInfo: ILeave, requestId: number) {
+  static approveLeaveRequest(leavePageInfo: ILeaveRequestData, requestId: number) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, `${URLs.employeeRequest}/${requestId}`, {
       action: leavePageInfo.leaveRequestStatus
     })
@@ -94,7 +90,7 @@ class LeavePageHelper {
 
   /**
    * delete added leave type
-   * @param {ILeave} leaveTypeIds
+   * @param {ILeaveRequestData} leaveTypeIds
    * @returns
    */
   static deleteLeaveType(leaveTypeIds: number[]) {

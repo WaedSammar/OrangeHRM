@@ -1,4 +1,4 @@
-export interface ILeave {
+export interface ILeaveRequestData {
   leaveTypeName: string
   leaveSituational: boolean
   leavePerStartedDay: number

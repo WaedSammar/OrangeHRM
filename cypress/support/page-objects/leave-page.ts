@@ -1,6 +1,6 @@
 import { ElementHandler } from '../element-handler'
 import { PAGES } from '../helpers/constants'
-import { ILeaveTableRowData } from '../types/leaveTableRow'
+import { ILeaveRequestDataTableRowData } from '../types/leaveTableRow'
 
 enum LEAVE_TABLE_HEADERS {
   DATE = 'Date',
@@ -22,9 +22,9 @@ class LeavePage {
 
   /**
    * verify leave request status in leave table
-   * @param {ILeaveTableRowData} data
+   * @param {ILeaveRequestDataTableRowData} data
    */
-  static verifyLeaveStatusInTable(data: ILeaveTableRowData) {
+  static verifyLeaveStatusInTable(data: ILeaveRequestDataTableRowData) {
     ElementHandler.validateTableRow(data)
   }
 }
