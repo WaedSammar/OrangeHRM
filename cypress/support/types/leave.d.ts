@@ -7,8 +7,8 @@ export interface ILeave {
   entitlementFromDate: string
   entitlementEndDate: string
   leaveRequestComment: string
-  leaveRequestFromData: string
-  leaveRequestEndData: string
+  leaveRequestFromDate: string
+  leaveRequestEndDate: string
   leaveRequestStatus: string
   leaveStatus: string
 }

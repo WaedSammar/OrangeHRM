@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+import { DATE_UNIT, DATE_FORMAT } from '../../support/helpers/constants'
 import { ILeave } from '../types/leave'
 import { CommonHelper } from './common-helper'
 import { HTTP_METHODS } from './constants'
@@ -11,6 +13,17 @@ const URLs = {
 }
 
 class LeavePageHelper {
+  /**
+   * generate future leave dates
+   * @returns 
+   */
+  static generateFutureLeaveDates() {
+    return {
+      fromDate: dayjs().add(5, DATE_UNIT.DAY).format(DATE_FORMAT.DEFAULT),
+      toDate: dayjs().add(10, DATE_UNIT.DAY).format(DATE_FORMAT.DEFAULT)
+    }
+  }
+
   /**
    * add new leave type
    * @param {ILeave} leavePageInfo
@@ -61,17 +74,17 @@ class LeavePageHelper {
   static applyLeaveRequest(leavePageInfo: ILeave, leaveTypeId: number) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.leaveRequest, {
       comment: leavePageInfo.leaveRequestComment,
-      fromDate: leavePageInfo.leaveRequestFromData,
+      fromDate: leavePageInfo.leaveRequestFromDate,
       leaveTypeId,
-      toDate: leavePageInfo.leaveRequestEndData
+      toDate: leavePageInfo.leaveRequestEndDate
     })
   }
 
   /**
    * approve leave request by admin
-   * @param {ILeave} leavePageInfo 
-   * @param {number} requestId 
-   * @returns 
+   * @param {ILeave} leavePageInfo
+   * @param {number} requestId
+   * @returns
    */
   static approveLeaveRequest(leavePageInfo: ILeave, requestId: number) {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, `${URLs.employeeRequest}/${requestId}`, {

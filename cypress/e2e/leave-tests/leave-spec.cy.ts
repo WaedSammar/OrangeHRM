@@ -1,10 +1,8 @@
-import dayjs from 'dayjs'
 import { LeavePageHelper } from '../../support/helpers/leave-page-helper'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { LEAVE_TABLE_HEADERS, LeavePage } from '../../support/page-objects/leave-page'
 import { IEmployeeInfo } from '../../support/types/employee'
 import { ILeave } from '../../support/types/leave'
-import { DATE_UNIT, DATE_FORMAT } from '../../support/helpers/constants'
 
 describe('Leave page test cases', () => {
   let leavePageInfo: ILeave, employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo
@@ -27,8 +25,9 @@ describe('Leave page test cases', () => {
     leaveTypeIds = []
     entitlementIds = []
 
-    leavePageInfo.leaveRequestFromData = dayjs().add(5, DATE_UNIT.DAY).format(DATE_FORMAT.DEFAULT)
-    leavePageInfo.leaveRequestEndData = dayjs().add(10, DATE_UNIT.DAY).format(DATE_FORMAT.DEFAULT)
+    const { fromDate, toDate } = LeavePageHelper.generateFutureLeaveDates()
+  leavePageInfo.leaveRequestFromDate = fromDate
+  leavePageInfo.leaveRequestEndDate = toDate
 
     cy.login()
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
