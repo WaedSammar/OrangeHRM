@@ -21,16 +21,6 @@ enum DROP_DOWN {
   LOGOUT = 'Logout'
 }
 
-enum DATE_UNIT {
-  DAY = 'day',
-  MONTH = 'month',
-  YEAR = 'year'
-}
-
-enum DATE_FORMAT {
-  DEFAULT = 'YYYY-MM-DD'
-}
-
 class ElementHandler {
   private static LOCATORS = {
     columnHeader: '[role="columnheader"]',
@@ -153,14 +143,6 @@ class ElementHandler {
   }
 
   /**
-   * logout from current user
-   */
-  static logout() {
-    cy.get(COMMON_LOCATORS.dropDownList).click()
-    cy.contains(DROP_DOWN.LOGOUT).click()
-  }
-
-  /**
    * get the index for column by header name
    * @param {string} headerName
    * @returns
@@ -261,4 +243,4 @@ class ElementHandler {
     })
   }
 }
-export { ElementHandler, COMMON_LOCATORS, DATE_FORMAT, DATE_UNIT }
+export { ElementHandler, COMMON_LOCATORS, DROP_DOWN }

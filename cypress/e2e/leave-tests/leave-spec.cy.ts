@@ -1,10 +1,11 @@
 import dayjs from 'dayjs'
-import { DATE_FORMAT, DATE_UNIT, ElementHandler } from '../../support/element-handler'
+import { ElementHandler } from '../../support/element-handler'
 import { LeavePageHelper } from '../../support/helpers/leave-page-helper'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { LEAVE_TABLE_HEADERS, LeavePage } from '../../support/page-objects/leave-page'
 import { IEmployeeInfo } from '../../support/types/employee'
 import { ILeave } from '../../support/types/leave'
+import { DATE_UNIT, DATE_FORMAT } from '../../support/helpers/constants'
 
 describe('Leave page test cases', () => {
   let leavePageInfo: ILeave, employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo
@@ -52,17 +53,17 @@ describe('Leave page test cases', () => {
   })
 
   it('Validate schedule status after admin approval', () => {
-    ElementHandler.logout()
+    cy.logout()
     cy.login(employeeInfo.userName, employeeInfo.password)
 
     LeavePageHelper.applyLeaveRequest(leavePageInfo, leaveTypeIds[0]).then((response) => {
       const requestId = response.body.data.id
 
-      ElementHandler.logout()
+      cy.logout()
       cy.login()
 
       LeavePageHelper.approveLeaveRequest(leavePageInfo, requestId).then(() => {
-        ElementHandler.logout()
+        cy.logout()
         cy.login(employeeInfo.userName, employeeInfo.password)
 
         LeavePage.goToLeavePage()
@@ -76,7 +77,7 @@ describe('Leave page test cases', () => {
   })
 
   afterEach(() => {
-    ElementHandler.logout()
+    cy.logout()
     cy.login()
     PIMPageHelper.deleteUsers(employeeIds)
     LeavePageHelper.deleteLeaveType(leaveTypeIds)
