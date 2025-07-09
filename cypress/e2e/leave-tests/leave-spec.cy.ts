@@ -9,6 +9,8 @@ describe('Leave page test cases', () => {
   let employeeIds: number[] = []
   let leaveTypeIds: number[] = []
   let entitlementIds: number[] = []
+  let credentialsList: { username: string; password: string }[] = []
+  let createdEmployeesMap: Record<string, IEmployeeInfo> = {}
 
   before(() => {
     cy.fixture('leave-page-mock').then((leavePageData) => {
@@ -31,10 +33,15 @@ describe('Leave page test cases', () => {
 
     cy.login()
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
-      const empNumber = response.body.data.empNumber
-      employeeIds.push(empNumber)
+      const empNumber = response.body.data.empNumber.toString()
+      employeeIds.push(Number(empNumber))
+      createdEmployeesMap[empNumber] = response.body.data
 
-      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(() => {
+      PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(({ credentials }) => {
+        credentialsList.push({
+          username: credentials.username,
+          password: credentials.password
+        })
         LeavePageHelper.addLeaveType(leavePageInfo).then((response) => {
           const leaveId = response.body.data.id
           leaveTypeIds.push(leaveId)
@@ -52,21 +59,21 @@ describe('Leave page test cases', () => {
 
   it('Validate schedule status after admin approval', () => {
     cy.logout()
-    cy.login(employeeInfo.userName, employeeInfo.password)
+    cy.login(credentialsList[0].username, credentialsList[0].password)
 
     LeavePageHelper.applyLeaveRequest(leavePageInfo, leaveTypeIds[0]).then((response) => {
       const requestId = response.body.data.id
-
       cy.logout()
       cy.login()
 
       LeavePageHelper.approveLeaveRequest(leavePageInfo, requestId).then(() => {
         cy.logout()
-        cy.login(employeeInfo.userName, employeeInfo.password)
+        cy.login(credentialsList[0].username, credentialsList[0].password)
 
         LeavePage.goToLeavePage()
+        const employeeData = createdEmployeesMap[employeeIds[0].toString()]
         const data = {
-          [LEAVE_TABLE_HEADERS.EMPLOYEE_NAME]: `${employeeInfo.firstName} ${employeeInfo.middleName} ${employeeInfo.lastName}`,
+          [LEAVE_TABLE_HEADERS.EMPLOYEE_NAME]: `${employeeData.firstName} ${employeeData.middleName} ${employeeData.lastName}`,
           [LEAVE_TABLE_HEADERS.STATUS]: leavePageInfo.leaveStatus
         }
         LeavePage.verifyLeaveStatusInTable(data)

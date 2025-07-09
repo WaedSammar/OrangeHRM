@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker/.'
+import { faker } from '@faker-js/faker'
 import { ILeaveRequestData } from '../../types/leave'
 import { CHANGE_DATE_FORMAT } from '../pim-page/pim-page-initializer'
 
