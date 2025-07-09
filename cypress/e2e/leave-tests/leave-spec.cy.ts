@@ -1,5 +1,4 @@
 import dayjs from 'dayjs'
-import { ElementHandler } from '../../support/element-handler'
 import { LeavePageHelper } from '../../support/helpers/leave-page-helper'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { LEAVE_TABLE_HEADERS, LeavePage } from '../../support/page-objects/leave-page'
@@ -71,7 +70,7 @@ describe('Leave page test cases', () => {
           [LEAVE_TABLE_HEADERS.EMPLOYEE_NAME]: `${employeeInfo.firstName} ${employeeInfo.middleName} ${employeeInfo.lastName}`,
           [LEAVE_TABLE_HEADERS.STATUS]: leavePageInfo.leaveStatus
         }
-        ElementHandler.validateTableRow(data)
+        LeavePage.verifyLeaveStatusInTable(data)
       })
     })
   })
