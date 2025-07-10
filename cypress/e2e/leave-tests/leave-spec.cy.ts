@@ -1,3 +1,4 @@
+import { ElementHandler } from '../../support/element-handler'
 import { LeavePageHelper } from '../../support/helpers/leave-page-helper'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { LEAVE_TABLE_HEADERS, LeavePage } from '../../support/page-objects/leave-page'
@@ -71,12 +72,17 @@ describe('Leave page test cases', () => {
         cy.login(credentialsList[0].username, credentialsList[0].password)
 
         LeavePage.goToLeavePage()
+        const { fromDate, toDate } = LeavePageHelper.generateFutureLeaveDates()
         const employeeData = createdEmployeesMap[employeeIds[0].toString()]
-        const data = {
-          [LEAVE_TABLE_HEADERS.EMPLOYEE_NAME]: `${employeeData.firstName} ${employeeData.middleName} ${employeeData.lastName}`,
-          [LEAVE_TABLE_HEADERS.STATUS]: leavePageInfo.leaveStatus
-        }
-        LeavePage.verifyLeaveStatusInTable(data)
+
+        LeavePageHelper.getLeaveStatusString(leavePageInfo.leaveStatus, fromDate, toDate).then((statusString) => {
+          const data = {
+            [LEAVE_TABLE_HEADERS.EMPLOYEE_NAME]: `${employeeData.firstName} ${employeeData.middleName} ${employeeData.lastName}`,
+            [LEAVE_TABLE_HEADERS.STATUS]: statusString
+          }
+
+          LeavePage.verifyLeaveStatusInTable(data)
+        })
       })
     })
   })
