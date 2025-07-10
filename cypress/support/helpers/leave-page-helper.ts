@@ -5,12 +5,13 @@ import { CommonHelper } from './common-helper'
 import { HTTP_METHODS } from './constants'
 import { LeaveInitializer } from '../initializers/leave-page/leave-page-initializer'
 
+const leaveBaseURL = '/web/index.php/api/v2/leave'
 const URLs = {
-  leaveType: `/web/index.php/api/v2/leave/leave-types`,
-  leavePeriod: `/web/index.php/api/v2/leave/leave-period`,
-  entitlements: `/web/index.php/api/v2/leave/leave-entitlements`,
-  leaveRequest: `/web/index.php/api/v2/leave/leave-requests`,
-  employeeRequest: `/web/index.php/api/v2/leave/employees/leave-requests`
+  leaveType: `${leaveBaseURL}/leave-types`,
+  leavePeriod: `${leaveBaseURL}/leave-period`,
+  entitlements: `${leaveBaseURL}/leave-entitlements`,
+  leaveRequest: `${leaveBaseURL}/leave-requests`,
+  employeeRequest: `${leaveBaseURL}/employees/leave-requests`
 }
 
 class LeavePageHelper {
