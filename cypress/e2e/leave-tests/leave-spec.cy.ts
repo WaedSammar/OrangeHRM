@@ -1,4 +1,3 @@
-import { ElementHandler } from '../../support/element-handler'
 import { LeavePageHelper } from '../../support/helpers/leave-page-helper'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { LEAVE_TABLE_HEADERS, LeavePage } from '../../support/page-objects/leave-page'
