@@ -27,6 +27,10 @@ describe('Leave page test cases', () => {
     leaveTypeIds = []
     entitlementIds = []
 
+    const { fromDate, toDate } = LeavePageHelper.generateFutureLeaveDates()
+    leavePageInfo.leaveRequestFromDate = fromDate
+    leavePageInfo.leaveRequestEndDate = toDate
+
     cy.login()
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
       const empNumber = response.body.data.empNumber.toString()

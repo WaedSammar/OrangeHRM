@@ -1,4 +1,4 @@
-import { ElementHandler } from '../element-handler'
+import { COMMON_LOCATORS, ElementHandler } from '../element-handler'
 import { PAGES } from '../helpers/constants'
 import { ILeaveRequestDataTableRowData } from '../types/leaveTableRow'
 
@@ -25,7 +25,23 @@ class LeavePage {
    * @param {ILeaveRequestDataTableRowData} data
    */
   static verifyLeaveStatusInTable(data: ILeaveRequestDataTableRowData) {
-    ElementHandler.validateTableRow(data)
+    const expectedStatus = data[LEAVE_TABLE_HEADERS.STATUS]
+    const dataWithoutStatus = { ...data }
+    delete dataWithoutStatus[LEAVE_TABLE_HEADERS.STATUS]
+
+    ElementHandler.getMatchingRowByData(dataWithoutStatus).then((matchIndex) => {
+      cy.get(COMMON_LOCATORS.table)
+        .find(COMMON_LOCATORS.tableCard)
+        .eq(matchIndex)
+        .find(COMMON_LOCATORS.cell)
+        .then(($cells) => {
+          ElementHandler.getHeaderIndex(LEAVE_TABLE_HEADERS.STATUS).then((statusIndex) => {
+            const actualStatus = $cells.eq(statusIndex).text().trim()
+            expect(actualStatus).to.include(expectedStatus)
+          })
+        })
+    })
   }
 }
+
 export { LeavePage, LEAVE_TABLE_HEADERS }

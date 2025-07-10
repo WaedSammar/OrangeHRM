@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+import { DATE_UNIT, DATE_FORMAT } from '../../support/helpers/constants'
 import { ILeaveRequestData } from '../types/leave'
 import { CommonHelper } from './common-helper'
 import { HTTP_METHODS } from './constants'
@@ -13,6 +15,17 @@ const URLs = {
 }
 
 class LeavePageHelper {
+  /**
+   * generate future leave dates
+   * @returns
+   */
+  static generateFutureLeaveDates() {
+    return {
+      fromDate: dayjs().add(5, DATE_UNIT.DAY).format(DATE_FORMAT.DEFAULT),
+      toDate: dayjs().add(10, DATE_UNIT.DAY).format(DATE_FORMAT.DEFAULT)
+    }
+  }
+
   /**
    * add new leave type
    * @param {ILeaveRequestData} leavePageInfo
