@@ -74,10 +74,23 @@ describe('Claim Page Test Cases', () => {
     }
     ClaimPage.clickAllowAction(data)
     ClaimPage.clickApprove()
+
+    cy.logout()
+    cy.login(credentialsList[0].username, credentialsList[0].password)
+    ClaimPage.goToClaimPage()
+    const requestInfo = {
+      [CLAIM_TABLE_HEADERS.STATUS]: `${claimPageInfo.requestStatusAfterApproved}`,
+      [CLAIM_TABLE_HEADERS.AMOUNT]: `${claimPageInfo.expenseAmount}`
+    }
+    ClaimPage.verifyInfoInClaimTable(requestInfo)
   })
 
+  it('submit claim, add attachment and verify it', () => {})
+
   afterEach(() => {
-    PIMPageHelper.deleteUsers(employeeIds)
+    cy.logout()
+    cy.login()
+    // PIMPageHelper.deleteUsers(employeeIds)
     ClaimPageHelper.deleteEventType(eventIds)
     ClaimPageHelper.deleteExpenseType(expenseIds)
   })

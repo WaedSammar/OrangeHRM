@@ -9,4 +9,5 @@ export interface IClaimRequest {
   claimRequestStatus: string
   expenseDate: string
   expenseAmount: string
+  requestStatusAfterApproved: string
 }
