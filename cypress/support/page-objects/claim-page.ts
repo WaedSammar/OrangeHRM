@@ -129,6 +129,17 @@ class ClaimPage {
     ElementHandler.clickButton(COMMON_BUTTONS.APPROVE)
   }
 
+  /**
+   * approve the request
+   */
+  static clickReject() {
+    ElementHandler.clickButton(COMMON_BUTTONS.REJECT)
+  }
+
+  /**
+   * verify claim request information
+   * @param {IClaimRequestDataTableRowData} claimPageInfo 
+   */
   static verifyInfoInClaimTable(claimPageInfo: IClaimRequestDataTableRowData) {
     ElementHandler.validateTableRow(claimPageInfo) 
   }

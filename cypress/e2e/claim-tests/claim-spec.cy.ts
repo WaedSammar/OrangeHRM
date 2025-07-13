@@ -79,18 +79,62 @@ describe('Claim Page Test Cases', () => {
     cy.login(credentialsList[0].username, credentialsList[0].password)
     ClaimPage.goToClaimPage()
     const requestInfo = {
-      [CLAIM_TABLE_HEADERS.STATUS]: `${claimPageInfo.requestStatusAfterApproved}`,
-      [CLAIM_TABLE_HEADERS.AMOUNT]: `${claimPageInfo.expenseAmount}`
+      [CLAIM_TABLE_HEADERS.STATUS]: claimPageInfo.requestStatusAfterApproved,
+      [CLAIM_TABLE_HEADERS.AMOUNT]: claimPageInfo.expenseAmount
     }
     ClaimPage.verifyInfoInClaimTable(requestInfo)
   })
 
-  it('submit claim, add attachment and verify it', () => {})
+  it('submit claim and approve it', () => {
+    cy.logout()
+    cy.login(credentialsList[0].username, credentialsList[0].password)
+
+    ClaimPage.goToClaimPage()
+    ClaimPage.clickSubmitBtn()
+    ClaimPage.selectEventType(claimPageInfo.eventTypeName)
+    ClaimPage.selectCurrencyType(claimPageInfo.currencyType)
+    ClaimPage.clickCreateBtn()
+    ClaimPage.clickSubmitBtn()
+
+    cy.logout()
+    cy.login()
+    ClaimPage.goToClaimPage()
+    const data = {
+      [CLAIM_TABLE_HEADERS.EMPLOYEE_NAME]: `${employeeInfo.firstName} ${employeeInfo.lastName}`,
+      [CLAIM_TABLE_HEADERS.EVENT_NAME]: claimPageInfo.eventTypeName,
+      [CLAIM_TABLE_HEADERS.STATUS]: claimPageInfo.claimRequestStatus
+    }
+    ClaimPage.clickAllowAction(data)
+    ClaimPage.clickApprove()
+  })
+
+  it('submit claim and reject it', () => {
+    cy.logout()
+    cy.login(credentialsList[0].username, credentialsList[0].password)
+
+    ClaimPage.goToClaimPage()
+    ClaimPage.clickSubmitBtn()
+    ClaimPage.selectEventType(claimPageInfo.eventTypeName)
+    ClaimPage.selectCurrencyType(claimPageInfo.currencyType)
+    ClaimPage.clickCreateBtn()
+    ClaimPage.clickSubmitBtn()
+
+    cy.logout()
+    cy.login()
+    ClaimPage.goToClaimPage()
+    const data = {
+      [CLAIM_TABLE_HEADERS.EMPLOYEE_NAME]: `${employeeInfo.firstName} ${employeeInfo.lastName}`,
+      [CLAIM_TABLE_HEADERS.EVENT_NAME]: claimPageInfo.eventTypeName,
+      [CLAIM_TABLE_HEADERS.STATUS]: claimPageInfo.claimRequestStatus
+    }
+    ClaimPage.clickAllowAction(data)
+    ClaimPage.clickReject()
+  })
 
   afterEach(() => {
     cy.logout()
     cy.login()
-    // PIMPageHelper.deleteUsers(employeeIds)
+    PIMPageHelper.deleteUsers(employeeIds)
     ClaimPageHelper.deleteEventType(eventIds)
     ClaimPageHelper.deleteExpenseType(expenseIds)
   })
