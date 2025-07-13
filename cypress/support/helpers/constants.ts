@@ -4,7 +4,8 @@ export enum PAGES {
   MY_INFO = 'My Info',
   ADMIN = 'Admin',
   RECRUITMENT = 'Recruitment',
-  LEAVE = 'Leave'
+  LEAVE = 'Leave',
+  CLAIM = 'Claim'
 }
 
 export enum HTTP_METHODS {
@@ -59,7 +60,10 @@ export enum SIZE_LIMIT {
 export enum COMMON_BUTTONS {
   ADD = 'Add',
   SEARCH = 'Search',
-  SAVE = 'Save'
+  SAVE = 'Save',
+  SUBMIT = 'Submit',
+  CREATE = 'Create',
+  APPROVE = 'Approve'
 }
 
 export enum COLORS {

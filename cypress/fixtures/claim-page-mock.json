@@ -4,5 +4,9 @@
   "eventTypeStatus": true,
   "expenseTypeName": "Transportation",
   "expenseTypeDescription": "transportation",
-  "TransportationStatus": true
+  "expenseTypeStatus": true,
+  "currencyType": "United States Dollar",
+  "claimRequestStatus": "Submitted",
+  "expenseDate": "2027-12-07",
+  "expenseAmount": "1000"
 }

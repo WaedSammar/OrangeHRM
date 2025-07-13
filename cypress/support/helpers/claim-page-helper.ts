@@ -32,7 +32,7 @@ class ClaimPageHelper {
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.expenseType, {
       description: claimPageInfo.expenseTypeDescription,
       name: claimPageInfo.expenseTypeName,
-      status: claimPageInfo.expenseTypeName
+      status: claimPageInfo.expenseTypeStatus
     })
   }
 
