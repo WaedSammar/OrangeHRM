@@ -42,6 +42,7 @@ declare global {
     interface Chainable {
       login(username?: string, password?: string): Chainable<void>
       parseXlsxToJson(filePath: string): Chainable<Record<string, any[]>>
+      logout(): Chainable<void>
     }
   }
 }
@@ -55,4 +56,9 @@ Cypress.Commands.add('login', (username = 'admin', password = 'admin123') => {
 
 Cypress.Commands.add('parseXlsxToJson', (filePath: string) => {
   return cy.task('parseXlsxToJson', { filePath })
+})
+
+Cypress.Commands.add('logout', () => {
+  cy.get('.oxd-userdropdown-name').click()
+  cy.contains('Logout').click()
 })
