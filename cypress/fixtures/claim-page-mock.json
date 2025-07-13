@@ -1,0 +1,8 @@
+{
+  "eventTypeName": "Business Trip",
+  "eventTypeDescription": "business trip",
+  "eventTypeStatus": true,
+  "expenseTypeName": "Transportation",
+  "expenseTypeDescription": "transportation",
+  "TransportationStatus": true
+}
