@@ -62,7 +62,8 @@ export enum COMMON_BUTTONS {
   SAVE = 'Save',
   SUBMIT = 'Submit',
   CREATE = 'Create',
-  APPROVE = 'Approve'
+  APPROVE = 'Approve',
+  REJECT = 'Reject'
 }
 
 export enum COLORS {

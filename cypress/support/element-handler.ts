@@ -61,8 +61,8 @@ class ElementHandler {
    * click on buttons
    * @param {string} label - name of button needed
    */
-  static clickButton(label: string) {
-    cy.get(HTML_TAGS.button).contains(label).click()
+  static clickButton(label: string, index: number = 0) {
+    cy.get(HTML_TAGS.button).contains(label).eq(index).click()
   }
 
   /**
