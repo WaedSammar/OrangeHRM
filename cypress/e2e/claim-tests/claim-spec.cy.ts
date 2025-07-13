@@ -1,3 +1,4 @@
+import { IEventType, IExpenseType } from '../../support/apis/response/claim-page/claim'
 import { ClaimPageHelper } from '../../support/helpers/claim-page-helper'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { CLAIM_TABLE_HEADERS, ClaimPage } from '../../support/page-objects/claim-page'
@@ -8,6 +9,8 @@ describe('Claim Page Test Cases', () => {
   let claimPageInfo: IClaimRequest, employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo
   let employeeIds: number[] = []
   let createdEmployeesMap: Record<string, IEmployeeInfo> = {}
+  let createdEventMap: Record<string, IEventType> = {}
+  let createdExpenseMap: Record<string, IExpenseType> = {}
   let credentialsList: { username: string; password: string }[] = []
   let eventIds: number[] = []
   let expenseIds: number[] = []
@@ -28,23 +31,25 @@ describe('Claim Page Test Cases', () => {
     expenseIds = []
 
     cy.login()
-    PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((response) => {
-      const empNumber = response.body.data.empNumber.toString()
+    PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((employeeResponse) => {
+      const empNumber = employeeResponse.body.data.empNumber.toString()
       employeeIds.push(Number(empNumber))
-      createdEmployeesMap[empNumber] = response.body.data
+      createdEmployeesMap[empNumber] = employeeResponse.body.data
 
       PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(({ credentials }) => {
         credentialsList.push({
           username: credentials.username,
           password: credentials.password
         })
-        ClaimPageHelper.createEventType(claimPageInfo).then((response) => {
-          const eventId = response.body.data.id
+        ClaimPageHelper.createEventType(claimPageInfo).then((eventResponse) => {
+          const eventId = eventResponse.body.data.id
           eventIds.push(eventId)
+          createdEventMap[eventId] = eventResponse.body.data
 
-          ClaimPageHelper.createExpenseType(claimPageInfo).then((response) => {
-            const expenseId = response.body.data.id
+          ClaimPageHelper.createExpenseType(claimPageInfo).then((expenseResponse) => {
+            const expenseId = expenseResponse.body.data.id
             expenseIds.push(expenseId)
+            createdExpenseMap[expenseId] = expenseResponse.body.data
           })
         })
       })
@@ -52,24 +57,24 @@ describe('Claim Page Test Cases', () => {
   })
 
   it('submit claim, add expense and approve it by admin', () => {
+    const employeeData = createdEmployeesMap[employeeIds[0].toString()]
+    const eventData = createdEventMap[eventIds[0]]
+    const expenseData = createdExpenseMap[expenseIds[0]]
+
     cy.logout()
     cy.login(credentialsList[0].username, credentialsList[0].password)
 
     ClaimPage.goToClaimPage()
-    ClaimPage.clickSubmitBtn()
-    ClaimPage.selectEventType(claimPageInfo.eventTypeName)
-    ClaimPage.selectCurrencyType(claimPageInfo.currencyType)
-    ClaimPage.clickCreateBtn()
-
-    ClaimPage.addExpense(claimPageInfo)
+    ClaimPage.applyClaimRequest(eventData.name, claimPageInfo.currencyType)
+    ClaimPage.addExpense(claimPageInfo, expenseData.name)
     ClaimPage.clickSubmitBtn()
 
     cy.logout()
     cy.login()
     ClaimPage.goToClaimPage()
     const data = {
-      [CLAIM_TABLE_HEADERS.EMPLOYEE_NAME]: `${employeeInfo.firstName} ${employeeInfo.lastName}`,
-      [CLAIM_TABLE_HEADERS.EVENT_NAME]: claimPageInfo.eventTypeName,
+      [CLAIM_TABLE_HEADERS.EMPLOYEE_NAME]: `${employeeData.firstName} ${employeeData.lastName}`,
+      [CLAIM_TABLE_HEADERS.EVENT_NAME]: eventData.name,
       [CLAIM_TABLE_HEADERS.STATUS]: claimPageInfo.claimRequestStatus
     }
     ClaimPage.clickAllowAction(data)
@@ -86,22 +91,22 @@ describe('Claim Page Test Cases', () => {
   })
 
   it('submit claim and approve it', () => {
+    const employeeData = createdEmployeesMap[employeeIds[0].toString()]
+    const eventData = createdEventMap[eventIds[0]]
+
     cy.logout()
     cy.login(credentialsList[0].username, credentialsList[0].password)
 
     ClaimPage.goToClaimPage()
-    ClaimPage.clickSubmitBtn()
-    ClaimPage.selectEventType(claimPageInfo.eventTypeName)
-    ClaimPage.selectCurrencyType(claimPageInfo.currencyType)
-    ClaimPage.clickCreateBtn()
+    ClaimPage.applyClaimRequest(eventData.name, claimPageInfo.currencyType)
     ClaimPage.clickSubmitBtn()
 
     cy.logout()
     cy.login()
     ClaimPage.goToClaimPage()
     const data = {
-      [CLAIM_TABLE_HEADERS.EMPLOYEE_NAME]: `${employeeInfo.firstName} ${employeeInfo.lastName}`,
-      [CLAIM_TABLE_HEADERS.EVENT_NAME]: claimPageInfo.eventTypeName,
+      [CLAIM_TABLE_HEADERS.EMPLOYEE_NAME]: `${employeeData.firstName} ${employeeData.lastName}`,
+      [CLAIM_TABLE_HEADERS.EVENT_NAME]: eventData.name,
       [CLAIM_TABLE_HEADERS.STATUS]: claimPageInfo.claimRequestStatus
     }
     ClaimPage.clickAllowAction(data)
@@ -109,22 +114,22 @@ describe('Claim Page Test Cases', () => {
   })
 
   it('submit claim and reject it', () => {
+    const employeeData = createdEmployeesMap[employeeIds[0].toString()]
+    const eventData = createdEventMap[eventIds[0]]
+
     cy.logout()
     cy.login(credentialsList[0].username, credentialsList[0].password)
 
     ClaimPage.goToClaimPage()
-    ClaimPage.clickSubmitBtn()
-    ClaimPage.selectEventType(claimPageInfo.eventTypeName)
-    ClaimPage.selectCurrencyType(claimPageInfo.currencyType)
-    ClaimPage.clickCreateBtn()
+    ClaimPage.applyClaimRequest(eventData.name, claimPageInfo.currencyType)
     ClaimPage.clickSubmitBtn()
 
     cy.logout()
     cy.login()
     ClaimPage.goToClaimPage()
     const data = {
-      [CLAIM_TABLE_HEADERS.EMPLOYEE_NAME]: `${employeeInfo.firstName} ${employeeInfo.lastName}`,
-      [CLAIM_TABLE_HEADERS.EVENT_NAME]: claimPageInfo.eventTypeName,
+      [CLAIM_TABLE_HEADERS.EMPLOYEE_NAME]: `${employeeData.firstName} ${employeeData.lastName}`,
+      [CLAIM_TABLE_HEADERS.EVENT_NAME]: eventData.name,
       [CLAIM_TABLE_HEADERS.STATUS]: claimPageInfo.claimRequestStatus
     }
     ClaimPage.clickAllowAction(data)
