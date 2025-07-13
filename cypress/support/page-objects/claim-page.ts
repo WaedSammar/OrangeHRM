@@ -128,5 +128,9 @@ class ClaimPage {
   static clickApprove() {
     ElementHandler.clickButton(COMMON_BUTTONS.APPROVE)
   }
+
+  static verifyInfoInClaimTable(claimPageInfo: IClaimRequestDataTableRowData) {
+    ElementHandler.validateTableRow(claimPageInfo) 
+  }
 }
 export { ClaimPage }
