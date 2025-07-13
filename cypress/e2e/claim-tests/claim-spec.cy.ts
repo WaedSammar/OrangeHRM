@@ -1,5 +1,6 @@
 import { ClaimPageHelper } from '../../support/helpers/claim-page-helper'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
+import { CLAIM_TABLE_HEADERS, ClaimPage } from '../../support/page-objects/claim-page'
 import { IClaimRequest } from '../../support/types/claim'
 import { IEmployeeInfo } from '../../support/types/employee'
 
@@ -50,11 +51,32 @@ describe('Claim Page Test Cases', () => {
     })
   })
 
-  it('submit claim, add expense and approve it by admin', () => {})
+  it('submit claim, add expense and approve it by admin', () => {
+    cy.logout()
+    cy.login(credentialsList[0].username, credentialsList[0].password)
 
-  afterEach(() => {
+    ClaimPage.goToClaimPage()
+    ClaimPage.clickSubmitBtn()
+    ClaimPage.selectEventType(claimPageInfo.eventTypeName)
+    ClaimPage.selectCurrencyType(claimPageInfo.currencyType)
+    ClaimPage.clickCreateBtn()
+
+    ClaimPage.addExpense(claimPageInfo)
+    ClaimPage.clickSubmitBtn()
+
     cy.logout()
     cy.login()
+    ClaimPage.goToClaimPage()
+    const data = {
+      [CLAIM_TABLE_HEADERS.EMPLOYEE_NAME]: `${employeeInfo.firstName} ${employeeInfo.lastName}`,
+      [CLAIM_TABLE_HEADERS.EVENT_NAME]: claimPageInfo.eventTypeName,
+      [CLAIM_TABLE_HEADERS.STATUS]: claimPageInfo.claimRequestStatus
+    }
+    ClaimPage.clickAllowAction(data)
+    ClaimPage.clickApprove()
+  })
+
+  afterEach(() => {
     PIMPageHelper.deleteUsers(employeeIds)
     ClaimPageHelper.deleteEventType(eventIds)
     ClaimPageHelper.deleteExpenseType(expenseIds)

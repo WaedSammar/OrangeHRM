@@ -3,7 +3,8 @@ export enum PAGES {
   PIM = 'PIM',
   MY_INFO = 'My Info',
   ADMIN = 'Admin',
-  RECRUITMENT = 'Recruitment'
+  RECRUITMENT = 'Recruitment',
+  CLAIM = 'Claim'
 }
 
 export enum HTTP_METHODS {
@@ -58,7 +59,10 @@ export enum SIZE_LIMIT {
 export enum COMMON_BUTTONS {
   ADD = 'Add',
   SEARCH = 'Search',
-  SAVE = 'Save'
+  SAVE = 'Save',
+  SUBMIT = 'Submit',
+  CREATE = 'Create',
+  APPROVE = 'Approve'
 }
 
 export enum COLORS {

@@ -4,5 +4,9 @@ export interface IClaimRequest {
   eventTypeStatus: boolean
   expenseTypeName: string
   expenseTypeDescription: string
-  TransportationStatus: boolean
+  expenseTypeStatus: boolean
+  currencyType: string
+  claimRequestStatus: string
+  expenseDate: string
+  expenseAmount: string
 }
