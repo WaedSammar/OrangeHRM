@@ -65,6 +65,18 @@ class ClaimPage {
   }
 
   /**
+   * apply for claim request
+   * @param {string} eventName 
+   * @param {string} currency 
+   */
+  static applyClaimRequest(eventName: string, currency: string) {
+    this.clickSubmitBtn()
+    this.selectEventType(eventName)
+    this.selectCurrencyType(currency)
+    this.clickCreateBtn()
+  }
+
+  /**
    * click add to create expense
    */
   static clickAddBtn() {
@@ -83,7 +95,7 @@ class ClaimPage {
    * select expense date
    * @param {string} date
    */
-  static selectEExpenseDate(date: string) {
+  static selectExpenseDate(date: string) {
     ElementHandler.selectDate(date)
   }
 
@@ -106,10 +118,10 @@ class ClaimPage {
    * add expense
    * @param {IClaimRequest} claimPageInfo
    */
-  static addExpense(claimPageInfo: IClaimRequest) {
+  static addExpense(claimPageInfo: IClaimRequest, expenseName: string) {
     this.clickAddBtn()
-    this.selectExpenseType(claimPageInfo.expenseTypeName)
-    this.selectEExpenseDate(claimPageInfo.expenseDate)
+    this.selectExpenseType(expenseName)
+    this.selectExpenseDate(claimPageInfo.expenseDate)
     this.selectExpenseAmount(claimPageInfo.expenseAmount)
     this.saveAddedExpenseInfo()
   }
@@ -138,10 +150,10 @@ class ClaimPage {
 
   /**
    * verify claim request information
-   * @param {IClaimRequestDataTableRowData} claimPageInfo 
+   * @param {IClaimRequestDataTableRowData} claimPageInfo
    */
   static verifyInfoInClaimTable(claimPageInfo: IClaimRequestDataTableRowData) {
-    ElementHandler.validateTableRow(claimPageInfo) 
+    ElementHandler.validateTableRow(claimPageInfo)
   }
 }
 export { ClaimPage }

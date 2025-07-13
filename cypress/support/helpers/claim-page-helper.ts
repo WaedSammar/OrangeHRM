@@ -1,3 +1,4 @@
+import { ClaimInitializer } from '../initializers/claim-page/claim-page-initializer'
 import { IClaimRequest } from '../types/claim'
 import { CommonHelper } from './common-helper'
 import { HTTP_METHODS } from './constants'
@@ -16,11 +17,8 @@ class ClaimPageHelper {
    * @returns
    */
   static createEventType(claimPageInfo: IClaimRequest) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.eventType, {
-      description: claimPageInfo.eventTypeDescription,
-      name: claimPageInfo.eventTypeName,
-      status: claimPageInfo.eventTypeStatus
-    })
+    const payload = ClaimInitializer.initializerEventType(claimPageInfo)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.eventType, payload)
   }
 
   /**
@@ -29,11 +27,8 @@ class ClaimPageHelper {
    * @returns
    */
   static createExpenseType(claimPageInfo: IClaimRequest) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.expenseType, {
-      description: claimPageInfo.expenseTypeDescription,
-      name: claimPageInfo.expenseTypeName,
-      status: claimPageInfo.expenseTypeStatus
-    })
+    const payload = ClaimInitializer.initializerExpenseType(claimPageInfo)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.expenseType, payload)
   }
 
   /**
