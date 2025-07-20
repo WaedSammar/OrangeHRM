@@ -1,5 +1,5 @@
 import { ElementHandler } from '../element-handler'
-import { PAGES, COMMON_BUTTONS } from '../helpers/constants'
+import { PAGES, COMMON_BUTTONS, HTML_TAGS } from '../helpers/constants'
 import { IClaimRequest } from '../types/claim'
 import { IClaimRequestDataTableRowData } from '../types/claimTableRowData'
 
@@ -23,10 +23,6 @@ enum LABELS {
 }
 
 class ClaimPage {
-  private static LOCATORS = {
-    clickBtn: 'button[type="button"]'
-  }
-
   /**
    * go to claim page
    */
@@ -66,8 +62,8 @@ class ClaimPage {
 
   /**
    * apply for claim request
-   * @param {string} eventName 
-   * @param {string} currency 
+   * @param {string} eventName
+   * @param {string} currency
    */
   static applyClaimRequest(eventName: string, currency: string) {
     this.clickSubmitBtn()
@@ -131,7 +127,7 @@ class ClaimPage {
    * @param data
    */
   static clickAllowAction(data: IClaimRequestDataTableRowData) {
-    ElementHandler.clickActionIconInRow(data, this.LOCATORS.clickBtn)
+    ElementHandler.clickActionIconInRow(data, HTML_TAGS.button)
   }
 
   /**
