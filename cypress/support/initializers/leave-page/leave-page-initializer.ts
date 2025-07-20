@@ -8,7 +8,7 @@ class LeaveInitializer {
    * @param {ILeaveRequestData} leavePageInfo
    * @returns
    */
-  static InitializerAddLeaveType(leavePageInfo: ILeaveRequestData) {
+  static initializerAddLeaveType(leavePageInfo: ILeaveRequestData) {
     const payload = {
       name: `${leavePageInfo.leaveTypeName} ${Date.now()}` || `${faker.word.adjective()} Leave`,
       situational: leavePageInfo.leaveSituational ?? faker.datatype.boolean()
@@ -21,7 +21,7 @@ class LeaveInitializer {
    * @param leavePageInfo
    * @returns
    */
-  static InitializerSelectLeavePeriod(leavePageInfo: ILeaveRequestData) {
+  static initializerSelectLeavePeriod(leavePageInfo: ILeaveRequestData) {
     const payload = {
       startDay: leavePageInfo.leavePerStartedDay || faker.number.int({ min: 1, max: 28 }),
       startMonth: leavePageInfo.leavePerStartedMonth || faker.number.int({ min: 1, max: 12 })
@@ -36,7 +36,7 @@ class LeaveInitializer {
    * @param {number} leaveTypeId
    * @returns
    */
-  static InitializerAddEntitlements(leavePageInfo: ILeaveRequestData, empNumber: number, leaveTypeId: number) {
+  static initializerAddEntitlements(leavePageInfo: ILeaveRequestData, empNumber: number, leaveTypeId: number) {
     const payload = {
       empNumber,
       entitlement: leavePageInfo.entitlementDuration || faker.number.int({ min: 1, max: 30 }),
@@ -53,7 +53,7 @@ class LeaveInitializer {
    * @param {number} leaveTypeId
    * @returns
    */
-  static InitializerApplyLeaveRequest(leavePageInfo: ILeaveRequestData, leaveTypeId: number) {
+  static initializerApplyLeaveRequest(leavePageInfo: ILeaveRequestData, leaveTypeId: number) {
     const payload = {
       comment: leavePageInfo.leaveRequestComment || faker.lorem.sentence(),
       fromDate: leavePageInfo.leaveRequestFromDate || CHANGE_DATE_FORMAT(faker.date.future()),

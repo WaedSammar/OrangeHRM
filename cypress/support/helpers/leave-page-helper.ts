@@ -44,9 +44,9 @@ class LeavePageHelper {
       const holidays: string[] = response.body.data.map(({ date }) => date)
       let businessDays = 0
       let fromData = dayjs(fromDate)
-      const EndDate = dayjs(toDate)
+      const endDate = dayjs(toDate)
 
-      while (fromData.isSameOrBefore(EndDate)) {
+      while (fromData.isSameOrBefore(endDate)) {
         const isWeekend = [0, 6].includes(fromData.day())
         const isHoliday = holidays.includes(fromData.format(DATE_FORMAT.DEFAULT))
         if (!isWeekend && !isHoliday) {
@@ -77,7 +77,7 @@ class LeavePageHelper {
    * @returns
    */
   static addLeaveType(leavePageInfo: ILeaveRequestData) {
-    const payload = LeaveInitializer.InitializerAddLeaveType(leavePageInfo)
+    const payload = LeaveInitializer.initializerAddLeaveType(leavePageInfo)
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.leaveType, payload).then((response) => {
       return response
     })
@@ -89,7 +89,7 @@ class LeavePageHelper {
    * @returns
    */
   static selectLeavePeriod(leavePageInfo: ILeaveRequestData) {
-    const payload = LeaveInitializer.InitializerSelectLeavePeriod(leavePageInfo)
+    const payload = LeaveInitializer.initializerSelectLeavePeriod(leavePageInfo)
     return CommonHelper.sendAPIRequest(HTTP_METHODS.PUT, URLs.leavePeriod, payload).then((response) => {
       return response
     })
@@ -103,7 +103,7 @@ class LeavePageHelper {
    * @returns
    */
   static addEntitlements(leavePageInfo: ILeaveRequestData, empNumber: number, leaveTypeId: number) {
-    const payload = LeaveInitializer.InitializerAddEntitlements(leavePageInfo, empNumber, leaveTypeId)
+    const payload = LeaveInitializer.initializerAddEntitlements(leavePageInfo, empNumber, leaveTypeId)
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.entitlements, payload).then((response) => {
       return response
     })
@@ -116,7 +116,7 @@ class LeavePageHelper {
    * @returns
    */
   static applyLeaveRequest(leavePageInfo: ILeaveRequestData, leaveTypeId: number) {
-    const payload = LeaveInitializer.InitializerApplyLeaveRequest(leavePageInfo, leaveTypeId)
+    const payload = LeaveInitializer.initializerApplyLeaveRequest(leavePageInfo, leaveTypeId)
     return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.leaveRequest, payload).then((response) => {
       return response
     })
