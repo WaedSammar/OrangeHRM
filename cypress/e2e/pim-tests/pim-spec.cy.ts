@@ -15,12 +15,13 @@ describe('Employee management - Add and Save Test Cases', () => {
       employeeMockData = addEmployeeData
 
       cy.login()
-      AdminPageHelper.addNationality(employeeMockData.newNationality)
-      AdminPageHelper.getNationality().then((res) => {
-        const added = res.body.data.find(({ name }) => name === employeeMockData.newNationality)
-        nationalityId = added.id
+      AdminPageHelper.addNationality(employeeMockData.newNationality).then(() => {
+        AdminPageHelper.getNationality().then((res) => {
+          const added = res.body.data.find(({ name }) => name === employeeMockData.newNationality)
+          nationalityId = added.id
+          cy.logout()
+        })
       })
-      cy.logout()
     })
   })
 
