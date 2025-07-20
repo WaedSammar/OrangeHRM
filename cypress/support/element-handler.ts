@@ -244,4 +244,4 @@ class ElementHandler {
     })
   }
 }
-export { ElementHandler, COMMON_LOCATORS, DROP_DOWN }
+export { ElementHandler, COMMON_LOCATORS }
