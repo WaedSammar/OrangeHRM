@@ -144,14 +144,6 @@ class ElementHandler {
   }
 
   /**
-   * logout from current user
-   */
-  static logout() {
-    cy.get(COMMON_LOCATORS.dropDownList).click()
-    cy.contains(DROP_DOWN.LOGOUT).click()
-  }
-
-  /**
    * get the index for column by header name
    * @param {string} headerName
    * @returns
@@ -252,4 +244,4 @@ class ElementHandler {
     })
   }
 }
-export { ElementHandler, COMMON_LOCATORS }
+export { ElementHandler, COMMON_LOCATORS, DROP_DOWN }

@@ -1,4 +1,3 @@
-import { ElementHandler } from '../../support/element-handler'
 import { AdminPageHelper } from '../../support/helpers/admin-page-helper'
 import { APIsHelper } from '../../support/helpers/apis-helpers'
 import { CommonHelper } from '../../support/helpers/common-helper'
@@ -16,12 +15,13 @@ describe('Employee management - Add and Save Test Cases', () => {
       employeeMockData = addEmployeeData
 
       cy.login()
-      AdminPageHelper.addNationality(employeeMockData.newNationality)
-      AdminPageHelper.getNationality().then((res) => {
-        const added = res.body.data.find(({ name }) => name === employeeMockData.newNationality)
-        nationalityId = added.id
+      AdminPageHelper.addNationality(employeeMockData.newNationality).then(() => {
+        AdminPageHelper.getNationality().then((res) => {
+          const added = res.body.data.find(({ name }) => name === employeeMockData.newNationality)
+          nationalityId = added.id
+          cy.logout()
+        })
       })
-      ElementHandler.logout()
     })
   })
 
@@ -50,7 +50,7 @@ describe('Employee management - Add and Save Test Cases', () => {
     PIMPage.fillAdditionalEmployeeDetails(employeeInfo)
     PIMPage.clickSave(1)
 
-    ElementHandler.logout()
+    cy.logout()
     cy.login(employeeInfo.userName, employeeInfo.password)
     MyInfo.goToMyInfoPage()
     PIMPage.verifyEmployeeInfo(employeeInfo)
@@ -63,7 +63,7 @@ describe('Employee management - Add and Save Test Cases', () => {
       PIMPageHelper.createUserViaAPI(employeeInfo, empNumber).then(({ credentials }) => {
         PIMPageHelper.updateEmployeeDetailsViaAPI(employeeInfo, empNumber).then(() => {
           PIMPageHelper.updateEmployeeCustomFieldsViaAPI(employeeInfo, empNumber).then(() => {
-            ElementHandler.logout()
+            cy.logout()
             cy.login(credentials.username, credentials.password)
             MyInfo.goToMyInfoPage()
             PIMPage.verifyEmployeeInfo(employeeInfo)
@@ -90,7 +90,7 @@ describe('Employee management - Add and Save Test Cases', () => {
     PIMPage.uploadAttachment()
     PIMPage.clickSave(2)
 
-    ElementHandler.logout()
+    cy.logout()
     cy.login(employeeInfo.userName, employeeInfo.password)
     MyInfo.goToMyInfoPage()
     PIMPage.downloadUploadedFile()
@@ -112,7 +112,7 @@ describe('Employee management - Add and Save Test Cases', () => {
               [PIM_TABLE_HEADERS.LAST_NAME]: employeeInfo.lastName,
               [PIM_TABLE_HEADERS.JOB_TITLE]: SEPARATORS.EMPTY
             }
-            ElementHandler.validateTableRow(data)
+            PIMPage.verifyEmployeeInTable(data)
           })
         })
       })
@@ -120,7 +120,7 @@ describe('Employee management - Add and Save Test Cases', () => {
   })
 
   afterEach(() => {
-    ElementHandler.logout()
+    cy.logout()
     cy.login()
     PIMPageHelper.getEmpNumberByEmployeeId(employeeInfo.employeeId).then((empNumber) => {
       PIMPageHelper.deleteUsers([empNumber!])

@@ -4,6 +4,7 @@ export enum PAGES {
   MY_INFO = 'My Info',
   ADMIN = 'Admin',
   RECRUITMENT = 'Recruitment',
+  LEAVE = 'Leave',
   CLAIM = 'Claim'
 }
 
@@ -72,4 +73,14 @@ export enum COLORS {
 
 export enum INPUT_TYPE {
   PASSWORD = 'password'
+}
+
+export enum DATE_UNIT {
+  DAY = 'day',
+  MONTH = 'month',
+  YEAR = 'year'
+}
+
+export enum DATE_FORMAT {
+  DEFAULT = 'YYYY-MM-DD'
 }

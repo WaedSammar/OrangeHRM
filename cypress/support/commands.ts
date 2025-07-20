@@ -46,6 +46,7 @@ declare global {
       login(username?: string, password?: string): Chainable<void>
       parseXlsxToJson(filePath: string): Chainable<Record<string, any[]>>
       logout(): Chainable<void>
+      logout(): Chainable<void>
     }
   }
 }
