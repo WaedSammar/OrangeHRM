@@ -149,7 +149,7 @@ describe('Recruitment Page Test Cases', () => {
     })
   })
 
-  it.only('Mark a shortlisted candidate as interview passed twice and offer job', () => {
+  it('Mark a shortlisted candidate as interview passed twice and offer job', () => {
     const candidateData = createdCandidatesMap[candidateIds[0]]
     const vacancyData = createdVacanciesMap[vacancyIds[0]]
 
@@ -193,9 +193,9 @@ describe('Recruitment Page Test Cases', () => {
   })
 
   afterEach(() => {
-    // RecruitmentPageHelper.deleteVacancies(vacancyIds)
-    // RecruitmentPageHelper.deleteCandidates(candidateIds)
-    // RecruitmentPageHelper.deleteJobTitles(jobTitleIds)
-    // PIMPageHelper.deleteUsers(employeeIds)
+    RecruitmentPageHelper.deleteVacancies(vacancyIds)
+    RecruitmentPageHelper.deleteCandidates(candidateIds)
+    RecruitmentPageHelper.deleteJobTitles(jobTitleIds)
+    PIMPageHelper.deleteUsers(employeeIds)
   })
 })
