@@ -75,7 +75,7 @@ describe('Recruitment Page Test Cases', () => {
       RecruitmentPage.scheduleInterview()
       const interviewerData = createdUsersMap[employeeIds[0].toString()]
       RecruitmentPage.fillInterviewInfo(recruitmentMockData, interviewerData)
-      RecruitmentPage.verifyStatus()
+      RecruitmentPage.verifyInterviewScheduled()
       expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
       RecruitmentPage.checkAllowedActions(expectedActions)
     })
@@ -95,7 +95,7 @@ describe('Recruitment Page Test Cases', () => {
 
       RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
       RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds).then(() => {
-        RecruitmentPage.verifyStatus()
+        RecruitmentPage.verifyInterviewScheduled()
         let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
         RecruitmentPage.checkAllowedActions(expectedActions)
         RecruitmentPage.markInterviewPassed()
@@ -118,7 +118,7 @@ describe('Recruitment Page Test Cases', () => {
       }
       RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
       RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds).then(() => {
-        RecruitmentPage.verifyStatus()
+        RecruitmentPage.verifyInterviewScheduled()
         let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
         RecruitmentPage.checkAllowedActions(expectedActions)
         RecruitmentPage.markInterviewFailed()
@@ -141,7 +141,7 @@ describe('Recruitment Page Test Cases', () => {
       }
       RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
       RecruitmentPageHelper.scheduleInterview(recruitmentMockData, employeeIds, candidateIds).then(() => {
-        RecruitmentPage.verifyStatus()
+        RecruitmentPage.verifyInterviewScheduled()
         const expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
         RecruitmentPage.checkAllowedActions(expectedActions)
         RecruitmentPage.rejectCandidate()
@@ -149,10 +149,53 @@ describe('Recruitment Page Test Cases', () => {
     })
   })
 
+  it.only('Mark a shortlisted candidate as interview passed twice and offer job', () => {
+    const candidateData = createdCandidatesMap[candidateIds[0]]
+    const vacancyData = createdVacanciesMap[vacancyIds[0]]
+
+    RecruitmentPageHelper.updateCandidateStatusToShortlisted(candidateIds).then(() => {
+      RecruitmentPage.goToRecruitmentPage()
+      const data = {
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.VACANCY]: vacancyData.name,
+        [RECRUITMENT_CANDIDATE_TABLE_HEADERS.CANDIDATE]: `${candidateData.firstName}  ${candidateData.lastName}`
+      }
+
+      RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
+      let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
+      RecruitmentPage.checkAllowedActions(expectedActions)
+      RecruitmentPage.scheduleInterview()
+      let interviewerData = createdUsersMap[employeeIds[0].toString()]
+      RecruitmentPage.fillInterviewInfo(recruitmentMockData, interviewerData)
+      RecruitmentPage.verifyInterviewScheduled()
+      expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
+      RecruitmentPage.checkAllowedActions(expectedActions)
+      RecruitmentPage.markInterviewPassed()
+
+      expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW, ALLOWED_ACTIONS.OFFER_JOB]
+      RecruitmentPage.checkAllowedActions(expectedActions)
+      RecruitmentPage.scheduleInterview()
+      RecruitmentPage.fillInterviewInfo(recruitmentMockData, interviewerData)
+      RecruitmentPage.verifyInterviewScheduled()
+      expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
+      RecruitmentPage.checkAllowedActions(expectedActions)
+      RecruitmentPage.markInterviewPassed()
+
+      expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.OFFER_JOB]
+      RecruitmentPage.checkAllowedActions(expectedActions)
+      RecruitmentPage.offerJob()
+
+      expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.OFFER_DECLINE, ALLOWED_ACTIONS.HIRE]
+      RecruitmentPage.checkAllowedActions(expectedActions)
+      RecruitmentPage.hireEmployee()
+      RecruitmentPage.verifyIntervieweeHired()
+    })
+  })
+
   afterEach(() => {
-    RecruitmentPageHelper.deleteVacancies(vacancyIds)
-    RecruitmentPageHelper.deleteCandidates(candidateIds)
-    RecruitmentPageHelper.deleteJobTitles(jobTitleIds)
-    PIMPageHelper.deleteUsers(employeeIds)
+    // RecruitmentPageHelper.deleteVacancies(vacancyIds)
+    // RecruitmentPageHelper.deleteCandidates(candidateIds)
+    // RecruitmentPageHelper.deleteJobTitles(jobTitleIds)
+    // PIMPageHelper.deleteUsers(employeeIds)
   })
 })
