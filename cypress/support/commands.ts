@@ -1,4 +1,7 @@
 /// <reference types="cypress" />
+
+import { COMMON_LOCATORS, DROP_DOWN } from './element-handler'
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -59,6 +62,6 @@ Cypress.Commands.add('parseXlsxToJson', (filePath: string) => {
 })
 
 Cypress.Commands.add('logout', () => {
-  cy.get('.oxd-userdropdown-name').click()
-  cy.contains('Logout').click()
+  cy.get(COMMON_LOCATORS.dropDownList).click()
+  cy.get(COMMON_LOCATORS.dropDownMenu).contains(DROP_DOWN.LOGOUT).click()
 })
