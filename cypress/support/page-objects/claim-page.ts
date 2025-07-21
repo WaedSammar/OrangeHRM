@@ -66,8 +66,8 @@ class ClaimPage {
 
   /**
    * apply for claim request
-   * @param {string} eventName 
-   * @param {string} currency 
+   * @param {string} eventName
+   * @param {string} currency
    */
   static applyClaimRequest(eventName: string, currency: string) {
     this.clickSubmitBtn()

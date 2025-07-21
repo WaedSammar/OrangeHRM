@@ -5,6 +5,7 @@ const COMMON_LOCATORS = {
   menuBtn: 'span.oxd-main-menu-item--name',
   menuItems: 'span.oxd-main-menu-item--name',
   dropDownList: '.oxd-userdropdown-name',
+  dropDownMenu: '.oxd-dropdown-menu',
   loaderIcon: '.oxd-loading-spinner',
   submitBtn: `${HTML_TAGS.button}[type='submit']`,
   downloadIcon: '.oxd-icon.bi-download',
@@ -14,7 +15,7 @@ const COMMON_LOCATORS = {
   tableCard: '.oxd-table-card'
 }
 
-enum DROP_DOWN {
+export enum DROP_DOWN {
   ABOUT = 'About',
   SUPPORT = 'Support',
   CHANGE_PASSWORD = 'Change Password',
@@ -243,4 +244,4 @@ class ElementHandler {
     })
   }
 }
-export { ElementHandler, COMMON_LOCATORS, DROP_DOWN }
+export { ElementHandler, COMMON_LOCATORS }
