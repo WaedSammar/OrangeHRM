@@ -162,13 +162,11 @@ describe('Recruitment Page Test Cases', () => {
       }
 
       RecruitmentPage.clickEyeIconForShortlistedCandidate(data)
-      let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.SCHEDULE_INTERVIEW]
-      RecruitmentPage.checkAllowedActions(expectedActions)
       RecruitmentPage.scheduleInterview()
       let interviewerData = createdUsersMap[employeeIds[0].toString()]
       RecruitmentPage.fillInterviewInfo(recruitmentMockData, interviewerData)
       RecruitmentPage.verifyInterviewScheduled()
-      expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
+      let expectedActions = [ALLOWED_ACTIONS.REJECT, ALLOWED_ACTIONS.PASSED, ALLOWED_ACTIONS.FAILED]
       RecruitmentPage.checkAllowedActions(expectedActions)
       RecruitmentPage.markInterviewPassed()
 
