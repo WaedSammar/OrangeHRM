@@ -14,7 +14,9 @@ enum LABELS {
 enum INTERVIEW_STATUS {
   PASSED = 'Mark Interview Passed',
   FAILED = 'Mark Interview Failed',
-  REJECT = 'Reject'
+  REJECT = 'Reject',
+  OFFER_JOB = 'Offer Job',
+  HIRE = 'Hire'
 }
 
 enum RECRUITMENT_CANDIDATE_TABLE_HEADERS {
@@ -27,7 +29,8 @@ enum RECRUITMENT_CANDIDATE_TABLE_HEADERS {
 }
 
 enum MESSAGES {
-  INTERVIEW_SCHEDULED_STATUS = 'Status: Interview Scheduled'
+  INTERVIEW_SCHEDULED_STATUS = 'Status: Interview Scheduled',
+  HIRED = 'Status: Hired'
 }
 
 enum BUTTONS {
@@ -136,38 +139,66 @@ class RecruitmentPage {
   }
 
   /**
+   * verify interview status as scheduled
+   */
+  static verifyInterviewScheduled() {
+    this.verifyStatus(MESSAGES.INTERVIEW_SCHEDULED_STATUS)
+  }
+
+  /**
+   * verify interview status as hired
+   */
+  static verifyIntervieweeHired() {
+    this.verifyStatus(MESSAGES.HIRED)
+  }
+
+  /**
    * verify interview status
    */
-  static verifyStatus() {
-    cy.get(this.LOCATORS.recruitmentStatus).should('have.text', MESSAGES.INTERVIEW_SCHEDULED_STATUS)
+  static verifyStatus(status: string) {
+    cy.get(this.LOCATORS.recruitmentStatus).should('have.text', status)
   }
 
   /**
    * mark interview passed
    */
   static markInterviewPassed() {
-    this.changeInterviewStatus(INTERVIEW_STATUS.PASSED)
+    this.clickAllowedAction(INTERVIEW_STATUS.PASSED)
   }
 
   /**
    * mark interview failed
    */
   static markInterviewFailed() {
-    this.changeInterviewStatus(INTERVIEW_STATUS.FAILED)
+    this.clickAllowedAction(INTERVIEW_STATUS.FAILED)
   }
 
   /**
    * reject candidate
    */
   static rejectCandidate() {
-    this.changeInterviewStatus(INTERVIEW_STATUS.REJECT)
+    this.clickAllowedAction(INTERVIEW_STATUS.REJECT)
+  }
+
+  /**
+   * choose offer job allow action
+   */
+  static offerJob() {
+    this.clickAllowedAction(INTERVIEW_STATUS.OFFER_JOB)
+  }
+
+  /**
+   * choose hire employee allow action
+   */
+  static hireEmployee() {
+    this.clickAllowedAction(INTERVIEW_STATUS.HIRE)
   }
 
   /**
    * change interview status
    * @param {string} status
    */
-  static changeInterviewStatus(status: INTERVIEW_STATUS) {
+  static clickAllowedAction(status: INTERVIEW_STATUS) {
     ElementHandler.clickButton(status)
     this.clickSave()
   }
