@@ -1,9 +1,17 @@
-import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
+import { ICandidate, IVacancy } from '../../support/apis/response/recruitment-page/recruitment'
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { RecruitmentPageHelper } from '../../support/helpers/recruitment-page-helper'
-import { RecruitmentPage, RECRUITMENT_CANDIDATE_TABLE_HEADERS } from '../../support/page-objects/recruitment-page'
+import { RECRUITMENT_CANDIDATE_TABLE_HEADERS, RecruitmentPage } from '../../support/page-objects/recruitment-page'
+import { IEmployeeInfo } from '../../support/types/employee'
+import { IRecruitmentFormData } from '../../support/types/recruitmentFormData'
+import { TableRowData } from '../../support/types/tableRowData'
+import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
 
-let recruitmentMockData: any, vacancyData: any, candidateData: any, interviewerData: any, candidateTableRowData: any
+let recruitmentMockData: IRecruitmentFormData,
+  vacancyData: IVacancy,
+  candidateData: ICandidate,
+  interviewerData: IEmployeeInfo,
+  candidateTableRowData: TableRowData
 
 Given('the user is logged into the system', () => {
   cy.login()
@@ -14,15 +22,20 @@ Given('there is a candidate with status Shortlisted', () => {
     recruitmentMockData = recruitmentData
     cy.fixture('employee-page-mock').then((employeeData) => {
       const employeeInfo = { ...employeeData }
+
       PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((empRes) => {
         const empNumber = empRes.body.data.empNumber.toString()
         interviewerData = empRes.body.data
+
         RecruitmentPageHelper.addJobTitle(recruitmentMockData).then((jobTitleRes) => {
           const jobTitleId = jobTitleRes.body.data.id
+
           RecruitmentPageHelper.addVacancy(recruitmentMockData, empNumber, jobTitleId).then((vacancyRes) => {
             vacancyData = vacancyRes.body.data
+
             RecruitmentPageHelper.addCandidate(recruitmentMockData, vacancyData.id).then((candidateRes) => {
               candidateData = candidateRes.body.data
+
               RecruitmentPageHelper.updateCandidateStatusToShortlisted([candidateData.id])
               candidateTableRowData = {
                 [RECRUITMENT_CANDIDATE_TABLE_HEADERS.STATUS]: recruitmentMockData.candidateStatus,
