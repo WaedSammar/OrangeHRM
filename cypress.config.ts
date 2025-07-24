@@ -2,12 +2,22 @@ import { defineConfig } from 'cypress'
 import * as xlsx from 'xlsx'
 import { promises as fs } from 'fs'
 import allureWriter from '@shelex/cypress-allure-plugin/writer'
+import createBundler from '@bahmutov/cypress-esbuild-preprocessor'
+import { addCucumberPreprocessorPlugin } from '@badeball/cypress-cucumber-preprocessor'
+import createEsbuildPlugin from '@badeball/cypress-cucumber-preprocessor/esbuild'
 
 export default defineConfig({
   projectId: 'zwebt5',
   e2e: {
     async setupNodeEvents(on, config) {
       allureWriter(on, config)
+      await addCucumberPreprocessorPlugin(on, config)
+      on(
+        'file:preprocessor',
+        createBundler({
+          plugins: [createEsbuildPlugin(config)]
+        })
+      )
       on('task', {
         async parseXlsxToJson({ filePath }) {
           await fs.access(filePath, fs.constants.R_OK)
@@ -27,7 +37,7 @@ export default defineConfig({
       return config
     },
     baseUrl: 'https://opensource-demo.orangehrmlive.com',
-    specPattern: 'cypress/e2e/**/*-spec.cy.ts',
+    specPattern: ['cypress/e2e/**/*.feature', 'cypress/e2e/**/*-spec.cy.ts'],
     defaultBrowser: 'chrome',
     video: false
   },
