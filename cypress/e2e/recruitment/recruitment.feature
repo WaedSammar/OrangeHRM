@@ -1,5 +1,5 @@
-Scenario: Candidate gets Shortlisted, passes two interviews, receives a Job Offer and gets Hired
-  
+Feature: Recruitment Page
+
   Scenario: Candidate gets Shortlisted, passed interview, declines job offer, and gets rejected
     Given the user is logged into the system
     And there is a candidate with status Shortlisted
