@@ -5,13 +5,17 @@ import { RECRUITMENT_CANDIDATE_TABLE_HEADERS, RecruitmentPage } from '../../supp
 import { IEmployeeInfo } from '../../support/types/employee'
 import { IRecruitmentFormData } from '../../support/types/recruitmentFormData'
 import { TableRowData } from '../../support/types/tableRowData'
-import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
+import { Given, When, Then, After } from '@badeball/cypress-cucumber-preprocessor'
 
 let recruitmentMockData: IRecruitmentFormData,
   vacancyData: IVacancy,
   candidateData: ICandidate,
   interviewerData: IEmployeeInfo,
-  candidateTableRowData: TableRowData
+  candidateTableRowData: TableRowData,
+  employeeIds: number[] = [],
+  vacancyIds: number[] = [],
+  candidateIds: number[] = [],
+  jobTitleIds: number[] = []
 
 Given('the user is logged into the system', () => {
   cy.login()
@@ -25,16 +29,20 @@ Given('there is a candidate with status Shortlisted', () => {
 
       PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((empRes) => {
         const empNumber = empRes.body.data.empNumber.toString()
+        employeeIds.push(Number(empNumber))
         interviewerData = empRes.body.data
 
         RecruitmentPageHelper.addJobTitle(recruitmentMockData).then((jobTitleRes) => {
           const jobTitleId = jobTitleRes.body.data.id
+          jobTitleIds.push(jobTitleId)
 
           RecruitmentPageHelper.addVacancy(recruitmentMockData, empNumber, jobTitleId).then((vacancyRes) => {
             vacancyData = vacancyRes.body.data
+            vacancyIds.push(vacancyData.id)
 
             RecruitmentPageHelper.addCandidate(recruitmentMockData, vacancyData.id).then((candidateRes) => {
               candidateData = candidateRes.body.data
+              candidateIds.push(candidateData.id)
 
               RecruitmentPageHelper.updateCandidateStatusToShortlisted([candidateData.id])
               candidateTableRowData = {
@@ -76,4 +84,11 @@ When('rejects the candidate', () => {
 
 Then('the candidate status should be Rejected', () => {
   RecruitmentPage.verifyInterviewRejected()
+})
+
+After(() => {
+  RecruitmentPageHelper.deleteVacancies(vacancyIds)
+  RecruitmentPageHelper.deleteCandidates(candidateIds)
+  RecruitmentPageHelper.deleteJobTitles(jobTitleIds)
+  PIMPageHelper.deleteUsers(employeeIds)
 })
