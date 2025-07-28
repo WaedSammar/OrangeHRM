@@ -10,13 +10,26 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^22.2.0",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.5",
     "@shelex/cypress-allure-plugin": "^2.41.2",
+    "@types/cucumber": "^6.0.1",
     "allure-commandline": "^2.34.0",
     "cypress": "^14.3.0",
+    "esbuild": "^0.25.8",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
   "dependencies": {
     "@faker-js/faker": "^9.8.0",
     "xlsx": "^0.18.5"
+  },
+  "cypress-cucumber-preprocessor": {
+    "stepDefinitions": [
+      "cypress/e2e/**/*.{feature}",
+      "cypress/e2e/**/*.{js,ts}"
+    ],
+    "filterSpecs": true,
+    "omitFiltered": true
   }
 }

@@ -16,7 +16,8 @@ enum INTERVIEW_STATUS {
   FAILED = 'Mark Interview Failed',
   REJECT = 'Reject',
   OFFER_JOB = 'Offer Job',
-  HIRE = 'Hire'
+  HIRE = 'Hire',
+  OFFER_DECLINED = 'Offer Declined'
 }
 
 enum RECRUITMENT_CANDIDATE_TABLE_HEADERS {
@@ -30,7 +31,8 @@ enum RECRUITMENT_CANDIDATE_TABLE_HEADERS {
 
 enum MESSAGES {
   INTERVIEW_SCHEDULED_STATUS = 'Status: Interview Scheduled',
-  HIRED = 'Status: Hired'
+  HIRED = 'Status: Hired',
+  REJECTED = 'Rejected'
 }
 
 enum BUTTONS {
@@ -150,6 +152,20 @@ class RecruitmentPage {
    */
   static verifyIntervieweeHired() {
     this.verifyStatus(MESSAGES.HIRED)
+  }
+
+  /**
+   * verify interview status as rejected
+   */
+  static verifyInterviewRejected() {
+    this.verifyStatus(MESSAGES.REJECTED)
+  }
+
+  /**
+   * decline offer
+   */
+  static offerDecline() {
+    this.clickAllowedAction(INTERVIEW_STATUS.OFFER_DECLINED)
   }
 
   /**
