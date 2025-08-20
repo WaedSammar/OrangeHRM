@@ -2,9 +2,10 @@ import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { TimePageHelper } from '../../support/helpers/time-page-helper'
 import { TimeSheetPage } from '../../support/page-objects/time-page'
 import { IEmployeeInfo } from '../../support/types/employee'
+import { ITimeSheet } from '../../support/types/timeSheet'
 
 describe('Time Sheet Test Cases', () => {
-  let employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo, timeSheetMockData
+  let employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo, timeSheetMockData: ITimeSheet
   let employeeIds: number[] = []
   let customerIds: number[] = []
   let projectIds: number[] = []
