@@ -3,4 +3,5 @@ export interface ITimeSheet {
   customerDescription: string
   projectName: string
   projectDescription: string
+  activityName: string
 }

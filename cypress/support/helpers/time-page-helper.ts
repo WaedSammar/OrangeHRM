@@ -5,7 +5,9 @@ import { HTTP_METHODS } from './constants'
 const timeBaseURL = `/web/index.php/api/v2/time`
 const URLs = {
   customers: `${timeBaseURL}/customers`,
-  projects: `${timeBaseURL}/projects`
+  projects: `${timeBaseURL}/projects`,
+  project: `project`,
+  activities: `activities`
 }
 
 class TimePageHelper {
@@ -34,6 +36,22 @@ class TimePageHelper {
       customerId,
       projectAdminsEmpNumbers: []
     })
+  }
+
+  /**
+   * create activity for created project
+   * @param {number} projectId
+   * @param {string} name
+   * @returns
+   */
+  static createActivityForProject(projectId: number, name: string) {
+    return CommonHelper.sendAPIRequest(
+      HTTP_METHODS.POST,
+      `${timeBaseURL}/${URLs.project}/${projectId}/${URLs.activities}`,
+      {
+        name
+      }
+    )
   }
 
   /**

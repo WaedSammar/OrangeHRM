@@ -20,8 +20,8 @@ class AdminPage {
    * save button
    * @param index
    */
-  static clickSave(index: number = 0, buttonText: string = COMMON_BUTTONS.SAVE) {
-    ElementHandler.clickSave(index, buttonText)
+  static clickSave() {
+    ElementHandler.clickSave()
   }
 }
 export { AdminPage }

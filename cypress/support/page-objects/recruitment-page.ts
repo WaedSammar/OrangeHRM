@@ -1,4 +1,4 @@
-import { ElementHandler } from '../element-handler'
+import { COMMON_LOCATORS, ElementHandler } from '../element-handler'
 import { APIsHelper } from '../helpers/apis-helpers'
 import { CommonHelper } from '../helpers/common-helper'
 import { COMMON_BUTTONS, HTML_TAGS, PAGES } from '../helpers/constants'
@@ -41,7 +41,6 @@ enum BUTTONS {
 
 class RecruitmentPage {
   private static LOCATORS = {
-    autoComplete: '.oxd-autocomplete-option',
     timeIcon: '.oxd-time-input--clock',
     recruitmentStatus: '.orangehrm-recruitment-status'
   }
@@ -100,7 +99,7 @@ class RecruitmentPage {
       `${employeeInfo.firstName} ${employeeInfo.middleName} ${employeeInfo.lastName}`
     )
     APIsHelper.waitForApiResponse(loadInterviewerName)
-    cy.get(this.LOCATORS.autoComplete).eq(0).click()
+    cy.get(COMMON_LOCATORS.autoComplete).eq(0).click()
   }
 
   /**
@@ -123,8 +122,8 @@ class RecruitmentPage {
    * @param {number} index
    * @param {COMMON_BUTTONS} buttonText
    */
-  static clickSave(index: number = 0, buttonText: string = COMMON_BUTTONS.SAVE) {
-    ElementHandler.clickSave(index, buttonText)
+  static clickSave() {
+    ElementHandler.clickSave()
   }
 
   /**

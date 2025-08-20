@@ -1,5 +1,6 @@
 import { PIMPageHelper } from '../../support/helpers/pim-page-helper'
 import { TimePageHelper } from '../../support/helpers/time-page-helper'
+import { TimeSheetPage } from '../../support/page-objects/time-page'
 import { IEmployeeInfo } from '../../support/types/employee'
 
 describe('Time Sheet Test Cases', () => {
@@ -44,13 +45,23 @@ describe('Time Sheet Test Cases', () => {
           TimePageHelper.createProject(customerId, timeSheetMockData).then((response) => {
             const projectId = response.body.data.id
             projectIds.push(projectId)
+
+            TimePageHelper.createActivityForProject(projectId, timeSheetMockData.activityName).then(() => {})
           })
         })
       })
     })
   })
 
-  it('Validate TimeSheet Submission by Employee and Approval by Admin', () => {})
+  it('Validate TimeSheet Submission by Employee and Approval by Admin', () => {
+    cy.logout()
+    cy.login(credentialsList[0].username, credentialsList[0].password)
+    TimeSheetPage.goToTimePage()
+    TimeSheetPage.createNewTimeSheet(timeSheetMockData)
+
+    cy.logout()
+    cy.login
+  })
 
   afterEach(() => {
     PIMPageHelper.deleteUsers(employeeIds)
