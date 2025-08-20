@@ -5,6 +5,8 @@ import { IEmployeeInfo } from '../../support/types/employee'
 describe('Time Sheet Test Cases', () => {
   let employeeMockData: IEmployeeInfo, employeeInfo: IEmployeeInfo, timeSheetMockData
   let employeeIds: number[] = []
+  let customerIds: number[] = []
+  let projectIds: number[] = []
   let createdEmployeesMap: Record<string, IEmployeeInfo> = {}
   let credentialsList: { username: string; password: string }[] = []
 
@@ -20,6 +22,8 @@ describe('Time Sheet Test Cases', () => {
 
   beforeEach(() => {
     employeeIds = []
+    customerIds = []
+    projectIds = []
 
     cy.login()
     PIMPageHelper.createEmployeeViaAPI(employeeInfo).then((employeeResponse) => {
@@ -35,12 +39,22 @@ describe('Time Sheet Test Cases', () => {
 
         TimePageHelper.createCustomer(timeSheetMockData).then((response) => {
           const customerId = response.body.data.id
+          customerIds.push(customerId)
 
-          TimePageHelper.createProject(customerId, timeSheetMockData).then(() => {})
+          TimePageHelper.createProject(customerId, timeSheetMockData).then((response) => {
+            const projectId = response.body.data.id
+            projectIds.push(projectId)
+          })
         })
       })
     })
   })
 
-  it('time sheet', () => {})
+  it('Validate TimeSheet Submission by Employee and Approval by Admin', () => {})
+
+  afterEach(() => {
+    PIMPageHelper.deleteUsers(employeeIds)
+    TimePageHelper.deleteProjects(projectIds)
+    TimePageHelper.deleteCustomers(customerIds)
+  })
 })
