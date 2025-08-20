@@ -15,7 +15,8 @@ const URLs = {
   personalDetails: `/pim/employees/**/personal-details`,
   candidate: `${baseURL}/web/index.php/api/v2/recruitment/candidates/**`,
   interviewerName: `${baseURL}/web/index.php/api/v2/recruitment/interviewers?nameOrId=*`,
-  projectName: `/web/index.php/api/v2/time/projects?onlyAllowed=false&model=detailed&customerOrProjectName=*`
+  projectName: `/web/index.php/api/v2/time/projects?onlyAllowed=false&model=detailed&customerOrProjectName=*`,
+  employeeName: `/web/index.php/api/v2/pim/employees?nameOrId=*&includeEmployees=currentAndPast`
 }
 
 class APIsHelper {
@@ -49,6 +50,10 @@ class APIsHelper {
 
   static interceptProjectName(aliasName: string) {
     CommonHelper.interceptRequests(URLs.projectName, HTTP_METHODS.GET, aliasName)
+  }
+
+  static interceptEmployeeName(aliasName: string) {
+    CommonHelper.interceptRequests(URLs.employeeName, HTTP_METHODS.GET, aliasName)
   }
 
   static waitForApiResponse(aliasName: string, expectedStatus: number = HTTP_STATUS_CODE.success) {
