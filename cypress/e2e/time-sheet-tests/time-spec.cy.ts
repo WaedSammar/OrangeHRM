@@ -57,7 +57,7 @@ describe('Time Sheet Test Cases', () => {
     cy.logout()
     cy.login(credentialsList[0].username, credentialsList[0].password)
     TimeSheetPage.goToTimePage()
-    TimeSheetPage.createNewTimeSheet(timeSheetMockData)
+    TimeSheetPage.createNewTimeSheet(timeSheetMockData.projectName)
 
     cy.logout()
     cy.login()

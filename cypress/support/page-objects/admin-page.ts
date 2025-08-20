@@ -18,7 +18,6 @@ class AdminPage {
 
   /**
    * save button
-   * @param index
    */
   static clickSave() {
     ElementHandler.clickSave()

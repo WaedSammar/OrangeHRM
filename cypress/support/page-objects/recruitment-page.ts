@@ -119,8 +119,6 @@ class RecruitmentPage {
 
   /**
    * click save button
-   * @param {number} index
-   * @param {COMMON_BUTTONS} buttonText
    */
   static clickSave() {
     ElementHandler.clickSave()

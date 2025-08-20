@@ -151,7 +151,6 @@ class PIMPage {
 
   /**
    * save button
-   * @param index
    */
   static clickSave() {
     ElementHandler.clickSave()

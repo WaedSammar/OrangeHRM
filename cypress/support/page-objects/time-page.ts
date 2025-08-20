@@ -10,14 +10,24 @@ class TimeSheetPage {
     chooseOption: '.oxd-select-option'
   }
 
+  /**
+   * go to time page
+   */
   static goToTimePage() {
     ElementHandler.clickMenuItem(PAGES.TIME)
   }
 
+  /**
+   * click edit button to add new sheet
+   */
   static clickEditBtn() {
     ElementHandler.clickButton(COMMON_BUTTONS.EDIT)
   }
 
+  /**
+   * select created project
+   * @param {string} projectName
+   */
   static selectProject(projectName: string) {
     const loadProjectName = CommonHelper.generateRandomString(2, 'loadProjectName')
     APIsHelper.interceptProjectName(loadProjectName)
@@ -26,22 +36,35 @@ class TimeSheetPage {
     cy.get(COMMON_LOCATORS.autoComplete).eq(0).click()
   }
 
+  /**
+   * select created activity
+   */
   static selectActivity() {
     cy.get(this.LOCATORS.select).click()
     cy.get(this.LOCATORS.chooseOption).eq(1).click()
   }
 
+  /**
+   * click save button
+   */
   static clickSave() {
     ElementHandler.clickSave()
   }
 
+  /**
+   * click submit button
+   */
   static clickSubmitBtn() {
     ElementHandler.clickButton(COMMON_BUTTONS.SUBMIT)
   }
 
-  static createNewTimeSheet(timeSheetData: ITimeSheet) {
+  /**
+   * create new time sheet
+   * @param {string} projectName
+   */
+  static createNewTimeSheet(projectName: string) {
     this.clickEditBtn()
-    this.selectProject(timeSheetData.projectName)
+    this.selectProject(projectName)
     this.selectActivity()
     this.clickSave()
     this.clickSubmitBtn()
