@@ -60,7 +60,7 @@ describe('Time Sheet Test Cases', () => {
     TimeSheetPage.createNewTimeSheet(timeSheetMockData)
 
     cy.logout()
-    cy.login
+    cy.login()
   })
 
   afterEach(() => {

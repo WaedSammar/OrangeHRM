@@ -5,6 +5,11 @@ import { COMMON_BUTTONS, PAGES } from '../helpers/constants'
 import { ITimeSheet } from '../types/timeSheet'
 
 class TimeSheetPage {
+  private static LOCATORS = {
+    select: '.oxd-select-text-input',
+    chooseOption: '.oxd-select-option'
+  }
+
   static goToTimePage() {
     ElementHandler.clickMenuItem(PAGES.TIME)
   }
@@ -21,19 +26,25 @@ class TimeSheetPage {
     cy.get(COMMON_LOCATORS.autoComplete).eq(0).click()
   }
 
-  static selectActivity(activityName: string) {
-    ElementHandler.selectDropdownByLabel('Activity', activityName)
+  static selectActivity() {
+    cy.get(this.LOCATORS.select).click()
+    cy.get(this.LOCATORS.chooseOption).eq(1).click()
   }
 
   static clickSave() {
     ElementHandler.clickSave()
   }
 
+  static clickSubmitBtn() {
+    ElementHandler.clickButton(COMMON_BUTTONS.SUBMIT)
+  }
+
   static createNewTimeSheet(timeSheetData: ITimeSheet) {
     this.clickEditBtn()
     this.selectProject(timeSheetData.projectName)
-    this.selectActivity(timeSheetData.activityName)
+    this.selectActivity()
     this.clickSave()
+    this.clickSubmitBtn()
   }
 }
 export { TimeSheetPage }
