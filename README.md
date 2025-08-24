@@ -111,7 +111,7 @@ before() → beforeEach() → it() → afterEach() → after()
 - Cypress automatically converts values to `Number` or `Boolean` wherever possible.
 - In JavaScript, `typeof NaN` is `"number"`, so Cypress will log it as a number.
 
-**_The information in this document is based on [Cypress Quiz](https://cypressquiz.com/?fbclid=IwY2xjawJ6AHRleHRuA2FlbQIxMQABHvVGwMbHbbKVvG0nMCUWVUpEJ3DabIleBr_FEVwJqZM2XEh8X2yxjopSK3h-_aem_OuGGzLmso6GoTIxLNlHpCQ)_**
+> **_The information in this document is based on [Cypress Quiz](https://cypressquiz.com/?fbclid=IwY2xjawJ6AHRleHRuA2FlbQIxMQABHvVGwMbHbbKVvG0nMCUWVUpEJ3DabIleBr_FEVwJqZM2XEh8X2yxjopSK3h-_aem_OuGGzLmso6GoTIxLNlHpCQ)_**
 
 ---
 ### View Allure Report:
