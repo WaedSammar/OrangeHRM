@@ -1,0 +1,7 @@
+{
+  "customerName": "Demo Customer",
+  "customerDescription": "Test customer for timeSheet module",
+  "projectName": "Demo Project",
+  "projectDescription": "Sample project linked to Demo Customer",
+  "activityName": "Development"
+}

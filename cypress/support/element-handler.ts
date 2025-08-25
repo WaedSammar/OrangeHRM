@@ -1,4 +1,4 @@
-import { HTML_TAGS, TIMEOUT } from './helpers/constants'
+import { COMMON_BUTTONS, HTML_TAGS, TIMEOUT } from './helpers/constants'
 import { TableRowData } from './types/tableRowData'
 
 const COMMON_LOCATORS = {
@@ -12,7 +12,8 @@ const COMMON_LOCATORS = {
   trashIcon: '.oxd-icon.bi-trash',
   table: '[role="table"]',
   cell: '[role="cell"]',
-  tableCard: '.oxd-table-card'
+  tableCard: '.oxd-table-card',
+  autoComplete: '.oxd-autocomplete-option'
 }
 
 export enum DROP_DOWN {
@@ -139,7 +140,7 @@ class ElementHandler {
    * save information user entered
    * @param index
    */
-  static clickSave(index: number = 0, buttonText: string) {
+  static clickSave(index: number = 0, buttonText: string = COMMON_BUTTONS.SAVE) {
     cy.get(COMMON_LOCATORS.submitBtn).eq(index).click().contains(buttonText)
   }
 
