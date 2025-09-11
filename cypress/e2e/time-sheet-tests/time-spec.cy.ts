@@ -47,7 +47,7 @@ describe('Time Sheet Test Cases', () => {
             const projectId = response.body.data.id
             projectIds.push(projectId)
 
-            TimePageHelper.createActivityForProject(projectId, timeSheetMockData.activityName).then(() => {})
+            TimePageHelper.createActivityForProject(projectId, timeSheetMockData.activityName)
           })
         })
       })

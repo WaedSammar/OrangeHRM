@@ -39,7 +39,8 @@ class TimeSheetPage {
 
   /**
    * select created project
-   * @param {string} projectName
+   * @param {string} projectName 
+   * @param {number} index 
    */
   static selectProject(projectName: string, index: number = 0) {
     const loadProjectName = CommonHelper.generateRandomString(2, 'loadProjectName')
@@ -52,9 +53,9 @@ class TimeSheetPage {
   /**
    * select created activity
    */
-  static selectActivity(index: number = 1) {
+  static selectActivity() {
     cy.get(this.LOCATORS.select).click()
-    cy.get(this.LOCATORS.chooseOption).eq(index).click()
+    cy.get(this.LOCATORS.chooseOption).eq(1).click()
   }
 
   /**
@@ -101,6 +102,7 @@ class TimeSheetPage {
   /**
    * search for the employee
    * @param {string} name
+   * @param {number} index
    */
   static searchForEmployee(name: string, index: number = 0) {
     const loadEmployeeName = CommonHelper.generateRandomString(1, 'loadEmployeeName')

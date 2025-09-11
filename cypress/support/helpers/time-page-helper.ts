@@ -1,3 +1,4 @@
+import { TimeInitializer } from '../initializers/time-page/time-page-initializer'
 import { ITimeSheet } from '../types/timeSheet'
 import { CommonHelper } from './common-helper'
 import { HTTP_METHODS } from './constants'
@@ -5,9 +6,12 @@ import { HTTP_METHODS } from './constants'
 const timeBaseURL = `/web/index.php/api/v2/time`
 const URLs = {
   customers: `${timeBaseURL}/customers`,
-  projects: `${timeBaseURL}/projects`,
-  project: `project`,
-  activities: `activities`
+  projects: `${timeBaseURL}/projects`
+}
+
+const URL_SEGMENTS = {
+  project: 'project',
+  activities: 'activities'
 }
 
 class TimePageHelper {
@@ -17,9 +21,9 @@ class TimePageHelper {
    * @returns
    */
   static createCustomer(timeSheetData: ITimeSheet) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.customers, {
-      name: timeSheetData.customerName,
-      description: timeSheetData.customerDescription
+    const payload = TimeInitializer.initializerCreateCustomer(timeSheetData)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.customers, payload).then((response) => {
+      return response
     })
   }
 
@@ -30,11 +34,9 @@ class TimePageHelper {
    * @returns
    */
   static createProject(customerId: number, timeSheetData: ITimeSheet) {
-    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.projects, {
-      name: timeSheetData.projectName,
-      description: timeSheetData.projectDescription,
-      customerId,
-      projectAdminsEmpNumbers: []
+    const payload = TimeInitializer.initializerCreateProject(timeSheetData, customerId)
+    return CommonHelper.sendAPIRequest(HTTP_METHODS.POST, URLs.projects, payload).then((response) => {
+      return response
     })
   }
 
@@ -47,7 +49,7 @@ class TimePageHelper {
   static createActivityForProject(projectId: number, name: string) {
     return CommonHelper.sendAPIRequest(
       HTTP_METHODS.POST,
-      `${timeBaseURL}/${URLs.project}/${projectId}/${URLs.activities}`,
+      `${timeBaseURL}/${URL_SEGMENTS.project}/${projectId}/${URL_SEGMENTS.activities}`,
       {
         name
       }
@@ -56,7 +58,7 @@ class TimePageHelper {
 
   /**
    * delete created customer
-   * @param {number} customerIds
+   * @param {number[]} customerIds
    */
   static deleteCustomers(customerIds: number[]) {
     CommonHelper.cleanup(URLs.customers, customerIds)
@@ -64,7 +66,7 @@ class TimePageHelper {
 
   /**
    * delete created project
-   * @param {number} projectIds
+   * @param {number[]} projectIds
    */
   static deleteProjects(projectIds: number[]) {
     CommonHelper.cleanup(URLs.projects, projectIds)
