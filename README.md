@@ -1,3 +1,8 @@
+## Platform Link  
+[OrangeHRM Demo](https://opensource-demo.orangehrmlive.com/web/index.php/auth/login)
+
+---
+
 ## Version Control Guidelines
 
 ### **_Commit Message Guidelines_**
