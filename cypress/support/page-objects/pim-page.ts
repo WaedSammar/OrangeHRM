@@ -1,7 +1,7 @@
 import { COMMON_LOCATORS, ElementHandler } from '../element-handler'
 import { APIsHelper } from '../helpers/apis-helpers'
 import { CommonHelper } from '../helpers/common-helper'
-import { COMMON_BUTTONS, CYPRESS_FOLDERS, HTML_TAGS, PAGES, SEPARATORS, TIMEOUT } from '../helpers/constants'
+import { COMMON_BUTTONS, CYPRESS_FOLDERS, HTML_TAGS, PAGES, TIMEOUT } from '../helpers/constants'
 import { GenderMap } from '../initializers/pim-page/pim-page-initializer'
 import { IEmployeeInfo } from '../types/employee'
 import { IEmployeeTableRowData } from '../types/PIMEmployeeTableRow'
@@ -151,10 +151,9 @@ class PIMPage {
 
   /**
    * save button
-   * @param index
    */
-  static clickSave(index: number = 0, buttonText: string = COMMON_BUTTONS.SAVE) {
-    ElementHandler.clickSave(index, buttonText)
+  static clickSave() {
+    ElementHandler.clickSave()
   }
 
   /**

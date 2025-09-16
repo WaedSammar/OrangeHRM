@@ -48,7 +48,7 @@ describe('Employee management - Add and Save Test Cases', () => {
     PIMPage.fillPersonalDetails(employeeInfo)
     PIMPage.clickSave()
     PIMPage.fillAdditionalEmployeeDetails(employeeInfo)
-    PIMPage.clickSave(1)
+    PIMPage.clickSave()
 
     cy.logout()
     cy.login(employeeInfo.userName, employeeInfo.password)
@@ -86,9 +86,9 @@ describe('Employee management - Add and Save Test Cases', () => {
     PIMPage.fillPersonalDetails(employeeInfo)
     PIMPage.clickSave()
     PIMPage.fillAdditionalEmployeeDetails(employeeInfo)
-    PIMPage.clickSave(1)
+    PIMPage.clickSave()
     PIMPage.uploadAttachment()
-    PIMPage.clickSave(2)
+    PIMPage.clickSave()
 
     cy.logout()
     cy.login(employeeInfo.userName, employeeInfo.password)

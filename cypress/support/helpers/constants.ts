@@ -5,7 +5,8 @@ export enum PAGES {
   ADMIN = 'Admin',
   RECRUITMENT = 'Recruitment',
   LEAVE = 'Leave',
-  CLAIM = 'Claim'
+  CLAIM = 'Claim',
+  TIME = 'Time'
 }
 
 export enum HTTP_METHODS {
@@ -64,7 +65,8 @@ export enum COMMON_BUTTONS {
   SUBMIT = 'Submit',
   CREATE = 'Create',
   APPROVE = 'Approve',
-  REJECT = 'Reject'
+  REJECT = 'Reject',
+  EDIT = 'Edit'
 }
 
 export enum COLORS {
